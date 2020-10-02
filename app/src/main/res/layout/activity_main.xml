@@ -47,6 +47,7 @@
                 android:layout_weight="11.5">
 
                 <ImageView
+                    android:id="@+id/btnSettings"
                     android:scaleX="1.26"
                     android:scaleY="1.26"
                     android:layout_width="match_parent"
@@ -68,6 +69,8 @@
                 android:layout_weight="11.5">
 
                 <ImageView
+                    android:scaleX="0.95"
+                    android:scaleY="0.95"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:src="@drawable/share">
@@ -116,12 +119,12 @@
                     android:layout_height="match_parent">
 
                     <EditText
+                        android:hint="@string/enter_city"
                         android:id="@+id/inputCity"
                         android:fontFamily="verdana"
                         android:paddingEnd="12sp"
                         android:textSize="27sp"
                         android:paddingStart="18sp"
-                        android:text="Moscow"
                         android:background="@drawable/back_city_input"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
@@ -240,10 +243,10 @@
                     android:layout_weight="41.5">
 
                     <TextView
+                        android:id="@+id/tvTemp"
                         android:textStyle="bold"
                         android:fontFamily="verdana"
                         android:gravity="center"
-                        android:text="20°С"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:textSize="43sp">
@@ -279,6 +282,7 @@
             </RelativeLayout>
 
             <LinearLayout
+                android:id="@+id/windIcon"
                 android:orientation="vertical"
                 android:background="@drawable/back_icons_cloudy"
                 android:layout_width="0dp"
@@ -312,10 +316,10 @@
                     android:layout_weight="41.5">
 
                     <TextView
+                        android:id="@+id/tvWind"
                         android:textStyle="bold"
                         android:fontFamily="verdana"
                         android:gravity="center"
-                        android:text="2 m/s"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:textSize="38sp">
@@ -344,6 +348,7 @@
             </RelativeLayout>
 
             <LinearLayout
+                android:id="@+id/humidityIcon"
                 android:orientation="vertical"
                 android:background="@drawable/back_icons_cloudy"
                 android:layout_width="0dp"
@@ -377,10 +382,10 @@
                     android:layout_weight="41.5">
 
                     <TextView
+                        android:id="@+id/tvHumidity"
                         android:textStyle="bold"
                         android:fontFamily="verdana"
                         android:gravity="center"
-                        android:text="85%"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:textSize="38sp">
@@ -408,6 +413,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="7">
+
         </RelativeLayout>
 
         </LinearLayout>
@@ -441,6 +447,59 @@
         </TextView>
 
     </RelativeLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="23.5">
+        </RelativeLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="12">
+
+            <RelativeLayout
+                android:layout_weight="27"
+                android:layout_width="0dp"
+                android:layout_height="match_parent">
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_weight="44"
+                android:layout_width="0dp"
+                android:layout_height="match_parent">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:visibility="gone"
+                    android:id="@+id/rvHelp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                </androidx.recyclerview.widget.RecyclerView>
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_weight="35"
+                android:layout_width="0dp"
+                android:layout_height="match_parent">
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="65">
+        </RelativeLayout>
+
+    </LinearLayout>
 
 
 

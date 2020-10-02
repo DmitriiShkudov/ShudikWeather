@@ -1,0 +1,9 @@
+<resources>
+    <string-array name="langs">
+      <item>Русский</item>
+      <item>English</item>
+      <item>Deutsch</item>
+    </string-array>
+    <string-array name="reply_entries">reply</string-array>
+    <string-array name="reply_values">reply</string-array>
+</resources>
