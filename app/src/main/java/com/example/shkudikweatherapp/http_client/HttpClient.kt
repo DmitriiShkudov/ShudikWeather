@@ -1,4 +1,4 @@
-package com.example.shkudikweatherapp.client
+package com.example.shkudikweatherapp.http_client
 
 import android.os.Handler
 import android.os.Message
@@ -7,9 +7,20 @@ import com.example.shkudikweatherapp.activities.MainActivity
 import com.example.shkudikweatherapp.activities.MainActivity.Companion.CONNECTED
 import com.example.shkudikweatherapp.pojo.weather.Weather
 import com.example.shkudikweatherapp.presenters.main_activity.BtnChangeCityPresenter
+import com.example.shkudikweatherapp.providers.UserPreferences
+import com.example.shkudikweatherapp.providers.WeatherProvider
 import com.google.gson.Gson
-import okhttp3.*
+import com.google.gson.GsonBuilder
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.launch
+import okhttp3.HttpUrl
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.lang.Thread.sleep
+
 
 object HttpClient : OkHttpClient() {
 
@@ -34,7 +45,7 @@ object HttpClient : OkHttpClient() {
 
                     this.newCall(request).execute()
 
-                } catch(e: Throwable) {}
+                } catch (e: Throwable) {}
 
                 connected = true
 
@@ -79,7 +90,7 @@ object HttpClient : OkHttpClient() {
 
                     }
 
-                } catch(e: Throwable) {}
+                } catch (e: Throwable) {}
 
             }.start()
 
@@ -115,7 +126,9 @@ object HttpClient : OkHttpClient() {
                     // case when user entered wrong city ( obj == null )
                     if (Gson().fromJson(receivedWeatherJSON, Weather::class.java).weather?.get(0) != null) {
 
-                        val description = Gson().fromJson(receivedWeatherJSON, Weather::class.java).weather?.get(0)?.description
+                        val description = Gson().fromJson(receivedWeatherJSON, Weather::class.java).weather?.get(
+                            0
+                        )?.description
                         val temp = Gson().fromJson(receivedWeatherJSON, Weather::class.java).main.temp.toString()
                         val humidity = Gson().fromJson(receivedWeatherJSON, Weather::class.java).main.humidity.toString()
                         val wind = Gson().fromJson(receivedWeatherJSON, Weather::class.java).wind.speed.toString()
@@ -124,9 +137,14 @@ object HttpClient : OkHttpClient() {
                             "description" to description,
                             "temp" to temp,
                             "humidity" to humidity,
-                            "wind" to wind)
+                            "wind" to wind
+                        )
 
-                        val successMessage = Message.obtain(handler, MainActivity.UPDATE, hashMapToSend)
+                        val successMessage = Message.obtain(
+                            handler,
+                            MainActivity.UPDATE,
+                            hashMapToSend
+                        )
 
                         handler.sendMessage(successMessage)
 
@@ -136,6 +154,39 @@ object HttpClient : OkHttpClient() {
 
             }.start()
 
+
+    }
+
+    suspend fun loadWeatherInfo(city: String) {
+
+            val retrofit = Retrofit.Builder()
+                .baseUrl("http://api.openweathermap.org/data/2.5/weather/")
+                .addConverterFactory(GsonConverterFactory.create(
+                                                    GsonBuilder()
+                                                    .setLenient()
+                                                    .create())
+                ).build()
+
+            val weatherService = retrofit.create(WeatherService::class.java)
+
+            val call = weatherService.getWeather(city = city,
+                                                 appid = "6a8c6db6e5c6f3972d7ae682ae812b52",
+                                                 lang = UserPreferences.Language.ENG.str)
+
+
+            val receivedWeatherJSON = call.execute().body()
+            Log.d("RECEIVED SHIT", receivedWeatherJSON!!)
+
+
+            val description = Gson().fromJson(receivedWeatherJSON, Weather::class.java).weather?.get(0)!!.description
+            val temp = Gson().fromJson(receivedWeatherJSON, Weather::class.java).main.temp
+            val humidity = Gson().fromJson(receivedWeatherJSON, Weather::class.java).main.humidity
+            val wind = Gson().fromJson(receivedWeatherJSON, Weather::class.java).wind.speed
+
+            WeatherProvider.temperature = temp.toInt()
+            WeatherProvider.description = description
+            WeatherProvider.humidity = humidity
+            WeatherProvider.wind = wind.toInt()
 
     }
 

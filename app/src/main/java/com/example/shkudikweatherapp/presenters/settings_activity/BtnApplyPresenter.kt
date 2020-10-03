@@ -1,10 +1,9 @@
 package com.example.shkudikweatherapp.presenters.settings_activity
 
-import android.content.Context
 import android.os.Handler
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
-import com.example.shkudikweatherapp.client.HttpClient
+import com.example.shkudikweatherapp.http_client.HttpClient
 import com.example.shkudikweatherapp.providers.UserPreferences
 import com.example.shkudikweatherapp.views.settings_activity.BtnApply
 

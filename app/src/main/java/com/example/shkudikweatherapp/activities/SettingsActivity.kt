@@ -1,19 +1,15 @@
 package com.example.shkudikweatherapp.activities
 
-import android.content.Context
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.example.shkudikweatherapp.R
-import com.example.shkudikweatherapp.client.HttpClient
 import com.example.shkudikweatherapp.presenters.main_activity.BackgroundPresenter
 import com.example.shkudikweatherapp.presenters.settings_activity.BtnApplyPresenter
 import com.example.shkudikweatherapp.presenters.settings_activity.LanguageSettingsPresenter
@@ -21,12 +17,9 @@ import com.example.shkudikweatherapp.presenters.settings_activity.LanguageSettin
 import com.example.shkudikweatherapp.presenters.settings_activity.LanguageSettingsPresenter.Companion.GER_LANG
 import com.example.shkudikweatherapp.presenters.settings_activity.LanguageSettingsPresenter.Companion.RUS_LANG
 import com.example.shkudikweatherapp.providers.UserPreferences
-import com.example.shkudikweatherapp.providers.WeatherProvider
 import com.example.shkudikweatherapp.views.settings_activity.BtnApply
 import com.example.shkudikweatherapp.views.settings_activity.LanguageSettings
 import com.example.shkudikweatherapp.weather_states.Background
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_main.mainBackground
 import kotlinx.android.synthetic.main.activity_settings.*
 import java.lang.Exception
 

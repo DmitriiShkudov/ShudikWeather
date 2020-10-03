@@ -8,7 +8,6 @@ import android.util.Log
 import android.view.View
 import android.view.View.SYSTEM_UI_FLAG_LAYOUT_STABLE
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
@@ -19,7 +18,7 @@ import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.example.shkudikweatherapp.R
 import com.example.shkudikweatherapp.adapters.RvHelpAdapter
-import com.example.shkudikweatherapp.client.HttpClient
+import com.example.shkudikweatherapp.http_client.HttpClient
 import com.example.shkudikweatherapp.presenters.main_activity.BackgroundPresenter
 import com.example.shkudikweatherapp.presenters.main_activity.BtnChangeCityPresenter
 import com.example.shkudikweatherapp.presenters.main_activity.icons.DescriptionIconPresenter
@@ -97,12 +96,7 @@ class MainActivity : MvpAppCompatActivity(), BtnChangeCity, DescriptionIcon, Hum
                 WeatherProvider.humidity = (receivedWeatherInfo["humidity"] as String).toInt()
                 WeatherProvider.wind = (receivedWeatherInfo["wind"] as String).toFloat().toInt()
 
-                descriptionPresenter.showDescription()
-                humidityPresenter.showHumidity()
-                tempPresenter.showTemp()
-                windPresenter.showWind()
 
-                backgroundPresenter.set()
 
             }
 
@@ -155,9 +149,9 @@ class MainActivity : MvpAppCompatActivity(), BtnChangeCity, DescriptionIcon, Hum
 
         ThreadManager.startConnectionThread()
 
-        HttpClient.checkCity(WeatherProvider.selectedCity, this.handler)
+        //HttpClient.checkCity(WeatherProvider.selectedCity, this.handler)
 
-        ThreadManager.restartWeatherThread()
+        //ThreadManager.restartWeatherThread()
 
         btnChangeCity.setOnClickListener {
 
@@ -232,6 +226,13 @@ class MainActivity : MvpAppCompatActivity(), BtnChangeCity, DescriptionIcon, Hum
 
             inputCity.background =
                 ResourcesCompat.getDrawable(resources, R.drawable.back_city_input, null)
+
+            descriptionPresenter.showDescription()
+            humidityPresenter.showHumidity()
+            tempPresenter.showTemp()
+            windPresenter.showWind()
+
+            backgroundPresenter.set()
 
         } else {
 

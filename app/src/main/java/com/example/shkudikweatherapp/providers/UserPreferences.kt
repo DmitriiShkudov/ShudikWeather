@@ -22,7 +22,7 @@ import com.example.shkudikweatherapp.data.InfoDatabase
 
 object UserPreferences {
 
-    enum class Language(val str: String) { RUS("rus"), ENG("eng"), GER("ger") }
+    enum class Language(val str: String) { RUS("ru"), ENG("en"), GER("de") }
 
     private const val USER_PREF = "User pref"
     private const val NOTIF_CITY_KEY = "City key"
@@ -52,8 +52,8 @@ object UserPreferences {
     var language: Language
     get() = when (this.pref?.getString(LANG_KEY, Language.ENG.str)) {
 
-        "rus" -> Language.RUS
-        "eng" -> Language.ENG
+        "ru" -> Language.RUS
+        "en" -> Language.ENG
         else -> Language.GER
     }
     set(value) {

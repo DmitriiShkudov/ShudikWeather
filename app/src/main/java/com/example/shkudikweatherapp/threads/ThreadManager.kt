@@ -1,9 +1,8 @@
 package com.example.shkudikweatherapp.threads
 
 import android.os.Handler
-import com.example.shkudikweatherapp.client.HttpClient
+import com.example.shkudikweatherapp.http_client.HttpClient
 import com.example.shkudikweatherapp.providers.WeatherProvider
-import okhttp3.internal.wait
 
 object ThreadManager {
 

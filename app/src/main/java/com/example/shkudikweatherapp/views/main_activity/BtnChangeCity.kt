@@ -9,4 +9,5 @@ interface BtnChangeCity : MvpView {
     fun cancel()
     fun showResult(success: Boolean)
 
+
 }
