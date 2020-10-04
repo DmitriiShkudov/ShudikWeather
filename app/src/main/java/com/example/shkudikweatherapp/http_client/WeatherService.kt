@@ -12,6 +12,6 @@ interface WeatherService {
     @GET("/data/2.5/weather")
     fun getWeather(@Query("q") city: String,
                    @Query("appid") appid: String,
-                   @Query("lang") lang: String): Call<String>
+                   @Query("lang") lang: String): Call<Weather>
 
 }

@@ -159,13 +159,12 @@ object HttpClient : OkHttpClient() {
 
     suspend fun loadWeatherInfo(city: String) {
 
+            val gson =
+                GsonBuilder().registerTypeAdapter(Weather::class.java, WeatherDeserializer()).create()
+
             val retrofit = Retrofit.Builder()
                 .baseUrl("http://api.openweathermap.org/data/2.5/weather/")
-                .addConverterFactory(GsonConverterFactory.create(
-                                                    GsonBuilder()
-                                                    .setLenient()
-                                                    .create())
-                ).build()
+                .addConverterFactory(GsonConverterFactory.create(gson)).build()
 
             val weatherService = retrofit.create(WeatherService::class.java)
 
@@ -174,19 +173,12 @@ object HttpClient : OkHttpClient() {
                                                  lang = UserPreferences.Language.ENG.str)
 
 
-            val receivedWeatherJSON = call.execute().body()
-            Log.d("RECEIVED SHIT", receivedWeatherJSON!!)
+            val weather = call.execute().body()
 
-
-            val description = Gson().fromJson(receivedWeatherJSON, Weather::class.java).weather?.get(0)!!.description
-            val temp = Gson().fromJson(receivedWeatherJSON, Weather::class.java).main.temp
-            val humidity = Gson().fromJson(receivedWeatherJSON, Weather::class.java).main.humidity
-            val wind = Gson().fromJson(receivedWeatherJSON, Weather::class.java).wind.speed
-
-            WeatherProvider.temperature = temp.toInt()
-            WeatherProvider.description = description
-            WeatherProvider.humidity = humidity
-            WeatherProvider.wind = wind.toInt()
+            WeatherProvider.temperature = weather!!.main.temp.toInt()
+            WeatherProvider.description = weather.weather!![0].description
+            WeatherProvider.humidity = weather.main.humidity
+            WeatherProvider.wind = weather.wind.speed.toInt()
 
     }
 
