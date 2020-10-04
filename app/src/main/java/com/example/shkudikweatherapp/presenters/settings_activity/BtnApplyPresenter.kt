@@ -3,7 +3,6 @@ package com.example.shkudikweatherapp.presenters.settings_activity
 import android.os.Handler
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
-import com.example.shkudikweatherapp.http_client.HttpClient
 import com.example.shkudikweatherapp.providers.UserPreferences
 import com.example.shkudikweatherapp.views.settings_activity.BtnApply
 
@@ -45,7 +44,6 @@ class BtnApplyPresenter : MvpPresenter<BtnApply>() {
 
         this.selectedHours = hours
         this.selectedCity = notificationCity
-        HttpClient.checkCity(notificationCity, this.handler)
 
     }
 

@@ -18,19 +18,21 @@ import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.example.shkudikweatherapp.R
 import com.example.shkudikweatherapp.adapters.RvHelpAdapter
-import com.example.shkudikweatherapp.http_client.HttpClient
+import com.example.shkudikweatherapp.http_client.RetrofitClient
 import com.example.shkudikweatherapp.presenters.main_activity.BackgroundPresenter
 import com.example.shkudikweatherapp.presenters.main_activity.BtnChangeCityPresenter
-import com.example.shkudikweatherapp.presenters.main_activity.icons.DescriptionIconPresenter
-import com.example.shkudikweatherapp.presenters.main_activity.icons.HumidityIconPresenter
-import com.example.shkudikweatherapp.presenters.main_activity.icons.TempIconPresenter
-import com.example.shkudikweatherapp.presenters.main_activity.icons.WindIconPresenter
+import com.example.shkudikweatherapp.presenters.main_activity.icons.*
 import com.example.shkudikweatherapp.providers.UserPreferences
 import com.example.shkudikweatherapp.providers.WeatherProvider
-import com.example.shkudikweatherapp.threads.ThreadManager
 import com.example.shkudikweatherapp.views.main_activity.*
 import com.example.shkudikweatherapp.weather_states.Background
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import java.lang.Thread.sleep
 
 
 internal fun View.showKeyboard(context: Context) =
@@ -51,80 +53,20 @@ internal fun EditText.reformat() {
 }
 
 
-class MainActivity : MvpAppCompatActivity(), BtnChangeCity, DescriptionIcon, HumidityIcon, TempIcon,
-    WindIcon, Background, ShareButton {
-
-
-    companion object {
-
-        const val CONNECTED = 1
-        const val UPDATE = 2
-
-    }
+class MainActivity : MvpAppCompatActivity(), BtnChangeCity, WeatherInfo, Background, ShareButton {
 
     @InjectPresenter
     lateinit var btnChangeCityPresenter: BtnChangeCityPresenter
 
     @InjectPresenter
-    lateinit var descriptionPresenter: DescriptionIconPresenter
-
-    @InjectPresenter
-    lateinit var humidityPresenter: HumidityIconPresenter
-
-    @InjectPresenter
-    lateinit var tempPresenter: TempIconPresenter
-
-    @InjectPresenter
-    lateinit var windPresenter: WindIconPresenter
+    lateinit var weatherInfoPresenter: WeatherInfoPresenter
 
     @InjectPresenter
     lateinit var backgroundPresenter: BackgroundPresenter
 
     private var rvAdapter: RvHelpAdapter? = null
 
-    private val handler = Handler {
 
-        when (it.what) {
-
-            UPDATE -> {
-
-                val receivedWeatherInfo = it.obj as HashMap<*, *>
-
-                WeatherProvider.temperature =
-                    (receivedWeatherInfo["temp"] as String).toFloat().toInt()
-                WeatherProvider.description = receivedWeatherInfo["description"] as String
-                WeatherProvider.humidity = (receivedWeatherInfo["humidity"] as String).toInt()
-                WeatherProvider.wind = (receivedWeatherInfo["wind"] as String).toFloat().toInt()
-
-
-
-            }
-
-            CONNECTED -> {
-
-                badConnection.visibility = View.GONE
-                ThreadManager.restartWeatherThreadIfBroken()
-
-            }
-
-            else -> {
-
-                badConnection.visibility = View.VISIBLE
-                ThreadManager.breakWeatherThread()
-
-            }
-
-        }
-
-        true
-
-    }
-
-    init {
-
-        ThreadManager.handler = this.handler
-
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -132,26 +74,36 @@ class MainActivity : MvpAppCompatActivity(), BtnChangeCity, DescriptionIcon, Hum
         setContentView(R.layout.activity_main)
 
         // init
-        WeatherProvider.context = applicationContext
+        with(applicationContext) {
 
-        UserPreferences.context = applicationContext
-
-        if (UserPreferences.fullscreen) {
-
-            window.decorView.systemUiVisibility = (SYSTEM_UI_FLAG_LAYOUT_STABLE)
-
+            WeatherProvider.context = this
+            UserPreferences.context = this
+            updateRv()
+            inputCity.setText(WeatherProvider.selectedCity)
 
         }
 
-        inputCity.setText(WeatherProvider.selectedCity)
+        CoroutineScope(Main).launch {
 
-        this.updateRv()
+            weatherInfoPresenter.loadData()
 
-        ThreadManager.startConnectionThread()
+            while (true) {
 
-        //HttpClient.checkCity(WeatherProvider.selectedCity, this.handler)
+                if (!RetrofitClient.isConnected) {
 
-        //ThreadManager.restartWeatherThread()
+                    badConnection.visibility = View.VISIBLE
+
+                } else {
+
+                    badConnection.visibility = View.INVISIBLE
+
+                }
+
+                delay(3000)
+
+            }
+
+        }
 
         btnChangeCity.setOnClickListener {
 
@@ -163,10 +115,23 @@ class MainActivity : MvpAppCompatActivity(), BtnChangeCity, DescriptionIcon, Hum
 
                 if (enteredCity.isNotEmpty()) {
 
-                    btnChangeCityPresenter.applyCity()
-                    btnChangeCityPresenter.executeAndShowResult(enteredCity)
+                    with(btnChangeCityPresenter) {
 
-                } else Toast.makeText(applicationContext, "Enter a city name!", Toast.LENGTH_LONG).show()
+                        applyCity(enteredCity)
+
+                        CoroutineScope(Main).launch {
+
+                            weatherInfoPresenter.loadData()
+
+                        }
+
+                    }
+
+                } else {
+
+                    Toast.makeText(applicationContext, "Enter a city name!", Toast.LENGTH_LONG).show()
+
+                }
 
             }
 
@@ -175,7 +140,6 @@ class MainActivity : MvpAppCompatActivity(), BtnChangeCity, DescriptionIcon, Hum
         btnSettings.setOnClickListener {
             startActivity(Intent(applicationContext, SettingsActivity::class.java))
         }
-
 
     }
 
@@ -218,60 +182,46 @@ class MainActivity : MvpAppCompatActivity(), BtnChangeCity, DescriptionIcon, Hum
 
     }
 
-    override fun showResult(success: Boolean) {
+    override fun showError() {
 
-        if (success) {
+        inputCity.background =
+            ResourcesCompat.getDrawable(resources, R.drawable.back_city_input_wrong, null)
 
-            updateRv()
+        ResourcesCompat.getDrawable(resources, R.drawable.back_icons_wrong, null).apply {
 
-            inputCity.background =
-                ResourcesCompat.getDrawable(resources, R.drawable.back_city_input, null)
-
-            descriptionPresenter.showDescription()
-            humidityPresenter.showHumidity()
-            tempPresenter.showTemp()
-            windPresenter.showWind()
-
-            backgroundPresenter.set()
-
-        } else {
-
-            Log.d("Debug", "Holy shit's")
-
-            inputCity.background =
-                ResourcesCompat.getDrawable(resources, R.drawable.back_city_input_wrong, null)
-
-            ResourcesCompat.getDrawable(resources, R.drawable.back_icons_wrong, null).apply {
-
-                tempIcon.background = this
-                humidityIcon.background = this
-                windIcon.background = this
-
-            }
-
-            tvDescriptionIcon.text = "This city isn't exist!"
-            tvTemp.text = "-"
-            tvHumidity.text = "-"
-            tvWind.text = "-"
+            tempIcon.background = this
+            humidityIcon.background = this
+            windIcon.background = this
 
         }
 
+        tvDescriptionIcon.text = "This city isn't exist!"
+        tvTemp.text = "-"
+        tvHumidity.text = "-"
+        tvWind.text = "-"
+
     }
 
-    override fun showDescription(description: String) =
-        tvDescriptionIcon.setText(description)
+
+    override fun showWeather(description: String,
+                          humidity: Int,
+                          temp: Int,
+                          wind: Int) {
 
 
-    override fun showHumidity(humidity: Int) =
-        tvHumidity.setText("${humidity}${"%"}")
+        inputCity.background =
+            ResourcesCompat.getDrawable(resources, R.drawable.back_city_input, null)
+
+        tvDescriptionIcon.text = description
+        tvWind.text = wind.toString() + " m/s"
+        tvTemp.text = (temp - 273).toString() + " °C"
+        tvHumidity.text = humidity.toString() + "%"
+
+        backgroundPresenter.set()
+
+    }
 
 
-    override fun showTemp(temp: Int) =
-        tvTemp.setText("${temp - 273}${"°С"}")
-
-
-    override fun showWind(wind: Int) =
-        tvWind.setText("${wind}${" m/s"}")
 
     override fun lowSnow() {
         mainBackground.setImageDrawable(

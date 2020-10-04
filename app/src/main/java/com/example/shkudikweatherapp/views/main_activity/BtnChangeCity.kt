@@ -7,7 +7,5 @@ interface BtnChangeCity : MvpView {
     fun applyCity()
     fun enteringCity()
     fun cancel()
-    fun showResult(success: Boolean)
-
 
 }
