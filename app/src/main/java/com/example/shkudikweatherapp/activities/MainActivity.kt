@@ -13,25 +13,33 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.example.shkudikweatherapp.R
 import com.example.shkudikweatherapp.adapters.RvHelpAdapter
 import com.example.shkudikweatherapp.http_client.RetrofitClient
+import com.example.shkudikweatherapp.http_client.WeatherService
+import com.example.shkudikweatherapp.pojo.weather.Weather
 import com.example.shkudikweatherapp.presenters.main_activity.BackgroundPresenter
 import com.example.shkudikweatherapp.presenters.main_activity.BtnChangeCityPresenter
 import com.example.shkudikweatherapp.presenters.main_activity.icons.*
 import com.example.shkudikweatherapp.providers.UserPreferences
 import com.example.shkudikweatherapp.providers.WeatherProvider
+import com.example.shkudikweatherapp.states.State
+import com.example.shkudikweatherapp.viewmodels.MainViewModel
 import com.example.shkudikweatherapp.views.main_activity.*
 import com.example.shkudikweatherapp.weather_states.Background
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.lang.Thread.sleep
 
 
@@ -52,325 +60,27 @@ internal fun EditText.reformat() {
 
 }
 
-
-class MainActivity : MvpAppCompatActivity(), BtnChangeCity, WeatherInfo, Background, ShareButton {
-
-    @InjectPresenter
-    lateinit var btnChangeCityPresenter: BtnChangeCityPresenter
-
-    @InjectPresenter
-    lateinit var weatherInfoPresenter: WeatherInfoPresenter
-
-    @InjectPresenter
-    lateinit var backgroundPresenter: BackgroundPresenter
-
-    private var rvAdapter: RvHelpAdapter? = null
+class MainActivity : AppCompatActivity() {
 
 
+
+    private lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // init
-        with(applicationContext) {
+        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
-            WeatherProvider.context = this
-            UserPreferences.context = this
-            updateRv()
-            inputCity.setText(WeatherProvider.selectedCity)
-
-        }
-
-        CoroutineScope(Main).launch {
-
-            weatherInfoPresenter.loadData()
-
-            while (true) {
-
-                if (!RetrofitClient.isConnected) {
-
-                    badConnection.visibility = View.VISIBLE
-
-                } else {
-
-                    badConnection.visibility = View.INVISIBLE
-
-                }
-
-                delay(3000)
-
-            }
-
-        }
-
-        btnChangeCity.setOnClickListener {
-
-            btnChangeCityPresenter.enteringCity()
-
-            btnApplyCity.setOnClickListener {
-
-                val enteredCity = inputCity.text.toString()
-
-                if (enteredCity.isNotEmpty()) {
-
-                    with(btnChangeCityPresenter) {
-
-                        applyCity(enteredCity)
-
-                        CoroutineScope(Main).launch {
-
-                            weatherInfoPresenter.loadData()
-
-                        }
-
-                    }
-
-                } else {
-
-                    Toast.makeText(applicationContext, "Enter a city name!", Toast.LENGTH_LONG).show()
-
-                }
-
-            }
-
-        }
-
-        btnSettings.setOnClickListener {
-            startActivity(Intent(applicationContext, SettingsActivity::class.java))
-        }
-
-    }
-
-    override fun applyCity() {
-
-        rvHelp.visibility = View.GONE
-        inputCity.reformat()
-        inputCity.hideKeyboard(applicationContext)
-        inputCity.clearFocus()
-        inputCityFrame.descendantFocusability = ViewGroup.FOCUS_BLOCK_DESCENDANTS
-        btnChangeCity.isClickable = true
-        btnApplyCity.setOnClickListener(null)
+        viewModel.state.observe(this, {
 
 
-    }
 
-    override fun enteringCity() {
-
-        rvHelp.visibility = View.VISIBLE
-        inputCityFrame.descendantFocusability = ViewGroup.FOCUS_BEFORE_DESCENDANTS
-        inputCity.requestFocus()
-        inputCity.setText("")
-        inputCity.showKeyboard(applicationContext)
-        btnChangeCity.isClickable = false
-
-        root.setOnClickListener { cancel() }
-
-    }
-
-    override fun cancel() {
-
-        inputCity.setText(WeatherProvider.selectedCity)
-        rvHelp.visibility = View.GONE
-        inputCity.hideKeyboard(applicationContext)
-        inputCity.clearFocus()
-        inputCityFrame.descendantFocusability = ViewGroup.FOCUS_BLOCK_DESCENDANTS
-        btnChangeCity.isClickable = true
-        btnApplyCity.setOnClickListener(null)
-        root.setOnClickListener(null)
-
-    }
-
-    override fun showError() {
-
-        inputCity.background =
-            ResourcesCompat.getDrawable(resources, R.drawable.back_city_input_wrong, null)
-
-        ResourcesCompat.getDrawable(resources, R.drawable.back_icons_wrong, null).apply {
-
-            tempIcon.background = this
-            humidityIcon.background = this
-            windIcon.background = this
-
-        }
-
-        tvDescriptionIcon.text = "This city isn't exist!"
-        tvTemp.text = "-"
-        tvHumidity.text = "-"
-        tvWind.text = "-"
+        })
 
     }
 
 
-    override fun showWeather(description: String,
-                          humidity: Int,
-                          temp: Int,
-                          wind: Int) {
-
-
-        inputCity.background =
-            ResourcesCompat.getDrawable(resources, R.drawable.back_city_input, null)
-
-        tvDescriptionIcon.text = description
-        tvWind.text = wind.toString() + " m/s"
-        tvTemp.text = (temp - 273).toString() + " °C"
-        tvHumidity.text = humidity.toString() + "%"
-
-        backgroundPresenter.set()
-
-    }
-
-
-
-    override fun lowSnow() {
-        mainBackground.setImageDrawable(
-            ResourcesCompat.getDrawable(
-                resources,
-                R.drawable.low_snow,
-                null
-            )
-        )
-
-        ResourcesCompat.getDrawable(resources, R.drawable.back_icons_snow, null).apply {
-
-            tempIcon.background = this
-            humidityIcon.background = this
-            windIcon.background = this
-
-        }
-    }
-
-    override fun snow() {
-
-        mainBackground.setImageDrawable(
-            ResourcesCompat.getDrawable(
-                resources,
-                R.drawable.low_snow,
-                null
-            )
-        )
-
-        ResourcesCompat.getDrawable(resources, R.drawable.back_icons_snow, null).apply {
-
-            tempIcon.background = this
-            humidityIcon.background = this
-            windIcon.background = this
-
-        }
-
-    }
-
-
-    override fun clear() {
-        mainBackground.setImageDrawable(
-            ResourcesCompat.getDrawable(
-                resources,
-                R.drawable.clear,
-                null
-            )
-        )
-
-        ResourcesCompat.getDrawable(resources, R.drawable.back_icons_clear, null).apply {
-
-            tempIcon.background = this
-            humidityIcon.background = this
-            windIcon.background = this
-
-        }
-
-    }
-
-    override fun cloudy() {
-        mainBackground.setImageDrawable(
-            ResourcesCompat.getDrawable(
-                resources,
-                R.drawable.cloud,
-                null
-            )
-        )
-
-        ResourcesCompat.getDrawable(resources, R.drawable.back_icons_cloudy, null).apply {
-
-            tempIcon.background = this
-            humidityIcon.background = this
-            windIcon.background = this
-
-        }
-
-    }
-
-    override fun lowCloudy() {
-        mainBackground.setImageDrawable(
-            ResourcesCompat.getDrawable(
-                resources,
-                R.drawable.low_cloud,
-                null
-            )
-        )
-
-        ResourcesCompat.getDrawable(resources, R.drawable.back_icons_low_cloudy, null).apply {
-
-            tempIcon.background = this
-            humidityIcon.background = this
-            windIcon.background = this
-
-        }
-    }
-
-    override fun rainy() {
-        mainBackground.setImageDrawable(
-            ResourcesCompat.getDrawable(
-                resources,
-                R.drawable.rain,
-                null
-            )
-        )
-
-        ResourcesCompat.getDrawable(resources, R.drawable.back_icons_rainy, null).apply {
-
-            tempIcon.background = this
-            humidityIcon.background = this
-            windIcon.background = this
-
-        }
-
-    }
-
-    override fun humid() {
-        mainBackground.setImageDrawable(
-            ResourcesCompat.getDrawable(
-                resources,
-                R.drawable.humid,
-                null
-            )
-        )
-
-        ResourcesCompat.getDrawable(resources, R.drawable.back_icons_humid, null).apply {
-
-            tempIcon.background = this
-            humidityIcon.background = this
-            windIcon.background = this
-
-        }
-
-    }
-
-
-    override fun showShareWays() {
-
-    }
-
-
-    fun fillTheInput(value: String) = inputCity.setText(value)
-
-    fun updateRv() {
-
-        rvAdapter = RvHelpAdapter(this, WeatherProvider.helpList)
-        rvAdapter!!.context = applicationContext
-        rvHelp.adapter = rvAdapter
-        rvHelp.layoutManager = LinearLayoutManager(applicationContext)
-
-    }
 
 }

@@ -1,15 +1,13 @@
-package com.example.shkudikweatherapp.http_client
+/*package com.example.shkudikweatherapp.http_client
 
 import android.util.Log
 import com.example.shkudikweatherapp.pojo.weather.Weather
 import com.example.shkudikweatherapp.providers.WeatherProvider
+import com.example.shkudikweatherapp.viewmodels.MainViewModel
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_settings.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -18,13 +16,14 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
 
-    private const val BASE_URL = "http://api.openweathermap.org/"
+    const val BASE_URL = "http://api.openweathermap.org/"
     private const val KEY_API = "6a8c6db6e5c6f3972d7ae682ae812b52"
     private const val EXISTED_CITY = "London"
 
+    var mainMV: MainViewModel? = null
 
     val isConnected: Boolean
-    get() = CoroutineScope(IO).async { this.testRequest(EXISTED_CITY) }
+    get() = this.testRequest(EXISTED_CITY)
 
 
     val weatherService: WeatherService
@@ -40,7 +39,7 @@ object RetrofitClient {
     }
 
 
-    suspend fun loadWeather(city: String) {
+    suspend fun loadWeather(city: String): Weather {
 
          val call = weatherService.getWeather(
              city = city,
@@ -52,6 +51,7 @@ object RetrofitClient {
 
              override fun onResponse(call: Call<Weather>, response: Response<Weather>) {
 
+                 mainMV!!.changeCity()
                  val weather = response.body()
                  WeatherProvider.temperature = weather!!.main.temp.toInt()
                  WeatherProvider.description = weather.weather!![0].description
@@ -81,9 +81,7 @@ object RetrofitClient {
 
             override fun onResponse(call: Call<Weather>, response: Response<Weather>) {
 
-                val weather = response.body()
 
-                
 
             }
 
@@ -93,4 +91,4 @@ object RetrofitClient {
 
     }
 
-}
+} */
