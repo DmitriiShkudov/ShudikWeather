@@ -17,7 +17,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#4D000000">
+        android:background="#92000000">
     </RelativeLayout>
 
     <LinearLayout
@@ -33,6 +33,7 @@
             android:layout_weight="5">
 
             <TextView
+                android:id="@+id/settings_header"
                 android:textSize="16sp"
                 android:paddingStart="4sp"
                 android:drawablePadding="4sp"
@@ -84,11 +85,12 @@
                 android:layout_weight="15">
 
                 <TextView
+                    android:text="Fullscreen"
                     android:textColor="@color/settingsTextColor"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:textStyle="bold"
-                    android:text="Fullscreen"
+                    android:id="@+id/text_fullscreen"
                     android:gravity="center|left"
                     android:textSize="20sp">
                 </TextView>
@@ -149,6 +151,7 @@
                 android:layout_weight="15">
 
                 <TextView
+                    android:id="@+id/text_language"
                     android:textColor="@color/settingsTextColor"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -174,8 +177,7 @@
                         android:id="@+id/imgLang"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginStart="-4sp"
-                        android:src="@drawable/england">
+                        android:layout_marginStart="-4sp">
                     </ImageView>
 
                 </RelativeLayout>
@@ -227,6 +229,93 @@
                     android:scaleY="0.69"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:src="@drawable/temp_unit">
+                </ImageView>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="15">
+
+                <TextView
+                    android:id="@+id/text_temp_unit"
+                    android:textColor="@color/settingsTextColor"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textStyle="bold"
+                    android:text="Temperature unit"
+                    android:gravity="center|left"
+                    android:textSize="20sp">
+                </TextView>
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="9">
+
+                <RadioGroup
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <RadioButton
+                        android:textSize="19sp"
+                        android:id="@+id/rb_f_unit"
+                        android:text="@string/deg_f"
+                        android:layout_marginVertical="6sp"
+                        android:layout_height="match_parent"
+                        android:layout_width="0dp"
+                        android:layout_weight="1">
+                    </RadioButton>
+
+                    <RadioButton
+                        android:textSize="19sp"
+                        android:id="@+id/rb_c_unit"
+                        android:text="@string/deg_c"
+                        android:layout_marginVertical="6sp"
+                        android:layout_height="match_parent"
+                        android:layout_width="0dp"
+                        android:layout_weight="1">
+                    </RadioButton>
+
+                </RadioGroup>
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3">
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="8">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3">
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3">
+
+                <ImageView
+                    android:scaleX="0.69"
+                    android:scaleY="0.69"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:src="@drawable/notifications">
                 </ImageView>
 
@@ -238,6 +327,7 @@
                 android:layout_weight="15">
 
                 <TextView
+                    android:id="@+id/text_push_notif"
                     android:textColor="@color/settingsTextColor"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -252,10 +342,11 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="6">
+                android:layout_weight="9">
 
                 <Button
-                    android:id="@+id/btnSetNotifications"
+                    android:textSize="14sp"
+                    android:id="@+id/btn_set_notifications"
                     android:text="@string/set"
                     android:layout_marginVertical="6sp"
                     android:layout_height="match_parent"
@@ -267,7 +358,7 @@
             <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="6">
+                android:layout_weight="3">
             </RelativeLayout>
 
 
@@ -298,12 +389,11 @@
                 android:layout_weight="15">
 
                 <EditText
-                    android:paddingStart="8sp"
+                    android:paddingStart="5sp"
                     android:background="@drawable/back_notification_city_input"
-                    android:id="@+id/inputNotificationCity"
+                    android:id="@+id/input_notification_city"
                     android:layout_marginTop = "29sp"
                     android:layout_marginStart="6sp"
-                    android:hint="Enter city"
                     android:layout_marginEnd="55sp"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
@@ -323,10 +413,10 @@
                     android:layout_weight="2">
 
                     <TextView
+                        android:id="@+id/text_select_interval"
                         android:textColor="@color/settingsTextColor"
                         android:textSize="16sp"
                         android:gravity="center"
-                        android:text="Select interval"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
                     </TextView>
@@ -386,11 +476,10 @@
                 android:layout_weight="1.5">
 
                 <Button
-                    android:id="@+id/btnApplyNotifications"
+                    android:id="@+id/btn_apply_notifications"
                     android:visibility="invisible"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="apply">
+                    android:layout_height="match_parent">
                 </Button>
 
             </RelativeLayout>
@@ -412,7 +501,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="40">
+            android:layout_weight="32">
         </RelativeLayout>
 
     </LinearLayout>

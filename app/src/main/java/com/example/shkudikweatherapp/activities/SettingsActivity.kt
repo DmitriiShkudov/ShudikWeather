@@ -5,89 +5,157 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.CompoundButton
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
+import androidx.lifecycle.ViewModelProvider
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.example.shkudikweatherapp.R
-import com.example.shkudikweatherapp.presenters.main_activity.BackgroundPresenter
-import com.example.shkudikweatherapp.presenters.settings_activity.BtnApplyPresenter
-import com.example.shkudikweatherapp.presenters.settings_activity.LanguageSettingsPresenter
-import com.example.shkudikweatherapp.presenters.settings_activity.LanguageSettingsPresenter.Companion.ENG_LANG
-import com.example.shkudikweatherapp.presenters.settings_activity.LanguageSettingsPresenter.Companion.GER_LANG
-import com.example.shkudikweatherapp.presenters.settings_activity.LanguageSettingsPresenter.Companion.RUS_LANG
 import com.example.shkudikweatherapp.providers.UserPreferences
-import com.example.shkudikweatherapp.views.settings_activity.BtnApply
-import com.example.shkudikweatherapp.views.settings_activity.LanguageSettings
-import com.example.shkudikweatherapp.weather_states.Background
+import com.example.shkudikweatherapp.providers.WeatherProvider
+import com.example.shkudikweatherapp.states.WeatherState
+import com.example.shkudikweatherapp.viewmodels.MainViewModel
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_settings.*
 import java.lang.Exception
 
-class SettingsActivity : MvpAppCompatActivity(), Background, LanguageSettings, BtnApply {
+class SettingsActivity : AppCompatActivity() {
 
-    @InjectPresenter
-    lateinit var backgroundPresenter: BackgroundPresenter
+    private val checkedChangeListener =
 
-    @InjectPresenter
-    lateinit var languageSettingsPresenter: LanguageSettingsPresenter
+        CompoundButton.OnCheckedChangeListener { rb, isChecked ->
 
-    @InjectPresenter
-    lateinit var btnApplyPresenter: BtnApplyPresenter
+            UserPreferences.degreeUnit =
+                if (rb_c_unit.isChecked) UserPreferences.DegreeUnit.DEG_C else UserPreferences.DegreeUnit.DEG_F
 
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
+        settingsBackground.setImageDrawable(when (WeatherProvider.weatherState) {
+
+            WeatherState.CLEAR -> ResourcesCompat.getDrawable(resources, R.drawable.clear, null)
+            WeatherState.CLOUDY -> ResourcesCompat.getDrawable(resources, R.drawable.cloud, null)
+            WeatherState.LOW_CLOUDY -> ResourcesCompat.getDrawable(resources, R.drawable.low_cloud, null)
+            WeatherState.RAIN -> ResourcesCompat.getDrawable(resources, R.drawable.rain, null)
+            WeatherState.HUMID -> ResourcesCompat.getDrawable(resources, R.drawable.humid, null)
+            WeatherState.SNOW -> ResourcesCompat.getDrawable(resources, R.drawable.snow, null)
+            WeatherState.LOW_SNOW -> ResourcesCompat.getDrawable(resources, R.drawable.low_snow, null)
+
+
+        })
+
         // init
-        UserPreferences.context = applicationContext
-        backgroundPresenter.set()
-        languageSettingsPresenter.updateLang()
-        cbFullscreen.isChecked = UserPreferences.fullscreen
-        Log.d("FUL", UserPreferences.fullscreen.toString())
+        setLocale()
 
-        //
-        btnSetNotifications.setOnClickListener {
+        UserPreferences.apply {
 
-            layoutSetNotifications.visibility = View.VISIBLE
-            btnApplyNotifications.visibility = View.VISIBLE
+            Log.d("LANG--->", this.language.str)
 
-        }
+            imgLang.setImageDrawable(when (this.language) {
 
-        var spinnerShit = 0
+                UserPreferences.Language.GER -> ResourcesCompat.getDrawable(resources, R.drawable.germany, null)
+                UserPreferences.Language.ENG -> ResourcesCompat.getDrawable(resources, R.drawable.england, null)
+                else -> ResourcesCompat.getDrawable(resources, R.drawable.russia, null)
 
-        spinnerLang.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            })
 
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, i: Int, p3: Long) {
+            cbFullscreen.isChecked = this.fullscreen
 
-                if (++spinnerShit > 1) {
+            when (this.degreeUnit) {
 
-                    when (spinnerLang.selectedItem) {
+                UserPreferences.DegreeUnit.DEG_C ->
+                    rb_c_unit.also { it.setOnCheckedChangeListener(checkedChangeListener) }.isChecked =
+                        true
 
-                        RUS_LANG -> languageSettingsPresenter.changeLang(UserPreferences.Language.RUS)
-
-                        ENG_LANG -> languageSettingsPresenter.changeLang(UserPreferences.Language.ENG)
-
-                        GER_LANG -> languageSettingsPresenter.changeLang(UserPreferences.Language.GER)
-
-                    }
-
-                    languageSettingsPresenter.updateLang()
-
-                }
+                UserPreferences.DegreeUnit.DEG_F ->
+                    rb_f_unit.also { it.setOnCheckedChangeListener(checkedChangeListener) }.isChecked =
+                        true
 
             }
 
-            override fun onNothingSelected(p0: AdapterView<*>?) {}
         }
 
-        spinnerLang.adapter =
-            ArrayAdapter(applicationContext,
-                R.layout.support_simple_spinner_dropdown_item, listOf(RUS_LANG, ENG_LANG, GER_LANG))
+        //
+        btn_set_notifications.setOnClickListener {
+
+            layoutSetNotifications.visibility = View.VISIBLE
+            btn_apply_notifications.visibility = View.VISIBLE
+
+        }
+
+        spinnerLang.adapter = ArrayAdapter(applicationContext,
+            R.layout.support_simple_spinner_dropdown_item,
+            listOf(UserPreferences.Language.ENG.str, UserPreferences.Language.RUS.str, UserPreferences.Language.GER.str))
+
+        var i = 0 // spinner bug
+
+        spinnerLang.onItemSelectedListener = object :
+            AdapterView.OnItemSelectedListener {
+
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
+
+                if (++i > 1) {
+
+                    when (position) {
+
+                        0 -> {
+
+                            imgLang.setImageDrawable(
+                                ResourcesCompat.getDrawable(
+                                    resources,
+                                    R.drawable.england,
+                                    null
+                                )
+                            )
+                            UserPreferences.language = UserPreferences.Language.ENG
+                        }
+                        1 -> {
+                            imgLang.setImageDrawable(
+                                ResourcesCompat.getDrawable(
+                                    resources,
+                                    R.drawable.russia,
+                                    null
+                                )
+                            )
+                            UserPreferences.language = UserPreferences.Language.RUS
+                        }
+                        2 -> {
+                            imgLang.setImageDrawable(
+                                ResourcesCompat.getDrawable(
+                                    resources,
+                                    R.drawable.germany,
+                                    null
+                                )
+                            )
+                            UserPreferences.language = UserPreferences.Language.GER
+                        }
+                    }
+
+                    setLocale()
+
+                }
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {}
+
+        }
+
+        val hour = when (UserPreferences.language) {
+
+                UserPreferences.Language.RUS -> "часа"
+                UserPreferences.Language.ENG -> "hours"
+                UserPreferences.Language.GER -> "Stunden"
+
+            }
 
         spinnerInterval.adapter = ArrayAdapter(applicationContext,
-            R.layout.tv_spinner, listOf("2 hours", "4 hours", "8 hours", "12 hours", "24 hours"))
+            R.layout.tv_spinner, listOf("2 $hour", "4 $hour", "8 $hour", "12 $hour", "24 $hour"))
 
         spinnerInterval.setSelection(when (UserPreferences.notifInterval) {
 
@@ -100,79 +168,91 @@ class SettingsActivity : MvpAppCompatActivity(), Background, LanguageSettings, B
             else -> throw Exception("The interval was set wrong")
         })
 
-        inputNotificationCity.setText(UserPreferences.notifCity)
+        input_notification_city.setText(UserPreferences.notifCity)
 
-        btnApplyNotifications.setOnClickListener {
+        btn_apply_notifications.setOnClickListener {}
 
-            btnApplyPresenter.check(notificationCity = inputNotificationCity.text.toString(),
-                                    hours = when (spinnerInterval.selectedItemPosition) {
-
-                                        0 -> 2
-                                        1 -> 4
-                                        2 -> 8
-                                        3 -> 12
-                                        4 -> 24
-                                        else -> -1
-                                    })
-        }
-
-        cbFullscreen.setOnCheckedChangeListener { compoundButton, b ->
-
-            UserPreferences.fullscreen = b
-
-        }
+        cbFullscreen.setOnCheckedChangeListener { compoundButton, b -> UserPreferences.fullscreen = b }
 
     }
 
-    override fun lowSnow() {
-        settingsBackground.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.low_snow, null))
-    }
+    ///
+    ///
+    ///
+    ///
+    fun setLocaleText(obj: View) {
 
-    override fun snow() {
-        settingsBackground.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.low_snow, null))
-    }
+        when (UserPreferences.language) {
 
-    override fun clear() =
-        settingsBackground.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.clear, null))
+            UserPreferences.Language.RUS -> when (obj) {
 
-    override fun cloudy() =
-        settingsBackground.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.cloud, null))
+                settings_header -> settings_header.text = "Настройки"
+                text_fullscreen -> text_fullscreen.text = "Полный экран"
+                text_language -> text_language.text = "Язык"
+                text_push_notif -> text_push_notif.text = "Пуш-уведомления"
+                btn_set_notifications -> btn_set_notifications.also { it.textSize = 12f }.text = "Установить"
+                text_temp_unit -> text_temp_unit.also { it.textSize = 18f }.text = "Единица измерения температуры"
+                input_notification_city -> input_notification_city.also { it.textSize = 15f }.hint = "Введите город"
+                text_select_interval -> text_select_interval.also { it.textSize = 14f }.text = "Выберите интервал"
+                btn_apply_notifications -> btn_apply_notifications.also { it.textSize = 12f }.text = "Применить"
 
-    override fun lowCloudy() =
-        settingsBackground.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.low_cloud, null))
+            }
 
-    override fun rainy() =
-        settingsBackground.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.rain, null))
+            UserPreferences.Language.GER -> when (obj) {
 
-    override fun humid() =
-        settingsBackground.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.humid, null))
+                settings_header -> settings_header.text = "Einstellungen"
+                text_fullscreen -> text_fullscreen.text = "Vollbildschirm"
+                text_language -> text_language.text = "Sprache"
+                text_push_notif -> text_push_notif.text = "Mitteilungen"
+                btn_set_notifications -> btn_set_notifications.also { it.textSize = 10f }.text = "Konfiguration"
+                text_temp_unit -> text_temp_unit.text = "Temperatureinheit"
+                input_notification_city -> input_notification_city.also { it.textSize = 16f }.hint = "Stadt betreten"
+                text_select_interval -> text_select_interval.also { it.textSize = 13f }.text = "Wählen Sie das Intervall"
+                btn_apply_notifications -> btn_apply_notifications.text = "Anwenden"
 
-    override fun updateLang(lang: UserPreferences.Language) {
+            }
 
-        when (lang) {
+            UserPreferences.Language.ENG -> when (obj) {
 
-            UserPreferences.Language.RUS -> imgLang.
-                setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.russia, null))
+                settings_header -> settings_header.text = "Settings"
+                text_fullscreen -> text_fullscreen.text = "Fullscreen"
+                text_language -> text_language.text = "Language"
+                text_push_notif -> text_push_notif.text = "Push-notifications"
+                btn_set_notifications -> btn_set_notifications.also { it.textSize = 16f }.text = "Set"
+                text_temp_unit -> text_temp_unit.text = "Temperature unit"
+                input_notification_city -> input_notification_city.hint = "Enter city"
+                text_select_interval -> text_select_interval.also { it.textSize = 15f }.text = "Select the interval"
+                btn_apply_notifications -> btn_apply_notifications.text = "Apply"
 
-            UserPreferences.Language.ENG -> imgLang.
-                setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.england, null))
-
-            UserPreferences.Language.GER -> imgLang.
-                setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.germany, null))
+            }
 
         }
-
     }
 
-    override fun success() {
-        inputNotificationCity.reformat()
-        Toast.makeText(applicationContext, "Successful", Toast.LENGTH_SHORT).show()
-        inputNotificationCity.hideKeyboard(applicationContext)
-    }
+    fun setLocale() {
 
-    override fun fail(msg: String) {
-        inputNotificationCity.reformat()
-        Toast.makeText(applicationContext, msg, Toast.LENGTH_SHORT).show()
+        setLocaleText(settings_header)
+        setLocaleText(text_fullscreen)
+        setLocaleText(text_language)
+        setLocaleText(text_push_notif)
+        setLocaleText(btn_set_notifications)
+        setLocaleText(text_temp_unit)
+        setLocaleText(input_notification_city)
+        setLocaleText(btn_apply_notifications)
+        setLocaleText(text_select_interval)
+
+
+        val hour = when (UserPreferences.language) {
+
+            UserPreferences.Language.RUS -> "часа"
+            UserPreferences.Language.ENG -> "hours"
+            UserPreferences.Language.GER -> "Stunden"
+
+        }
+
+        spinnerInterval.adapter = ArrayAdapter(applicationContext,
+            R.layout.tv_spinner, listOf("2 $hour", "4 $hour", "8 $hour", "12 $hour", "24 $hour"))
+        
     }
 
 }

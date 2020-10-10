@@ -2,7 +2,9 @@ package com.example.shkudikweatherapp.http_client
 
 import com.example.shkudikweatherapp.pojo.weather.Weather
 import com.example.shkudikweatherapp.providers.UserPreferences
+import kotlinx.coroutines.Deferred
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 

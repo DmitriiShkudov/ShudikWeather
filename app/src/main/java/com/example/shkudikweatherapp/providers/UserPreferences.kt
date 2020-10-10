@@ -11,6 +11,7 @@ import android.content.SharedPreferences
 import android.graphics.BitmapFactory
 import android.os.Build
 import android.provider.Settings.Secure.getString
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat.getSystemService
@@ -22,50 +23,64 @@ import com.example.shkudikweatherapp.data.InfoDatabase
 
 object UserPreferences {
 
-    enum class Language(val str: String) { RUS("ru"), ENG("en"), GER("de") }
+    enum class Language(val str: String) { RUS("Русский"), ENG("English"), GER("Deutsch") }
+
+    enum class DegreeUnit(val str: String) { DEG_F(" °F"), DEG_C(" °C") }
 
     private const val USER_PREF = "User pref"
+    private const val DEG_PREF = "Deg pref"
     private const val NOTIF_CITY_KEY = "City key"
     private const val NOTIF_INTERVAL_KEY = "Interval key"
     private const val LANG_KEY = "Language key"
     private const val FULLSCREEN_KEY = "Fullscreen key"
+    private const val DEGREE_KEY = "Degree key"
+    private const val EMPTY = ""
 
     var context: Context? = null
 
     val db: InfoDatabase
     get() = Room.databaseBuilder(this.context!!, InfoDatabase::class.java, "info").build()
 
+    //
     val pref: SharedPreferences?
     get() = this.context?.getSharedPreferences(USER_PREF, 0)
 
-
+    //
     var notifCity: String
-    get() = this.pref?.getString(NOTIF_CITY_KEY, "") ?: ""
+    get() = this.pref?.getString(NOTIF_CITY_KEY, EMPTY) ?: EMPTY
     set(value) = this.pref?.edit()?.putString(NOTIF_CITY_KEY, value)?.apply()!!
 
-
+    //
     var notifInterval: Int
     get() = this.pref?.getInt(NOTIF_INTERVAL_KEY, 2) ?: 2
     set(value) = this.pref?.edit()?.putInt(NOTIF_INTERVAL_KEY, value)?.apply()!!
 
-
+    //
     var language: Language
-    get() = when (this.pref?.getString(LANG_KEY, Language.ENG.str)) {
+        get() = when (this.pref?.getString(LANG_KEY, Language.ENG.str) ?: Language.ENG.str) {
 
-        "ru" -> Language.RUS
-        "en" -> Language.ENG
-        else -> Language.GER
-    }
-    set(value) {
+            Language.RUS.str -> Language.RUS
+            Language.ENG.str -> Language.ENG
+            else -> Language.GER
+        }
+        set(value) = this.pref?.edit()?.putString(LANG_KEY, value.str)?.apply()!!
 
-        this.pref?.edit()?.putString(LANG_KEY, value.str)?.apply()
+    //
+    var degreeUnit: DegreeUnit
+        get() = when (this.pref?.getString(DEGREE_KEY, DegreeUnit.DEG_C.str) ?: DegreeUnit.DEG_C.str) {
 
-    }
+            DegreeUnit.DEG_C.str -> DegreeUnit.DEG_C
+            else -> DegreeUnit.DEG_F
 
+        }
+        set(value) = this.pref?.edit()?.putString(DEGREE_KEY, value.str)?.apply()!!
+
+    //
     var fullscreen: Boolean
     get() = this.pref?.getBoolean(FULLSCREEN_KEY, false) ?: false
     set(value) = this.pref?.edit()?.putBoolean(FULLSCREEN_KEY, value)?.apply()!!
 
+    //
     fun makeNotification() {
 
         val aContext = this.context!!.applicationContext

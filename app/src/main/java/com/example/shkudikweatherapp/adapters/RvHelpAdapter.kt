@@ -8,10 +8,8 @@ import com.example.shkudikweatherapp.activities.MainActivity
 
 class RvHelpAdapter(val activity: MainActivity, val helpList: ArrayList<String>) : RecyclerView.Adapter<RvHelpViewHolder>() {
 
-    var context: Context? = null
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RvHelpViewHolder =
-        RvHelpViewHolder(context!!, LayoutInflater.from(parent.context), parent)
+        RvHelpViewHolder(LayoutInflater.from(parent.context), parent)
 
 
     override fun getItemCount(): Int = helpList.size

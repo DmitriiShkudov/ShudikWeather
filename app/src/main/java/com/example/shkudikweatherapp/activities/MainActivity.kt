@@ -19,19 +19,14 @@ import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.example.shkudikweatherapp.R
 import com.example.shkudikweatherapp.adapters.RvHelpAdapter
-import com.example.shkudikweatherapp.http_client.RetrofitClient
-import com.example.shkudikweatherapp.http_client.WeatherService
 import com.example.shkudikweatherapp.pojo.weather.Weather
-import com.example.shkudikweatherapp.presenters.main_activity.BackgroundPresenter
-import com.example.shkudikweatherapp.presenters.main_activity.BtnChangeCityPresenter
-import com.example.shkudikweatherapp.presenters.main_activity.icons.*
 import com.example.shkudikweatherapp.providers.UserPreferences
 import com.example.shkudikweatherapp.providers.WeatherProvider
 import com.example.shkudikweatherapp.states.State
+import com.example.shkudikweatherapp.states.WeatherState
 import com.example.shkudikweatherapp.viewmodels.MainViewModel
-import com.example.shkudikweatherapp.views.main_activity.*
-import com.example.shkudikweatherapp.weather_states.Background
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_settings.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
@@ -60,27 +55,272 @@ internal fun EditText.reformat() {
 
 }
 
+
 class MainActivity : AppCompatActivity() {
 
-
-
     private lateinit var viewModel: MainViewModel
+
+    override fun onResume() {
+
+        super.onResume()
+
+        viewModel.load()
+
+        setLocale()
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        WeatherProvider.context = applicationContext
+        UserPreferences.context = applicationContext
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
+        with(WeatherProvider.selectedCity) {
+
+            input_city.setText(this)
+            viewModel.applyCity(this)
+
+        }
+
+        viewModel.update()
+
+        btn_change_city.setOnClickListener { viewModel.changingCity() }
+
+        btn_apply_city.setOnClickListener {
+
+            input_city.reformat()
+            viewModel.applyCity(input_city.text.toString())
+            viewModel.load()
+
+        }
+
+        btn_settings.setOnClickListener { startActivity(Intent(this, SettingsActivity::class.java))}
+
+        ///
+        ///
+        ///
+        ///
         viewModel.state.observe(this, {
 
+            when (it) {
 
+                State.CHANGING_CITY -> {
+
+                    Log.d("Debug", "In the changing")
+
+                    btn_apply_city.isClickable = true
+                    with(input_city) {
+
+                        input_city_frame.descendantFocusability = ViewGroup.FOCUS_BEFORE_DESCENDANTS
+                        setText("")
+                        requestFocus()
+                        showKeyboard(applicationContext)
+
+                    }
+
+                    updateRv()
+                    rvHelp.visibility = View.VISIBLE
+
+                    root.setOnClickListener {
+
+                        // cancellation
+                        rvHelp.visibility = View.GONE
+                        btn_apply_city.isClickable = false
+                        btn_change_city.isClickable = true
+                        input_city.clearFocus()
+                        input_city_frame.descendantFocusability = ViewGroup.FOCUS_BLOCK_DESCENDANTS
+                        input_city.hideKeyboard(applicationContext)
+                        input_city.setText(WeatherProvider.selectedCity)
+                        main_background.setOnClickListener(null)
+
+                    }
+
+                }
+
+                State.LOADING -> {
+
+                    btn_change_city.isClickable = true
+                    btn_apply_city.isClickable = false
+                    input_city.clearFocus()
+                    input_city_frame.descendantFocusability = ViewGroup.FOCUS_BLOCK_DESCENDANTS
+                    input_city.hideKeyboard(applicationContext)
+                    bad_connection.visibility = View.GONE
+                    cpv_loading.visibility = View.VISIBLE
+                    rvHelp.visibility = View.GONE
+
+                }
+
+                State.UPDATED -> {
+
+                    input_city.background = ResourcesCompat.getDrawable(resources, R.drawable.back_city_input, null)
+                    btn_change_city.isClickable = true
+                    bad_connection.visibility = View.GONE
+                    cpv_loading.visibility = View.GONE
+
+                }
+
+                State.BAD_CONNECTION -> {
+
+                    bad_connection.visibility = View.VISIBLE
+                    cpv_loading.visibility = View.GONE
+
+                }
+
+                State.WRONG_CITY -> {
+
+                    cpv_loading.visibility = View.GONE
+
+                    windIcon.background = ResourcesCompat.getDrawable(resources, R.drawable.back_icons_wrong, null)
+                    humidityIcon.background = ResourcesCompat.getDrawable(resources, R.drawable.back_icons_wrong, null)
+                    tempIcon.background = ResourcesCompat.getDrawable(resources, R.drawable.back_icons_wrong, null)
+                    input_city.background = ResourcesCompat.getDrawable(resources, R.drawable.back_city_input_wrong, null)
+
+                    "-".apply {
+
+                        tvWind.text = this
+                        tvHumidity.text = this
+                        tvTemp.text = this
+
+                    }
+
+                }
+
+            }
 
         })
 
+        viewModel.weatherState.observe(this) {
+
+            main_background.setImageDrawable(when (it) {
+
+                WeatherState.CLEAR -> {
+
+                    windIcon.background = ResourcesCompat.getDrawable(resources, R.drawable.back_icons_clear, null)
+                    humidityIcon.background = ResourcesCompat.getDrawable(resources, R.drawable.back_icons_clear, null)
+                    tempIcon.background = ResourcesCompat.getDrawable(resources, R.drawable.back_icons_clear, null)
+
+                    ResourcesCompat.getDrawable(resources, R.drawable.clear, null)
+                }
+                WeatherState.CLOUDY -> {
+
+                    windIcon.background = ResourcesCompat.getDrawable(resources, R.drawable.back_icons_cloudy, null)
+                    humidityIcon.background = ResourcesCompat.getDrawable(resources, R.drawable.back_icons_cloudy, null)
+                    tempIcon.background = ResourcesCompat.getDrawable(resources, R.drawable.back_icons_cloudy, null)
+
+                    ResourcesCompat.getDrawable(resources, R.drawable.cloud, null)
+                }
+                WeatherState.LOW_CLOUDY -> {
+
+                    windIcon.background = ResourcesCompat.getDrawable(resources, R.drawable.back_icons_low_cloudy, null)
+                    humidityIcon.background = ResourcesCompat.getDrawable(resources, R.drawable.back_icons_low_cloudy, null)
+                    tempIcon.background = ResourcesCompat.getDrawable(resources, R.drawable.back_icons_low_cloudy, null)
+
+                    ResourcesCompat.getDrawable(resources, R.drawable.low_cloud, null)
+                }
+                WeatherState.RAIN -> {
+
+                    windIcon.background = ResourcesCompat.getDrawable(resources, R.drawable.back_icons_rainy, null)
+                    humidityIcon.background = ResourcesCompat.getDrawable(resources, R.drawable.back_icons_rainy, null)
+                    tempIcon.background = ResourcesCompat.getDrawable(resources, R.drawable.back_icons_rainy, null)
+
+                    ResourcesCompat.getDrawable(resources, R.drawable.rain, null)
+                }
+                WeatherState.HUMID -> {
+
+                    windIcon.background = ResourcesCompat.getDrawable(resources, R.drawable.back_icons_humid, null)
+                    humidityIcon.background = ResourcesCompat.getDrawable(resources, R.drawable.back_icons_humid, null)
+                    tempIcon.background = ResourcesCompat.getDrawable(resources, R.drawable.back_icons_humid, null)
+
+                    ResourcesCompat.getDrawable(resources, R.drawable.humid, null)
+                }
+                WeatherState.SNOW -> {
+
+                    windIcon.background = ResourcesCompat.getDrawable(resources, R.drawable.back_icons_snow, null)
+                    humidityIcon.background = ResourcesCompat.getDrawable(resources, R.drawable.back_icons_snow, null)
+                    tempIcon.background = ResourcesCompat.getDrawable(resources, R.drawable.back_icons_snow, null)
+
+                    ResourcesCompat.getDrawable(resources, R.drawable.snow, null)
+                }
+                WeatherState.LOW_SNOW -> {
+
+                    windIcon.background = ResourcesCompat.getDrawable(resources, R.drawable.back_icons_snow, null)
+                    humidityIcon.background = ResourcesCompat.getDrawable(resources, R.drawable.back_icons_snow, null)
+                    tempIcon.background = ResourcesCompat.getDrawable(resources, R.drawable.back_icons_snow, null)
+
+                    ResourcesCompat.getDrawable(resources, R.drawable.low_snow, null)
+                }
+
+            })
+
+        }
+
+        viewModel.temp.observe(this) { tvTemp.text = it }
+
+        viewModel.humidity.observe(this) { tvHumidity.text = it }
+
+        viewModel.wind.observe(this) { tvWind.text = it }
+
+        viewModel.desc.observe(this) { tvDescriptionIcon.text = it }
+
     }
 
+    fun updateRv() {
 
+        val adapter = RvHelpAdapter(this, WeatherProvider.helpList)
+        rvHelp.adapter = adapter
+        rvHelp.layoutManager = LinearLayoutManager(applicationContext)
+
+    }
+
+    fun setLocaleText(obj: View) {
+
+        when (UserPreferences.language) {
+
+            UserPreferences.Language.RUS -> when (obj) {
+
+                text_temp -> text_temp.text = "Температура"
+                text_wind -> text_wind.text = "Скорость ветра"
+                text_humidity -> text_humidity.text = "Влажность"
+                input_city -> input_city.hint = "Введите город"
+                text_bad_connection -> text_bad_connection.text = "Плохое соединение..."
+
+            }
+
+            UserPreferences.Language.GER -> when (obj) {
+
+                text_temp -> text_temp.text = "Temperatur"
+                text_wind -> text_wind.text = "Windgeschwindigkeit"
+                text_humidity -> text_humidity.text = "Feuchtigkeit"
+                input_city -> input_city.hint = "Stadt betreten"
+                text_bad_connection -> text_bad_connection.text = "Schlechte Verbindung..."
+
+            }
+
+            UserPreferences.Language.ENG -> when (obj) {
+
+                text_temp -> text_temp.text = "Temperature"
+                text_wind -> text_wind.text = "Wind speed"
+                text_humidity -> text_humidity.text = "Humidity"
+                input_city -> input_city.hint = "Enter city"
+                text_bad_connection -> text_bad_connection.text = "Bad connection..."
+
+            }
+
+        }
+    }
+
+    fun setLocale() {
+
+        setLocaleText(text_temp)
+        setLocaleText(text_wind)
+        setLocaleText(text_humidity)
+        setLocaleText(input_city)
+        setLocaleText(text_bad_connection)
+
+    }
 
 }

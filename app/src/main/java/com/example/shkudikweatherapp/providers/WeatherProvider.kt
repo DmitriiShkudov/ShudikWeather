@@ -2,6 +2,8 @@ package com.example.shkudikweatherapp.providers
 
 import android.content.Context
 import android.util.Log
+import com.example.shkudikweatherapp.helpers.Helper
+import com.example.shkudikweatherapp.states.WeatherState
 import java.text.FieldPosition
 
 object WeatherProvider {
@@ -11,15 +13,8 @@ object WeatherProvider {
     private const val DEFAULT_CITY_NAME = "Paris"
     private const val HELP_LIST_PREF = "Help list pref"
     private const val HELP_KEY = "Help_"
+    private const val EMPTY = ""
     private const val MAX_HELP_CITIES = 3
-
-
-    enum class WeatherDesc {
-
-        CLEAR, RAIN, HUMID, LOW_CLOUD, CLOUD, LOW_SNOW, SNOW
-
-    }
-
 
     var context: Context? = null
 
@@ -29,41 +24,20 @@ object WeatherProvider {
                 getString(SELECTED_CITY_NAME_KEY, DEFAULT_CITY_NAME) ?: DEFAULT_CITY_NAME
 
     set(value) =
-        this.prefCities?.edit()?.putString(SELECTED_CITY_NAME_KEY, value)!!.apply()
+        this.prefCities?.edit()?.putString(SELECTED_CITY_NAME_KEY, value.also { addHelpCity(it) })!!.apply()
 
-    var temperature: Int = 0
-    var wind: Int = 0
-    var humidity: Int = 0
     var description: String = String()
-
-
-    var weatherDesc: WeatherDesc? = null
-
-    get() = when (this.description) {
-
-        "light shower snow" -> WeatherDesc.LOW_SNOW
-        "clear sky" -> WeatherDesc.CLEAR
-        "shower rain" -> WeatherDesc.RAIN
-        "light rain" -> WeatherDesc.RAIN
-        "rain" -> WeatherDesc.RAIN
-        "moderate rain" -> WeatherDesc.RAIN
-        "few clouds" -> WeatherDesc.LOW_CLOUD
-        "broken clouds" -> WeatherDesc.LOW_CLOUD
-        "scattered clouds" -> WeatherDesc.LOW_CLOUD
-        "haze" -> WeatherDesc.HUMID
-        "fog" -> WeatherDesc.HUMID
-        else -> WeatherDesc.CLOUD
-
-    }
+    val weatherState: WeatherState
+    get() = Helper.funnyDescDetermination(this.description)
 
     val helpList: ArrayList<String>
     get() {
 
         val arrayList = ArrayList<String>()
 
-        arrayOf(this.prefHelp?.getString(HELP_KEY + "1", "") ?: "",
-                this.prefHelp?.getString(HELP_KEY + "2", "") ?: "",
-                this.prefHelp?.getString(HELP_KEY + "3", "") ?: "")
+        arrayOf(this.prefHelp?.getString(HELP_KEY + "1", EMPTY) ?: EMPTY,
+                this.prefHelp?.getString(HELP_KEY + "2", EMPTY) ?: EMPTY,
+                this.prefHelp?.getString(HELP_KEY + "3", EMPTY) ?: EMPTY)
             .forEach {
 
                 if (it.isNotEmpty()) {
@@ -98,10 +72,10 @@ object WeatherProvider {
             else -> {
 
                 this.prefHelp?.edit()?.putString(HELP_KEY + "1",
-                    this.prefHelp?.getString(HELP_KEY + "2", ""))?.apply()
+                    this.prefHelp?.getString(HELP_KEY + "2", EMPTY))?.apply()
 
                 this.prefHelp?.edit()?.putString(HELP_KEY + "2",
-                    this.prefHelp?.getString(HELP_KEY + "3", ""))?.apply()
+                    this.prefHelp?.getString(HELP_KEY + "3", EMPTY))?.apply()
 
                 this.prefHelp?.edit()?.putString(HELP_KEY + "3", helpCity)?.apply()
 
@@ -114,14 +88,12 @@ object WeatherProvider {
 
         val posInPref = position + 1
 
-        Log.d("POS", position.toString())
-
-        this.prefHelp?.edit()?.putString(HELP_KEY + (position + 1).toString(), "")?.apply()
+        this.prefHelp?.edit()?.putString(HELP_KEY + (posInPref).toString(), EMPTY)?.apply()
 
         for (i in posInPref + 1..MAX_HELP_CITIES + 1) {
 
             this.prefHelp?.edit()?.
-                putString(HELP_KEY + (i - 1), this.prefHelp?.getString(HELP_KEY + i, ""))?.apply()
+                putString(HELP_KEY + (i - 1), this.prefHelp?.getString(HELP_KEY + i, EMPTY))?.apply()
 
         }
 

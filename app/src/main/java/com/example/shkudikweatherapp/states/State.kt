@@ -1,3 +1,3 @@
 package com.example.shkudikweatherapp.states
 
-enum class State { UPDATED, LOADING, WRONG_CITY, BAD_CONNECTION }
+enum class State { UPDATED, LOADING, WRONG_CITY, BAD_CONNECTION, CHANGING_CITY }

@@ -25,4 +25,6 @@
     <string name="hello_world">Hello Square World!</string>
     <string name="set">Set</string>
     <string name="enter_city">Enter city</string>
+    <string name="deg_f">°F</string>
+    <string name="deg_c">°С</string>
 </resources>
