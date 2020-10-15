@@ -4,8 +4,6 @@
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
-
     <ImageView
         android:id="@+id/main_background"
         android:scaleType="centerCrop"
@@ -69,6 +67,7 @@
                 android:layout_weight="11.5">
 
                 <ImageView
+                    android:id="@+id/btn_share"
                     android:scaleX="0.95"
                     android:scaleY="0.95"
                     android:layout_width="match_parent"
@@ -96,25 +95,26 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="10">
+            android:layout_weight="8.5">
 
             <RelativeLayout
                 android:layout_height="match_parent"
                 android:layout_width="0dp"
-                android:layout_weight="18">
+                android:layout_weight="10.5">
             </RelativeLayout>
 
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_height="match_parent"
                 android:layout_width="0dp"
-                android:layout_weight="70">
+                android:layout_weight="86">
+
 
                 <FrameLayout
                     android:id="@+id/input_city_frame"
                     android:descendantFocusability="blocksDescendants"
                     android:background="@drawable/back_city_input"
-                    android:layout_weight="80"
+                    android:layout_weight="74"
                     android:layout_width="0dp"
                     android:layout_height="match_parent">
 
@@ -123,8 +123,7 @@
                         android:fontFamily="verdana"
                         android:paddingEnd="12sp"
                         android:textSize="27sp"
-                        android:paddingStart="15sp"
-                        android:background="@drawable/back_city_input"
+                        android:paddingStart="11sp"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
@@ -132,7 +131,7 @@
 
                     <ImageView
                         android:id="@+id/btn_apply_city"
-                        android:paddingEnd="10sp"
+                        android:paddingEnd="9sp"
                         android:layout_gravity="end|center"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -142,13 +141,13 @@
                 </FrameLayout>
 
                 <RelativeLayout
-                    android:layout_weight="3"
+                    android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="match_parent">
                 </RelativeLayout>
 
                 <RelativeLayout
-                    android:layout_weight="17"
+                    android:layout_weight="13"
                     android:layout_width="0dp"
                     android:layout_height="match_parent">
 
@@ -157,8 +156,22 @@
                         android:scaleX="0.9"
                         android:scaleY="0.9"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/replace">
+                        android:layout_height="match_parent">
+                    </ImageView>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_weight="13"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/btn_geo"
+                        android:scaleX="0.9"
+                        android:scaleY="0.9"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
                     </ImageView>
 
                 </RelativeLayout>
@@ -168,7 +181,7 @@
             <RelativeLayout
                 android:layout_height="match_parent"
                 android:layout_width="0dp"
-                android:layout_weight="12">
+                android:layout_weight="3.5">
             </RelativeLayout>
 
         </LinearLayout>
@@ -176,7 +189,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1.5">
+            android:layout_weight="1">
         </RelativeLayout>
 
         <RelativeLayout
@@ -198,7 +211,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="33.5">
+            android:layout_weight="35.5">
         </RelativeLayout>
 
         <RelativeLayout
@@ -411,7 +424,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="7">
+            android:layout_weight="6">
 
             <com.github.rahatarmanahmed.cpv.CircularProgressView
                 android:visibility="gone"
@@ -465,7 +478,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="23.5">
+                android:layout_weight="23">
             </RelativeLayout>
 
             <LinearLayout
@@ -475,7 +488,7 @@
                 android:layout_weight="12">
 
                 <RelativeLayout
-                    android:layout_weight="27"
+                    android:layout_weight="22"
                     android:layout_width="0dp"
                     android:layout_height="match_parent">
                 </RelativeLayout>
@@ -495,7 +508,7 @@
                 </LinearLayout>
 
                 <RelativeLayout
-                    android:layout_weight="35"
+                    android:layout_weight="40"
                     android:layout_width="0dp"
                     android:layout_height="match_parent">
                 </RelativeLayout>
@@ -505,7 +518,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="65">
+                android:layout_weight="67">
             </RelativeLayout>
 
         </LinearLayout>

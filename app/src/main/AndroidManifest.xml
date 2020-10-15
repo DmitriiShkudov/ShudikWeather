@@ -3,10 +3,16 @@
     package="com.example.shkudikweatherapp">
 
 
-
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION" />
+
 
     <application
         android:allowBackup="true"
@@ -15,7 +21,7 @@
         android:networkSecurityConfig="@xml/policy"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
         <uses-library
             android:name="com.google.android.wearable"
             android:required="false" />
@@ -29,7 +35,9 @@
             android:value="true" />
 
         <activity
+
             android:name=".activities.SettingsActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

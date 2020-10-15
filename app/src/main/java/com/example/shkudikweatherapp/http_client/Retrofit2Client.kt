@@ -1,49 +1,47 @@
 package com.example.shkudikweatherapp.http_client
 
-import android.util.Log
-import com.example.shkudikweatherapp.pojo.weather.Weather
+import com.example.shkudikweatherapp.providers.Helper
+import com.example.shkudikweatherapp.providers.Helper.BASE_URL_TIME
+import com.example.shkudikweatherapp.providers.Helper.BASE_URL_WEATHER
+import com.example.shkudikweatherapp.providers.Helper.KEY_API
 import com.example.shkudikweatherapp.providers.UserPreferences
 import com.example.shkudikweatherapp.viewmodels.MainViewModel
-import kotlinx.coroutines.*
-import kotlinx.coroutines.Dispatchers.IO
 import okhttp3.OkHttpClient
-import okhttp3.internal.wait
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.net.SocketTimeoutException
 import java.util.concurrent.TimeUnit
 
 
-class Retrofit2Client(val viewModel: MainViewModel) {
+class Retrofit2Client(private val viewModel: MainViewModel) {
 
-    private val BASE_URL = "http://api.openweathermap.org/"
-    private val KEY_API = "6a8c6db6e5c6f3972d7ae682ae812b52"
-
-
-    var okHttpClient = OkHttpClient.Builder()
+    private val okHttpClient = OkHttpClient.Builder()
         .connectTimeout(2, TimeUnit.SECONDS)
         .readTimeout(1500, TimeUnit.MILLISECONDS)
         .writeTimeout(1, TimeUnit.SECONDS)
         .build()
 
+    private val retrofitWeather =
+        Retrofit.Builder().
+        baseUrl(BASE_URL_WEATHER).
+        client(okHttpClient).
+        addConverterFactory(GsonConverterFactory.create()).
+        build()
+
+    private val retrofitTime =
+        Retrofit.Builder().
+        baseUrl(BASE_URL_TIME).
+        client(okHttpClient).
+        addConverterFactory(GsonConverterFactory.create()).
+        build()
+
     private val weatherService: WeatherService
+    get() = retrofitWeather.create(WeatherService::class.java)
 
-        get() {
+    private val timeUTCService: TimeUTCService
+    get() = retrofitTime.create(TimeUTCService::class.java)
 
-            val retrofit =
-                Retrofit.Builder().
-                baseUrl(BASE_URL).
-                client(okHttpClient).
-                addConverterFactory(GsonConverterFactory.create()).
-                build()
-
-            return retrofit.create(WeatherService::class.java)
-
-        }
-
-
+    // essential determination for successful API request
     fun getLang() = when (UserPreferences.language) {
 
         UserPreferences.Language.RUS -> "ru"
@@ -52,34 +50,47 @@ class Retrofit2Client(val viewModel: MainViewModel) {
 
     }
 
-    fun loadWeather(city: String) {
+    fun loadWeather(city: String) =
 
-        weatherService.getWeather(city = city, appid = KEY_API, lang = getLang()).enqueue(object : Callback<Weather> {
+        try {
 
-            override fun onResponse(call: Call<Weather>, response: Response<Weather>) {
+            with(
+                weatherService.getWeather(city = city, appid = KEY_API, lang = getLang()).execute()
+                    .body()
+            ) {
 
-                val weather = response.body()
+                if (this != null) {
 
-                if (weather != null) {
-
-                    viewModel.weatherLoaded(weather)
+                    this
 
                 } else {
 
-                    viewModel.wrongCity()
+                    viewModel.desc.postValue(Helper.CITY_NOT_FOUND)
+                    viewModel.stateWrongCity()
+                    null
 
                 }
 
             }
 
-            override fun onFailure(call: Call<Weather>, t: Throwable) {
+        } catch (e: SocketTimeoutException) {
 
-                viewModel.connectionError()
+            viewModel.stateConnectionError()
+            null
 
-            }
+        }
 
-        })
+    fun loadTimeUTC() =
 
-    }
+        try {
+
+            timeUTCService.getTimeUTC().execute().body()
+
+        } catch (e: SocketTimeoutException) {
+
+            viewModel.stateConnectionError()
+            null
+
+        }
 
 }

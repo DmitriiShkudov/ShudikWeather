@@ -19,54 +19,53 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.shkudikweatherapp.R
 import com.example.shkudikweatherapp.activities.MainActivity
-import com.example.shkudikweatherapp.data.InfoDatabase
+import com.example.shkudikweatherapp.providers.Helper.DEGREE_KEY
+import com.example.shkudikweatherapp.providers.Helper.EMPTY
+import com.example.shkudikweatherapp.providers.Helper.FULLSCREEN_KEY
+import com.example.shkudikweatherapp.providers.Helper.LANG_KEY
+import com.example.shkudikweatherapp.providers.Helper.NOTIF_CITY_KEY
+import com.example.shkudikweatherapp.providers.Helper.NOTIF_INTERVAL_KEY
+import com.example.shkudikweatherapp.providers.Helper.SEARCH_MODE_KEY
+import com.example.shkudikweatherapp.providers.Helper.USER_PREF
 
 object UserPreferences {
 
     enum class Language(val str: String) { RUS("Русский"), ENG("English"), GER("Deutsch") }
-
     enum class DegreeUnit(val str: String) { DEG_F(" °F"), DEG_C(" °C") }
-
-    private const val USER_PREF = "User pref"
-    private const val DEG_PREF = "Deg pref"
-    private const val NOTIF_CITY_KEY = "City key"
-    private const val NOTIF_INTERVAL_KEY = "Interval key"
-    private const val LANG_KEY = "Language key"
-    private const val FULLSCREEN_KEY = "Fullscreen key"
-    private const val DEGREE_KEY = "Degree key"
-    private const val EMPTY = ""
+    enum class SearchMode(val isCity: Boolean) { CITY(true), GEO(false) }
 
     var context: Context? = null
 
-    val db: InfoDatabase
-    get() = Room.databaseBuilder(this.context!!, InfoDatabase::class.java, "info").build()
+    val pref
+        get() = this.context?.getSharedPreferences(USER_PREF, 0)
 
-    //
-    val pref: SharedPreferences?
-    get() = this.context?.getSharedPreferences(USER_PREF, 0)
+    var searchMode: SearchMode
+    get() = when (this.pref?.getBoolean(SEARCH_MODE_KEY, SearchMode.CITY.isCity) ?: SearchMode.CITY.isCity) {
 
-    //
-    var notifCity: String
-    get() = this.pref?.getString(NOTIF_CITY_KEY, EMPTY) ?: EMPTY
-    set(value) = this.pref?.edit()?.putString(NOTIF_CITY_KEY, value)?.apply()!!
+        true -> SearchMode.CITY
+        false -> SearchMode.GEO
 
-    //
-    var notifInterval: Int
-    get() = this.pref?.getInt(NOTIF_INTERVAL_KEY, 2) ?: 2
-    set(value) = this.pref?.edit()?.putInt(NOTIF_INTERVAL_KEY, value)?.apply()!!
+    }
+    set(value) = this.pref?.edit()?.putBoolean(SEARCH_MODE_KEY, value.isCity)?.apply()!!
 
-    //
-    var language: Language
+
+    var notifCity
+        get() = this.pref?.getString(NOTIF_CITY_KEY, EMPTY) ?: EMPTY
+        set(value) = this.pref?.edit()?.putString(NOTIF_CITY_KEY, value)?.apply()!!
+
+    var notifInterval
+        get() = this.pref?.getInt(NOTIF_INTERVAL_KEY, 2) ?: 2
+        set(value) = this.pref?.edit()?.putInt(NOTIF_INTERVAL_KEY, value)?.apply()!!
+
+    var language
         get() = when (this.pref?.getString(LANG_KEY, Language.ENG.str) ?: Language.ENG.str) {
-
             Language.RUS.str -> Language.RUS
             Language.ENG.str -> Language.ENG
             else -> Language.GER
         }
         set(value) = this.pref?.edit()?.putString(LANG_KEY, value.str)?.apply()!!
 
-    //
-    var degreeUnit: DegreeUnit
+    var degreeUnit
         get() = when (this.pref?.getString(DEGREE_KEY, DegreeUnit.DEG_C.str) ?: DegreeUnit.DEG_C.str) {
 
             DegreeUnit.DEG_C.str -> DegreeUnit.DEG_C
@@ -75,57 +74,8 @@ object UserPreferences {
         }
         set(value) = this.pref?.edit()?.putString(DEGREE_KEY, value.str)?.apply()!!
 
-    //
-    var fullscreen: Boolean
-    get() = this.pref?.getBoolean(FULLSCREEN_KEY, false) ?: false
-    set(value) = this.pref?.edit()?.putBoolean(FULLSCREEN_KEY, value)?.apply()!!
-
-    //
-    fun makeNotification() {
-
-        val aContext = this.context!!.applicationContext
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-
-            val name = "F"
-            val descriptionText = "F"
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel("D", name, importance).apply {
-                description = descriptionText
-            }
-
-            // Register the channel with the system
-            val notificationManager: NotificationManager =
-                aContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(channel)
-
-            // Create an explicit intent for an Activity in your app
-            val intent = Intent(aContext, MainActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
-            }
-            val pendingIntent: PendingIntent = PendingIntent.getActivity(aContext, 0, intent, 0)
-
-            val builder = NotificationCompat.Builder(aContext, "G")
-                .setSmallIcon(R.drawable.england)
-                .setContentTitle("My notification")
-                .setContentText("Hello World!")
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                // Set the intent that will fire when the user taps the notification
-                .setContentIntent(pendingIntent)
-                .setAutoCancel(true)
-
-            val id = 12
-
-            with(NotificationManagerCompat.from(aContext)) {
-                // notificationId is a unique int for each notification that you must define
-                notify(id, builder.build())
-            }
-
-        }
-
-
-
-
-    }
+    var fullscreen
+        get() = this.pref?.getBoolean(FULLSCREEN_KEY, false) ?: false
+        set(value) = this.pref?.edit()?.putBoolean(FULLSCREEN_KEY, value)?.apply()!!
 
 }

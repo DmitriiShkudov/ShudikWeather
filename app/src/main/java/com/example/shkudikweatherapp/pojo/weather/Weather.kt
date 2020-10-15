@@ -7,5 +7,10 @@ data class Weather constructor(@SerializedName("weather")
                                @SerializedName("main")
                                val main: MainModel,
                                @SerializedName("wind")
-                               val wind: WindModel
-) {}
+                               val wind: WindModel,
+                               @SerializedName("timezone")
+                               val timezone: Int) {
+
+
+
+}
