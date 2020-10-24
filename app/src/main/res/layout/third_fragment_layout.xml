@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="25">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/fTemp3"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:text="Температура:"
+                android:layout_marginStart="12dp"
+                android:gravity="start|center"
+                android:layout_gravity="start"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="16">
+            </TextView>
+
+            <TextView
+                android:id="@+id/fFeels3"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:text="Ощущается как:"
+                android:layout_marginStart="12dp"
+                android:gravity="start|center"
+                android:layout_gravity="start"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="16">
+            </TextView>
+
+            <TextView
+                android:id="@+id/fHumidity3"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:text="Влажность:"
+                android:layout_marginStart="12dp"
+                android:gravity="start|center"
+                android:layout_gravity="start"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="16">
+            </TextView>
+
+            <TextView
+                android:id="@+id/fWind3"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:text="Ветер:"
+                android:layout_marginStart="12dp"
+                android:gravity="start|center"
+                android:layout_gravity="start"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="16">
+            </TextView>
+
+            <TextView
+                android:id="@+id/fWindDir3"
+                android:layout_marginEnd="6dp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:text="Направление ветра:"
+                android:layout_marginStart="12dp"
+                android:gravity="start|center"
+                android:layout_gravity="start"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="16">
+            </TextView>
+
+            <TextView
+                android:id="@+id/fPressure3"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:text="Давление:"
+                android:layout_marginStart="12dp"
+                android:gravity="start|center"
+                android:layout_gravity="start"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="16">
+            </TextView>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:id="@+id/temp3"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:textSize="16sp">
+            </TextView>
+
+            <TextView
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:id="@+id/feels3"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:textSize="16sp">
+            </TextView>
+
+            <TextView
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:id="@+id/humidity3"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:textSize="16sp">
+            </TextView>
+
+            <TextView
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:id="@+id/wind3"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:textSize="16sp">
+            </TextView>
+
+            <TextView
+                android:layout_marginEnd="3dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:id="@+id/windDir3"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:textSize="14sp">
+            </TextView>
+
+            <TextView
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:id="@+id/pressure3"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:textSize="16sp">
+            </TextView>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+    </LinearLayout>
+
+</LinearLayout>

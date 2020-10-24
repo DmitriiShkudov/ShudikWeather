@@ -22,21 +22,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
-        <uses-library
-            android:name="com.google.android.wearable"
-            android:required="false" />
-
-        <!--
-               Set to true if your app is Standalone, that is, it does not require the handheld
-               app to run.
-        -->
-        <meta-data
-            android:name="com.google.android.wearable.standalone"
-            android:value="true" />
 
         <activity
 
-            android:name=".activities.SettingsActivity">
+            android:name=".presentation_layer.settings_activity.activity.SettingsActivity">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -45,7 +34,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.MainActivity"
+            android:name=".presentation_layer.main_activity.activity.MainActivity"
             android:windowSoftInputMode="stateHidden|adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

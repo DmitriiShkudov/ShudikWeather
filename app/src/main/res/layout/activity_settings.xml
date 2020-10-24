@@ -17,7 +17,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#86000000">
+        android:background="#51000000">
     </RelativeLayout>
 
     <LinearLayout
@@ -25,7 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="@dimen/box_inset_layout_padding"
-        tools:context=".activities.SettingsActivity">
+        tools:context=".presentation_layer.settings_activity.activity.SettingsActivity">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -481,6 +481,7 @@
                 android:layout_weight="1.5">
 
                 <Button
+                    android:clickable="true"
                     android:id="@+id/btn_apply_notifications"
                     android:visibility="invisible"
                     android:layout_width="match_parent"
