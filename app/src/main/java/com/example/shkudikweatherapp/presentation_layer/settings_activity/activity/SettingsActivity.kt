@@ -51,7 +51,6 @@ class SettingsActivity : AppCompatActivity() {
 
         }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
 
         if (UserPreferences.fullscreen) setTheme(R.style.fullscreen)
@@ -68,7 +67,6 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         btn_apply_notifications.setOnClickListener {
-
 
             val nBuilder = NotificationCompat.Builder(this@SettingsActivity, "m").
                 setSmallIcon(R.drawable.settings).

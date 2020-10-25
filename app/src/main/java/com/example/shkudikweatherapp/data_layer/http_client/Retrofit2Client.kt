@@ -5,7 +5,9 @@ import com.example.shkudikweatherapp.data_layer.providers.Helper.BASE_URL_TIME
 import com.example.shkudikweatherapp.data_layer.providers.Helper.BASE_URL_WEATHER
 import com.example.shkudikweatherapp.data_layer.providers.Helper.KEY_API
 import com.example.shkudikweatherapp.data_layer.providers.UserPreferences
+import com.example.shkudikweatherapp.data_layer.providers.UserPreferences.language
 import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.isSelectedCityExists
+import com.example.shkudikweatherapp.presentation_layer.states.States
 import com.example.shkudikweatherapp.presentation_layer.viewmodels.MainViewModel
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -58,8 +60,15 @@ class Retrofit2Client(private val viewModel: MainViewModel) {
 
                 } else {
 
-                    viewModel.desc.postValue(Helper.CITY_NOT_FOUND)
-                    viewModel.stateWrongCity()
+                    viewModel.desc.postValue(when (language) {
+
+                        UserPreferences.Language.RUS -> Helper.CITY_NOT_FOUND_RUS
+                        UserPreferences.Language.ENG -> Helper.CITY_NOT_FOUND_ENG
+                        UserPreferences.Language.GER -> Helper.CITY_NOT_FOUND_GER
+
+                    })
+
+                    viewModel.state.postValue(States.WRONG_CITY)
                     isSelectedCityExists = false
                     null
 
@@ -69,7 +78,7 @@ class Retrofit2Client(private val viewModel: MainViewModel) {
 
         } catch (e: SocketTimeoutException) {
 
-            viewModel.stateConnectionError()
+            viewModel.state.postValue(States.BAD_CONNECTION)
             null
 
         }
@@ -131,8 +140,15 @@ class Retrofit2Client(private val viewModel: MainViewModel) {
 
                 } else {
 
-                    viewModel.desc.postValue(Helper.CITY_NOT_FOUND)
-                    viewModel.stateWrongCity()
+                    viewModel.desc.postValue(when (language) {
+
+                        UserPreferences.Language.RUS -> Helper.CITY_NOT_FOUND_RUS
+                        UserPreferences.Language.ENG -> Helper.CITY_NOT_FOUND_ENG
+                        UserPreferences.Language.GER -> Helper.CITY_NOT_FOUND_GER
+
+                    })
+
+                    viewModel.state.postValue(States.WRONG_CITY)
                     isSelectedCityExists = false
                     null
 
@@ -142,7 +158,7 @@ class Retrofit2Client(private val viewModel: MainViewModel) {
 
         } catch (e: SocketTimeoutException) {
 
-            viewModel.stateConnectionError()
+            viewModel.state.postValue(States.BAD_CONNECTION)
             null
 
         }
@@ -155,7 +171,7 @@ class Retrofit2Client(private val viewModel: MainViewModel) {
 
         } catch (e: SocketTimeoutException) {
 
-            viewModel.stateConnectionError()
+            viewModel.state.postValue(States.BAD_CONNECTION)
             null
 
         }

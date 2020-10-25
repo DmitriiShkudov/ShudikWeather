@@ -3,6 +3,7 @@ package com.example.shkudikweatherapp.presentation_layer.main_activity.activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -148,6 +149,26 @@ class MainActivity : AppCompatActivity() {
             openSettings()
 
         }
+
+        btn_share.setOnClickListener {
+
+            val share = Intent.createChooser(Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, "Димтри")
+
+                // (Optional) Here we're setting the title of the content
+                putExtra(Intent.EXTRA_TITLE, "Introducing content previews")
+
+                type = "text/plain"
+
+                // (Optional) Here we're passing a content URI to an image to be displayed
+                data = Uri.parse("34 градуса!")
+                flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+            }, null)
+            startActivity(share)
+
+        }
+
 
         tvDescriptionIcon.setOnClickListener {
 
@@ -304,7 +325,7 @@ class MainActivity : AppCompatActivity() {
                 boardImpl.setCity() else boardImpl.setUserLocationTitle()
 
             recyclerHelpImpl.update()
-            viewModel.stateLoading()
+            stateImpl.setState(States.LOADING)
             viewModel.update()
 
         }

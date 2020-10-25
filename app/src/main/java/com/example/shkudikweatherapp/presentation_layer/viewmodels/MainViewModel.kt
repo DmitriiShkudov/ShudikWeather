@@ -58,14 +58,6 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     var fWindDir = MutableLiveData<Array<String>>()
     var fPressure = MutableLiveData<Array<String>>()
 
-    fun stateChangingCity() = this.state.value(States.CHANGING_CITY)
-    fun stateChangingCityCancelled() = this.state.value(States.CHANGING_CITY_CANCELLED)
-    fun stateCityApplied() = this.state.value(States.CITY_APPLIED)
-    fun stateLoading() = this.state.postValue(States.LOADING)
-    fun stateConnectionError() = this.state.postValue(States.BAD_CONNECTION)
-    fun stateWrongCity() = this.state.postValue(States.WRONG_CITY)
-    fun stateMoreInfo() = this.state.postValue(States.MORE_INFO)
-
     fun update() =
         CoroutineScope(IO).launch {
 

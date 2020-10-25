@@ -15,7 +15,9 @@ object Helper {
     const val METER_PER_SEC = " m/s"
     const val METER_PER_SEC_RUS = " м/с"
     const val ABS_ZERO = 273
-    const val CITY_NOT_FOUND = "This city is not found"
+    const val CITY_NOT_FOUND_RUS = "Город не найден"
+    const val CITY_NOT_FOUND_ENG = "City is not found"
+    const val CITY_NOT_FOUND_GER = "Stadt nicht gefunden"
     const val USER_PREF = "User pref"
     const val NOTIF_CITY_KEY = "City key"
     const val NOTIF_INTERVAL_KEY = "Interval key"
