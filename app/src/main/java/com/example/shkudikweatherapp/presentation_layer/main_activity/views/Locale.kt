@@ -3,13 +3,9 @@ package com.example.shkudikweatherapp.presentation_layer.main_activity.views
 import android.view.View
 import com.example.shkudikweatherapp.presentation_layer.main_activity.activity.MainActivity
 import com.example.shkudikweatherapp.data_layer.providers.UserPreferences
+import com.example.shkudikweatherapp.data_layer.providers.UserPreferences.language
+import com.example.shkudikweatherapp.presentation_layer.common_protocols.Locale
 import kotlinx.android.synthetic.main.activity_main.*
-
-interface Locale {
-
-    fun setLocale()
-
-}
 
 class LocaleImpl(private val activity: MainActivity) : Locale {
 
@@ -19,7 +15,7 @@ class LocaleImpl(private val activity: MainActivity) : Locale {
 
             fun setLocaleText(obj: View) {
 
-                when (UserPreferences.language) {
+                when (language) {
 
                     UserPreferences.Language.RUS -> when (obj) {
 
@@ -63,5 +59,4 @@ class LocaleImpl(private val activity: MainActivity) : Locale {
 
         }
     }
-
 }

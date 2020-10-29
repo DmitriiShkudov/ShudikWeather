@@ -37,5 +37,4 @@ class MoreInfoImpl(private val activity: MainActivity) : IMoreInfo {
 
         }
     }
-
 }

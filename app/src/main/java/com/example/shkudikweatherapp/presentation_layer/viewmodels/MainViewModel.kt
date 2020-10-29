@@ -1,6 +1,7 @@
 package com.example.shkudikweatherapp.presentation_layer.viewmodels
 
 import android.app.Application
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.example.shkudikweatherapp.data_layer.providers.Helper.ABS_ZERO
@@ -12,6 +13,7 @@ import com.example.shkudikweatherapp.data_layer.http_client.Retrofit2Client
 import com.example.shkudikweatherapp.data_layer.pojo.forecast.Forecast
 import com.example.shkudikweatherapp.data_layer.pojo.time_utc.TimeUTC
 import com.example.shkudikweatherapp.data_layer.pojo.weather.Weather
+import com.example.shkudikweatherapp.data_layer.providers.Helper
 import com.example.shkudikweatherapp.presentation_layer.main_activity.activity.MainActivity.Companion.isMoreInfoOpened
 import com.example.shkudikweatherapp.data_layer.providers.Helper.getMainDescription
 import com.example.shkudikweatherapp.data_layer.providers.Helper.isNightTime
@@ -28,9 +30,13 @@ import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider
 import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.selectedCity
 import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.selectedLat
 import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.selectedLon
-import com.example.shkudikweatherapp.presentation_layer.states.MainDescription
-import com.example.shkudikweatherapp.presentation_layer.states.States
+import com.example.shkudikweatherapp.data_layer.states.MainDescription
+import com.example.shkudikweatherapp.data_layer.states.States
+import com.example.shkudikweatherapp.presentation_layer.main_activity.activity.MainActivity
+import com.example.shkudikweatherapp.presentation_layer.main_activity.activity.reformat
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.Default
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 
@@ -59,23 +65,18 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     var fPressure = MutableLiveData<Array<String>>()
 
     fun update() =
-        CoroutineScope(IO).launch {
-
+        CoroutineScope(Main).launch {
             while (true) {
-
                 if (!isMoreInfoOpened)
-                    load()
+                    load(this)
                 delay(10000)
-
             }
     }
 
-    fun load() {
-
-        GlobalScope.launch(IO) {
+    suspend fun load(coroutineScope: CoroutineScope) {
 
             val weather =
-                async {
+                coroutineScope.async { withContext(IO) {
                     if (searchMode == UserPreferences.SearchMode.CITY) {
 
                         retrofitClient.loadWeather(selectedCity)
@@ -85,14 +86,17 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
                         retrofitClient.loadLocalWeather(selectedLat, selectedLon)
 
                     }
-
-                }.await()
+                } }.await()
 
             val timeUTC =
-                async { retrofitClient.loadTimeUTC() }.await()
+                coroutineScope.async { withContext(IO) {
+
+                    retrofitClient.loadTimeUTC()
+
+                } }.await()
 
             val forecast =
-                async {
+                coroutineScope.async { withContext(IO) {
                     if (searchMode == UserPreferences.SearchMode.CITY) {
 
                         retrofitClient.loadForecast(selectedCity)
@@ -102,135 +106,135 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
                         retrofitClient.loadForecast(selectedLat, selectedLon)
 
                     }
-
-                }.await()
-
+                } }.await()
 
             if (weather != null && timeUTC != null && forecast != null) {
 
                 succeed(weather, timeUTC, forecast)
 
             }
-
-
         }
-
-    }
 
     private suspend fun succeed(weather: Weather, timeUTC: TimeUTC, forecast: Forecast) {
 
-        withContext(Main) {
+         if (searchMode == UserPreferences.SearchMode.CITY)
+             WeatherProvider.addHelpCity(selectedCity)
 
-            // Received weather
-            val receivedTemp = weather.main.temp.toInt() - ABS_ZERO
-            val receivedHumidity = weather.main.humidity.toString() + PERCENT
-            val receivedWind = weather.wind.speed.toInt()
-            val receivedMainDesc = weather.weather!![0].main
-            val receivedDesc = weather.weather[0].description
+         // Received weather
+         val receivedTemp = weather.main.temp.toInt() - ABS_ZERO
+         val receivedHumidity = weather.main.humidity.toString() + PERCENT
+         val receivedWind = weather.wind.speed.toInt()
+         val receivedMainDesc = weather.weather!![0].main
+         val receivedDesc = weather.weather[0].description
 
-            // Received time
-            val receivedTime = timeUTC.currentDateTime.substring(11..15)
-            //
-            val hoursDelta = weather.timezone / 3600
-            val delta = receivedTime.substring(0..1).toInt() + hoursDelta
-            //
+         // Received time
+         val receivedTime = timeUTC.currentDateTime.substring(11..15)
 
-            // Received forecast
-            val receivedFTemp1 = forecast.list[1].main.temp.toInt()
-            val receivedFTemp2 = forecast.list[2].main.temp.toInt()
-            val receivedFTemp3 = forecast.list[3].main.temp.toInt()
-
-            val receivedFFeels1 = forecast.list[1].main.feels_like.toInt()
-            val receivedFFeels2 = forecast.list[2].main.feels_like.toInt()
-            val receivedFFeels3 = forecast.list[3].main.feels_like.toInt()
-
-            val receivedFWind1 = forecast.list[1].windModel.speed.toInt()
-            val receivedFWind2 = forecast.list[2].windModel.speed.toInt()
-            val receivedFWind3 = forecast.list[3].windModel.speed.toInt()
-
-            val receivedFWindDir1 = forecast.list[1].windModel.deg
-            val receivedFWindDir2 = forecast.list[2].windModel.deg
-            val receivedFWindDir3 = forecast.list[3].windModel.deg
-
-            val receivedFPressure1 = forecast.list[1].main.pressure
-            val receivedFPressure2 = forecast.list[2].main.pressure
-            val receivedFPressure3 = forecast.list[3].main.pressure
+         val hoursDelta = weather.timezone / 3600
+         val delta = receivedTime.substring(0..1).toInt() + hoursDelta
 
 
-            // applying received info
+         // Received forecast
+         val receivedFTemp1 = forecast.list[1].main.temp.toInt()
+         val receivedFTemp2 = forecast.list[2].main.temp.toInt()
+         val receivedFTemp3 = forecast.list[3].main.temp.toInt()
 
-            if (searchMode == UserPreferences.SearchMode.CITY)
-                WeatherProvider.addHelpCity(selectedCity)
+         val receivedFFeels1 = forecast.list[1].main.feels_like.toInt()
+         val receivedFFeels2 = forecast.list[2].main.feels_like.toInt()
+         val receivedFFeels3 = forecast.list[3].main.feels_like.toInt()
+
+         val receivedFWind1 = forecast.list[1].windModel.speed.toInt()
+         val receivedFWind2 = forecast.list[2].windModel.speed.toInt()
+         val receivedFWind3 = forecast.list[3].windModel.speed.toInt()
+
+         val receivedFWindDir1 = forecast.list[1].windModel.deg
+         val receivedFWindDir2 = forecast.list[2].windModel.deg
+         val receivedFWindDir3 = forecast.list[3].windModel.deg
+
+         val receivedFPressure1 = forecast.list[1].main.pressure
+         val receivedFPressure2 = forecast.list[2].main.pressure
+         val receivedFPressure3 = forecast.list[3].main.pressure
+
+         // applying received info
+
+         //
+         withContext(Default) {
+             time.postValue(
+                 (when {
+                     (delta >= 24) -> (delta - 24)
+                     (delta < 0) -> (delta + 24)
+                     else -> delta
+                 }).toString() + receivedTime.substring(2..4)
+             )
+         }
+         //
+         withContext(Default) {
+             desc.postValue("$receivedDesc, ${time.value!!}")
+             isNight.postValue(isNightTime(time.value!!))
+         }
+         //
+         withContext(Default) {
+             mainDesc.postValue(getMainDescription(isNight.value!!, receivedMainDesc))
+         }
 
 
-            withContext(IO) {
+         // Setting forecast
 
-                time.postValue(
-                    (when {
-                        (delta >= 24) -> (delta - 24)
-                        (delta < 0) -> (delta + 24)
-                        else -> delta
-                    }).toString() + receivedTime.substring(2..4)
-                )
+        fTemp.value(arrayOf(setTemp(receivedFTemp1), setTemp(receivedFTemp2), setTemp(receivedFTemp3)))
+
+        fFeels.value(arrayOf(setTemp(receivedFFeels1), setTemp(receivedFFeels2), setTemp(receivedFFeels3)))
+
+        fWind.value(arrayOf(setWindSpeed(receivedFWind1), setWindSpeed(receivedFWind2), setWindSpeed(receivedFWind3)))
+
+        fWindDir.value(arrayOf(setWindDirection(receivedFWindDir1),
+                               setWindDirection(receivedFWindDir2),
+                               setWindDirection(receivedFWindDir3)))
+
+        fHumidity.value(arrayOf(forecast.list[1].main.humidity.toString() + PERCENT,
+                                forecast.list[2].main.humidity.toString() + PERCENT,
+                                forecast.list[3].main.humidity.toString() + PERCENT))
+
+        fPressure.value(arrayOf(setPressure(receivedFPressure1),
+                                setPressure(receivedFPressure2),
+                                setPressure(receivedFPressure3)))
+
+        // Setting current weather
+
+        temp.value(
+            (if (degreeUnit == UserPreferences.TemperatureUnit.DEG_C)
+                        (receivedTemp) else (receivedTemp).fahrenheit()).toString() + degreeUnit.str
+        )
+
+        humidity.value(receivedHumidity)
+
+        wind.value(
+            receivedWind.toString() +
+                    if (language != UserPreferences.Language.RUS) METER_PER_SEC else METER_PER_SEC_RUS
+        )
+
+        state.value(States.UPDATED)
+
+    }
+
+    fun applyCity(activity: MainActivity) { with(activity) {
+
+            if (input_city.text!!.isNotEmpty()) {
+
+                searchMode = UserPreferences.SearchMode.CITY
+
+                input_city.reformat()
+                selectedCity = input_city.text.toString()
+                stateImpl.setState(States.CITY_APPLIED)
+                stateImpl.setState(States.LOADING)
+
+                CoroutineScope(Main).launch { viewModel.load(this) }
+
+            } else {
+
+                Toast.makeText(applicationContext, Helper.emptyInputErrorMessage, Toast.LENGTH_LONG)
+                    .show()
 
             }
-
-
-            withContext(IO) {
-
-                desc.postValue("$receivedDesc, ${time.value!!}")
-                isNight.postValue(isNightTime(time.value!!))
-
-            }
-
-            withContext(IO) {
-
-                getMainDescription(isNight.value!!, receivedMainDesc).apply {
-
-                    mainDesc.postValue(this)
-
-                }
-
-            }
-
-            // Setting forecast
-            withContext(Main) {
-
-                fTemp.value(arrayOf(setTemp(receivedFTemp1), setTemp(receivedFTemp2), setTemp(receivedFTemp3)))
-
-                fFeels.value(arrayOf(setTemp(receivedFFeels1), setTemp(receivedFFeels2), setTemp(receivedFFeels3)))
-
-                fWind.value(arrayOf(setWindSpeed(receivedFWind1), setWindSpeed(receivedFWind2), setWindSpeed(receivedFWind3)))
-
-                fWindDir.value(arrayOf(setWindDirection(receivedFWindDir1),
-                                       setWindDirection(receivedFWindDir2),
-                                       setWindDirection(receivedFWindDir3)))
-
-                fHumidity.value(arrayOf(forecast.list[1].main.humidity.toString() + PERCENT,
-                                        forecast.list[2].main.humidity.toString() + PERCENT,
-                                        forecast.list[3].main.humidity.toString() + PERCENT))
-
-                fPressure.value(arrayOf(setPressure(receivedFPressure1),
-                                        setPressure(receivedFPressure2),
-                                        setPressure(receivedFPressure3)))
-
-
-            }
-
-            temp.value(
-                (if (degreeUnit == UserPreferences.DegreeUnit.DEG_C)
-                            (receivedTemp) else (receivedTemp).fahrenheit()).toString() + degreeUnit.str
-            )
-
-            humidity.value(receivedHumidity)
-
-            wind.value(
-                receivedWind.toString() +
-                        if (language != UserPreferences.Language.RUS) METER_PER_SEC else METER_PER_SEC_RUS
-            )
-
-            state.value(States.UPDATED)
-
         }
 
     }

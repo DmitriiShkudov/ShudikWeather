@@ -16,7 +16,7 @@ object UserPreferences {
     enum class Language(val str: String, val apiStr: String) {
         RUS("Русский", "ru"), ENG("English","en"), GER("Deutsch", "de")
     }
-    enum class DegreeUnit(val str: String) { DEG_F(" °F"), DEG_C(" °C") }
+    enum class TemperatureUnit(val str: String) { DEG_F(" °F"), DEG_C(" °C") }
     enum class SearchMode(val isCity: Boolean) { CITY(true), GEO(false) }
 
     var context: Context? = null
@@ -55,10 +55,10 @@ object UserPreferences {
         set(value) = this.pref?.edit()?.putString(LANG_KEY, value.str)?.apply()!!
 
     var degreeUnit
-        get() = when (this.pref?.getString(DEGREE_KEY, DegreeUnit.DEG_C.str) ?: DegreeUnit.DEG_C.str) {
+        get() = when (this.pref?.getString(DEGREE_KEY, TemperatureUnit.DEG_C.str) ?: TemperatureUnit.DEG_C.str) {
 
-            DegreeUnit.DEG_C.str -> DegreeUnit.DEG_C
-            else -> DegreeUnit.DEG_F
+            TemperatureUnit.DEG_C.str -> TemperatureUnit.DEG_C
+            else -> TemperatureUnit.DEG_F
 
         }
         set(value) = this.pref?.edit()?.putString(DEGREE_KEY, value.str)?.apply()!!

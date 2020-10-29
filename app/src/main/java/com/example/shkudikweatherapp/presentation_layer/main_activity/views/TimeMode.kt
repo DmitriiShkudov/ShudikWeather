@@ -4,15 +4,8 @@ import androidx.core.content.res.ResourcesCompat
 import com.example.shkudikweatherapp.R
 import com.example.shkudikweatherapp.presentation_layer.main_activity.activity.MainActivity
 import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.isSelectedCityExists
+import com.example.shkudikweatherapp.presentation_layer.common_protocols.TimeMode
 import kotlinx.android.synthetic.main.activity_main.*
-
-interface TimeMode {
-
-    fun setDayMode()
-    fun setNightMode()
-    fun setTimeMode(isNight: Boolean)
-
-}
 
 class TimeModeImpl(val activity: MainActivity) : TimeMode {
 
@@ -21,8 +14,6 @@ class TimeModeImpl(val activity: MainActivity) : TimeMode {
             if (isSelectedCityExists)
                 tvDescriptionIcon.
                 setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.more_info, 0)
-
-            btn_share.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.share, null))
 
             btn_apply_city.setImageDrawable(
                 ResourcesCompat.getDrawable(
@@ -74,16 +65,12 @@ class TimeModeImpl(val activity: MainActivity) : TimeMode {
             if (isSelectedCityExists)
                 tvDescriptionIcon.setCompoundDrawablesWithIntrinsicBounds(
                     0,
-                    0, R.drawable.more_info_night, 0
+                    0,
+                    R.drawable.more_info_night,
+                    0
                 )
 
-            btn_share.setImageDrawable(
-                ResourcesCompat.getDrawable(
-                    resources,
-                    R.drawable.share_night,
-                    null
-                )
-            )
+
             btn_change_city.setImageDrawable(
                 ResourcesCompat.getDrawable(
                     resources,
@@ -115,7 +102,6 @@ class TimeModeImpl(val activity: MainActivity) : TimeMode {
 
             ResourcesCompat.getColor(resources, R.color.white, null).also {
 
-                tvDescriptionIcon.setTextColor(it)
                 input_city.setTextColor(it)
                 tvTemp.setTextColor(it)
                 tvHumidity.setTextColor(it)
@@ -125,6 +111,10 @@ class TimeModeImpl(val activity: MainActivity) : TimeMode {
                 text_temp.setTextColor(it)
 
             }
+
+            tvDescriptionIcon.setTextColor(ResourcesCompat.getColor(resources,
+                                                                    R.color.bright_white,
+                                                                    null))
 
             tempIcon.background = ResourcesCompat.getDrawable(
                 resources,

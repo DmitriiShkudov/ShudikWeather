@@ -4,15 +4,16 @@ import androidx.core.content.res.ResourcesCompat
 import com.example.shkudikweatherapp.R
 import com.example.shkudikweatherapp.presentation_layer.main_activity.activity.MainActivity
 import com.example.shkudikweatherapp.data_layer.providers.Helper
+import com.example.shkudikweatherapp.data_layer.providers.Helper.LOW_ENG
+import com.example.shkudikweatherapp.data_layer.providers.Helper.LOW_GER
+import com.example.shkudikweatherapp.data_layer.providers.Helper.LOW_RUS
+import com.example.shkudikweatherapp.data_layer.providers.Helper.OVERCAST_ENG
+import com.example.shkudikweatherapp.data_layer.providers.Helper.OVERCAST_GER
+import com.example.shkudikweatherapp.data_layer.providers.Helper.OVERCAST_RUS
 import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.desc
-import com.example.shkudikweatherapp.presentation_layer.states.MainDescription
+import com.example.shkudikweatherapp.presentation_layer.common_protocols.Background
+import com.example.shkudikweatherapp.data_layer.states.MainDescription
 import kotlinx.android.synthetic.main.activity_main.*
-
-interface Background {
-
-    fun setBackground(description: MainDescription)
-
-}
 
 class BackgroundImpl(private val activity: MainActivity) : Background {
 
@@ -50,9 +51,9 @@ class BackgroundImpl(private val activity: MainActivity) : Background {
 
                     MainDescription.CLOUDS -> {
 
-                        val isOvercast = desc.contains(Helper.OVERCAST_ENG) ||
-                                         desc.contains(Helper.OVERCAST_RUS) ||
-                                         desc.contains(Helper.OVERCAST_GER)
+                        val isOvercast = desc.contains(OVERCAST_ENG) ||
+                                         desc.contains(OVERCAST_RUS) ||
+                                         desc.contains(OVERCAST_GER)
 
                         tempIcon.background = ResourcesCompat.getDrawable(
                             resources,
@@ -80,9 +81,9 @@ class BackgroundImpl(private val activity: MainActivity) : Background {
 
                     MainDescription.CLOUDS_NIGHT -> {
 
-                        val isOvercast = desc.contains(Helper.OVERCAST_ENG) ||
-                                         desc.contains(Helper.OVERCAST_RUS) ||
-                                         desc.contains(Helper.OVERCAST_GER)
+                        val isOvercast = desc.contains(OVERCAST_ENG) ||
+                                         desc.contains(OVERCAST_RUS) ||
+                                         desc.contains(OVERCAST_GER)
 
                         ResourcesCompat.getDrawable(
                             resources,
@@ -92,7 +93,7 @@ class BackgroundImpl(private val activity: MainActivity) : Background {
 
                     }
 
-                    MainDescription.RAIN -> {
+                    MainDescription.RAIN, MainDescription.DRIZZLE -> {
 
                         tempIcon.background = ResourcesCompat.getDrawable(
                             resources,
@@ -114,14 +115,12 @@ class BackgroundImpl(private val activity: MainActivity) : Background {
                         ResourcesCompat.getDrawable(resources, R.drawable.rain, null)
                     }
 
-                    MainDescription.RAIN_NIGHT -> {
-
+                    MainDescription.RAIN_NIGHT, MainDescription.DRIZZLE_NIGHT ->
                         ResourcesCompat.getDrawable(resources, R.drawable.rain_night, null)
 
-                    }
 
                     MainDescription.HAZE, MainDescription.MIST, MainDescription.DUST,
-                    MainDescription.FOG, MainDescription.SMOKE -> {
+                    MainDescription.FOG, MainDescription.SMOKE, MainDescription.ASH, MainDescription.SAND -> {
 
                         tempIcon.background = ResourcesCompat.getDrawable(
                             resources,
@@ -143,7 +142,8 @@ class BackgroundImpl(private val activity: MainActivity) : Background {
                     }
 
                     MainDescription.HAZE_NIGHT, MainDescription.MIST_NIGHT, MainDescription.DUST_NIGHT,
-                    MainDescription.FOG_NIGHT, MainDescription.SMOKE_NIGHT -> {
+                    MainDescription.FOG_NIGHT, MainDescription.SMOKE_NIGHT, MainDescription.ASH_NIGHT,
+                    MainDescription.SAND_NIGHT-> {
 
                         ResourcesCompat.getDrawable(resources, R.drawable.humid_night, null)
 
@@ -151,9 +151,9 @@ class BackgroundImpl(private val activity: MainActivity) : Background {
 
                     MainDescription.SNOW -> {
 
-                        val isLow = desc.contains(Helper.LOW_ENG) ||
-                                    desc.contains(Helper.LOW_RUS) ||
-                                    desc.contains(Helper.LOW_GER)
+                        val isLow = desc.contains(LOW_ENG) ||
+                                    desc.contains(LOW_RUS) ||
+                                    desc.contains(LOW_GER)
 
                         tempIcon.background = ResourcesCompat.getDrawable(
                             resources,
@@ -177,8 +177,14 @@ class BackgroundImpl(private val activity: MainActivity) : Background {
                         )
                     }
 
-                    MainDescription.SNOW_NIGHT -> ResourcesCompat.getDrawable(resources, R.drawable.snow_night, null)
+                    MainDescription.SNOW_NIGHT ->
+                        ResourcesCompat.getDrawable(resources, R.drawable.snow_night, null)
 
+                    MainDescription.THUNDERSTORM, MainDescription.THUNDERSTORM_NIGHT ->
+                        ResourcesCompat.getDrawable(resources, R.drawable.thunder, null)
+
+                    MainDescription.TORNADO, MainDescription.TORNADO_NIGHT ->
+                        ResourcesCompat.getDrawable(resources, R.drawable.tornado, null)
 
                     else -> ResourcesCompat.getDrawable(resources, R.drawable.humid_night, null)
 

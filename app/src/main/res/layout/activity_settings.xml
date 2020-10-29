@@ -17,7 +17,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#51000000">
+        android:background="#43000000">
     </RelativeLayout>
 
     <LinearLayout
@@ -32,7 +32,10 @@
             android:layout_height="0dp"
             android:layout_weight="5">
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
+                app:autoSizeTextType="uniform"
+                app:autoSizeMinTextSize="5sp"
+                app:autoSizeMaxTextSize="15sp"
                 android:id="@+id/settings_header"
                 android:textSize="16sp"
                 android:paddingStart="4sp"
@@ -42,7 +45,7 @@
                 android:drawableStart="@drawable/settings_small"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent">
-            </TextView>
+            </androidx.appcompat.widget.AppCompatTextView>
 
         </RelativeLayout>
 
@@ -85,16 +88,19 @@
                 android:layout_height="match_parent"
                 android:layout_weight="15">
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:paddingEnd="4sp"
+                    app:autoSizeTextType="uniform"
+                    app:autoSizeMinTextSize="5sp"
+                    app:autoSizeMaxTextSize="16sp"
                     android:text="Fullscreen"
                     android:textColor="@color/settingsTextColor"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:textStyle="bold"
                     android:id="@+id/text_fullscreen"
-                    android:gravity="center|left"
-                    android:textSize="19sp">
-                </TextView>
+                    android:gravity="center|left">
+                </androidx.appcompat.widget.AppCompatTextView>
 
             </RelativeLayout>
 
@@ -152,16 +158,19 @@
                 android:layout_height="match_parent"
                 android:layout_weight="15">
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:paddingEnd="4sp"
+                    app:autoSizeTextType="uniform"
+                    app:autoSizeMinTextSize="5sp"
+                    app:autoSizeMaxTextSize="16sp"
                     android:id="@+id/text_language"
                     android:textColor="@color/settingsTextColor"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:textStyle="bold"
                     android:text="Language"
-                    android:gravity="center|left"
-                    android:textSize="19sp">
-                </TextView>
+                    android:gravity="center|left">
+                </androidx.appcompat.widget.AppCompatTextView>
 
             </RelativeLayout>
 
@@ -243,16 +252,19 @@
                 android:layout_height="match_parent"
                 android:layout_weight="15">
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:paddingEnd="4sp"
+                    app:autoSizeTextType="uniform"
+                    app:autoSizeMinTextSize="5sp"
+                    app:autoSizeMaxTextSize="16sp"
                     android:id="@+id/text_temp_unit"
                     android:textColor="@color/settingsTextColor"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:textStyle="bold"
                     android:text="Temperature unit"
-                    android:gravity="center|left"
-                    android:textSize="19sp">
-                </TextView>
+                    android:gravity="center|left">
+                </androidx.appcompat.widget.AppCompatTextView>
 
             </RelativeLayout>
 
@@ -267,7 +279,9 @@
                     android:layout_height="match_parent">
 
                     <RadioButton
-                        android:textSize="19sp"
+                        app:autoSizeTextType="uniform"
+                        app:autoSizeMinTextSize="5sp"
+                        app:autoSizeMaxTextSize="17sp"
                         android:id="@+id/rb_f_unit"
                         android:text="@string/deg_f"
                         android:layout_marginVertical="6sp"
@@ -277,8 +291,9 @@
                     </RadioButton>
 
                     <RadioButton
-                        android:textSize="19sp"
-                        android:id="@+id/rb_c_unit"
+                        app:autoSizeTextType="uniform"
+                        app:autoSizeMinTextSize="5sp"
+                        app:autoSizeMaxTextSize="17sp"                        android:id="@+id/rb_c_unit"
                         android:text="@string/deg_c"
                         android:layout_marginVertical="6sp"
                         android:layout_height="match_parent"
@@ -331,16 +346,19 @@
                 android:layout_height="match_parent"
                 android:layout_weight="15">
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:paddingEnd="4sp"
+                    app:autoSizeTextType="uniform"
+                    app:autoSizeMinTextSize="5sp"
+                    app:autoSizeMaxTextSize="16sp"
                     android:id="@+id/text_push_notif"
                     android:textColor="@color/settingsTextColor"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:textStyle="bold"
                     android:text="Push-notifications"
-                    android:gravity="center|left"
-                    android:textSize="19sp">
-                </TextView>
+                    android:gravity="center|left">
+                </androidx.appcompat.widget.AppCompatTextView>
 
             </RelativeLayout>
 
@@ -350,7 +368,9 @@
                 android:layout_weight="9">
 
                 <Button
-                    android:textSize="13sp"
+                    app:autoSizeTextType="uniform"
+                    app:autoSizeMinTextSize="5sp"
+                    app:autoSizeMaxTextSize="12sp"
                     android:id="@+id/btn_set_notifications"
                     android:text="@string/set"
                     android:layout_marginVertical="6sp"
@@ -394,6 +414,9 @@
                 android:layout_weight="15">
 
                 <EditText
+                    app:autoSizeTextType="uniform"
+                    app:autoSizeMinTextSize="5sp"
+                    app:autoSizeMaxTextSize="17sp"
                     android:paddingStart="5sp"
                     android:background="@drawable/back_notification_city_input"
                     android:id="@+id/input_notification_city"
@@ -417,14 +440,17 @@
                     android:layout_height="0dp"
                     android:layout_weight="2">
 
-                    <TextView
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_marginVertical="4sp"
+                        app:autoSizeTextType="uniform"
+                        app:autoSizeMinTextSize="5sp"
+                        app:autoSizeMaxTextSize="19sp"
                         android:id="@+id/text_select_interval"
                         android:textColor="@color/settingsTextColor"
-                        android:textSize="16sp"
                         android:gravity="center"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
-                    </TextView>
+                    </androidx.appcompat.widget.AppCompatTextView>
 
                 </RelativeLayout>
 
@@ -434,6 +460,9 @@
                     android:layout_weight="3">
 
                     <Spinner
+                        app:autoSizeTextType="uniform"
+                        app:autoSizeMinTextSize="5sp"
+                        app:autoSizeMaxTextSize="14sp"
                         android:layout_marginTop="1sp"
                         android:gravity="center"
                         android:textAlignment="center"
@@ -481,7 +510,9 @@
                 android:layout_weight="1.5">
 
                 <Button
-                    android:clickable="true"
+                    app:autoSizeTextType="uniform"
+                    app:autoSizeMinTextSize="5sp"
+                    app:autoSizeMaxTextSize="16sp"
                     android:id="@+id/btn_apply_notifications"
                     android:visibility="invisible"
                     android:layout_width="match_parent"

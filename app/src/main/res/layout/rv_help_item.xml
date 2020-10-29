@@ -1,29 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    android:background="@drawable/back_rv_help_item"
+<LinearLayout android:background="@drawable/back_rv_help_item"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="27sp">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
+        android:maxHeight="30dp"
+        app:autoSizeTextType="uniform"
+        app:autoSizeMinTextSize="5sp"
+        app:autoSizeMaxTextSize="16sp"
         android:layout_weight="1"
         android:fontFamily="verdana"
         android:gravity="start|center"
-        android:paddingStart="6sp"
+        android:paddingStart="1dp"
         android:drawableStart="@drawable/restore"
-        android:drawablePadding="8sp"
-        android:textSize="16sp"
+        android:drawablePadding="3dp"
         android:id="@+id/tvHelp"
         android:layout_height="match_parent"
-        android:layout_width="wrap_content">
-    </TextView>
+        android:layout_width="0dp">
+    </androidx.appcompat.widget.AppCompatTextView>
 
     <ImageView
         android:id="@+id/imgDeleteHelp"
-        android:layout_marginEnd="5sp"
-        android:scaleX="1.2"
-        android:scaleY="1.2"
+        android:scaleX="1.1"
+        android:scaleY="1.1"
         android:src="@drawable/delete"
         android:layout_gravity="end"
         android:layout_width="wrap_content"

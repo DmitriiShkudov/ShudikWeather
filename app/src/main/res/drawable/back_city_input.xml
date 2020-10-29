@@ -8,7 +8,7 @@
                 android:shape="rectangle">
 
                 <corners
-                    android:radius="40sp">
+                    android:radius="40dp">
                 </corners>
 
                 <stroke

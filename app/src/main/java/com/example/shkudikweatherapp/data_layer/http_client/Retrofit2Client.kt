@@ -1,18 +1,16 @@
 package com.example.shkudikweatherapp.data_layer.http_client
 
-import com.example.shkudikweatherapp.data_layer.providers.Helper
 import com.example.shkudikweatherapp.data_layer.providers.Helper.BASE_URL_TIME
 import com.example.shkudikweatherapp.data_layer.providers.Helper.BASE_URL_WEATHER
 import com.example.shkudikweatherapp.data_layer.providers.Helper.KEY_API
-import com.example.shkudikweatherapp.data_layer.providers.UserPreferences
+import com.example.shkudikweatherapp.data_layer.providers.Helper.cityNotFoundDesc
 import com.example.shkudikweatherapp.data_layer.providers.UserPreferences.language
 import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.isSelectedCityExists
-import com.example.shkudikweatherapp.presentation_layer.states.States
+import com.example.shkudikweatherapp.data_layer.states.States
 import com.example.shkudikweatherapp.presentation_layer.viewmodels.MainViewModel
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.net.SocketTimeoutException
 import java.util.concurrent.TimeUnit
 
 
@@ -49,7 +47,7 @@ class Retrofit2Client(private val viewModel: MainViewModel) {
         try {
 
             with(
-                weatherService.getWeather(city = city, appid = KEY_API, lang = UserPreferences.language.apiStr).execute()
+                weatherService.getWeather(city = city, appid = KEY_API, lang = language.apiStr).execute()
                     .body()
             ) {
 
@@ -60,14 +58,9 @@ class Retrofit2Client(private val viewModel: MainViewModel) {
 
                 } else {
 
-                    viewModel.desc.postValue(when (language) {
+                    viewModel.desc.postValue(cityNotFoundDesc)
 
-                        UserPreferences.Language.RUS -> Helper.CITY_NOT_FOUND_RUS
-                        UserPreferences.Language.ENG -> Helper.CITY_NOT_FOUND_ENG
-                        UserPreferences.Language.GER -> Helper.CITY_NOT_FOUND_GER
-
-                    })
-
+                    viewModel.state.postValue(States.UPDATED)
                     viewModel.state.postValue(States.WRONG_CITY)
                     isSelectedCityExists = false
                     null
@@ -76,7 +69,7 @@ class Retrofit2Client(private val viewModel: MainViewModel) {
 
             }
 
-        } catch (e: SocketTimeoutException) {
+        } catch (e: Throwable) {
 
             viewModel.state.postValue(States.BAD_CONNECTION)
             null
@@ -86,17 +79,11 @@ class Retrofit2Client(private val viewModel: MainViewModel) {
     fun loadForecast(city: String) =
 
         try {
+            weatherService.getForecast(city = city, appid = KEY_API, lang = language.apiStr).
+                execute().
+                body()
 
-            with(
-                weatherService.getForecast(city = city, appid = KEY_API, lang = UserPreferences.language.apiStr).execute()
-                    .body()
-            ) {
-
-                this
-
-            }
-
-        } catch (e: SocketTimeoutException) {
+        } catch (e: Throwable) {
 
             null
 
@@ -106,16 +93,11 @@ class Retrofit2Client(private val viewModel: MainViewModel) {
 
         try {
 
-            with(
-                weatherService.getForecast(latitude, longitude , appid = KEY_API, lang = UserPreferences.language.apiStr).execute()
-                    .body()
-            ) {
+            weatherService.getForecast(latitude, longitude , appid = KEY_API, lang = language.apiStr).
+                execute().
+                body()
 
-                this
-
-            }
-
-        } catch (e: SocketTimeoutException) {
+        } catch (e: Throwable) {
 
             null
 
@@ -130,33 +112,25 @@ class Retrofit2Client(private val viewModel: MainViewModel) {
                 weatherService.getLocalWeather(latitude = latitude,
                                                longitude = longitude,
                                                appid = KEY_API,
-                                               lang = UserPreferences.language.apiStr).execute().body()
+                                               lang = language.apiStr).execute().body()
             ) {
 
                 if (this != null) {
 
-                    isSelectedCityExists = true
                     this
 
                 } else {
 
-                    viewModel.desc.postValue(when (language) {
-
-                        UserPreferences.Language.RUS -> Helper.CITY_NOT_FOUND_RUS
-                        UserPreferences.Language.ENG -> Helper.CITY_NOT_FOUND_ENG
-                        UserPreferences.Language.GER -> Helper.CITY_NOT_FOUND_GER
-
-                    })
-
+                    viewModel.state.postValue(States.UPDATED)
                     viewModel.state.postValue(States.WRONG_CITY)
-                    isSelectedCityExists = false
+
                     null
 
                 }
 
             }
 
-        } catch (e: SocketTimeoutException) {
+        } catch (e: Throwable) {
 
             viewModel.state.postValue(States.BAD_CONNECTION)
             null
@@ -169,7 +143,7 @@ class Retrofit2Client(private val viewModel: MainViewModel) {
 
             timeUTCService.getTimeUTC().execute().body()
 
-        } catch (e: SocketTimeoutException) {
+        } catch (e: Throwable) {
 
             viewModel.state.postValue(States.BAD_CONNECTION)
             null

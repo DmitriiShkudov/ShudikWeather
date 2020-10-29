@@ -9,7 +9,7 @@ import com.example.shkudikweatherapp.data_layer.providers.Helper.SELECTED_CITY_N
 import com.example.shkudikweatherapp.data_layer.providers.Helper.SELECTED_LAT_KEY
 import com.example.shkudikweatherapp.data_layer.providers.Helper.SELECTED_LON_KEY
 import com.example.shkudikweatherapp.data_layer.providers.Helper.WEATHER_PREF
-import com.example.shkudikweatherapp.presentation_layer.states.MainDescription
+import com.example.shkudikweatherapp.data_layer.states.MainDescription
 
 object WeatherProvider {
 

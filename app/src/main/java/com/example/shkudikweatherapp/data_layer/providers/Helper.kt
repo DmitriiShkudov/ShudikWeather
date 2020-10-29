@@ -1,9 +1,10 @@
 package com.example.shkudikweatherapp.data_layer.providers
 
+import android.view.View
 import androidx.lifecycle.MutableLiveData
 import com.example.shkudikweatherapp.data_layer.providers.UserPreferences.degreeUnit
 import com.example.shkudikweatherapp.data_layer.providers.UserPreferences.language
-import com.example.shkudikweatherapp.presentation_layer.states.MainDescription
+import com.example.shkudikweatherapp.data_layer.states.MainDescription
 
 object Helper {
 
@@ -50,15 +51,17 @@ object Helper {
     const val EMPTY_INPUT_ERROR_ENG = "Enter the city"
     const val EMPTY_INPUT_ERROR_GER = "Stadt betreten"
     const val MINUS = "-"
-    const val YOUR_LOCATION_RUS = "Локализация"
+    const val YOUR_LOCATION_RUS = "Локация"
     const val YOUR_LOCATION_ENG = "Your location"
     const val YOUR_LOCATION_GER = "Ihr Standort"
-    const val LOCATION_DENIED_WARNING_RUS = "Разрешение на запрос локации было отменено пользователем." +
-            "Дайте разрешение в настройках вашего устройства или перезапустите приложение."
+    const val LOCATION_DENIED_WARNING_RUS =
+        "Разрешение на запрос локации было отменено пользователем." +
+                "Дайте разрешение в настройках вашего устройства или перезапустите приложение."
     const val LOCATION_DENIED_WARNING_ENG = "Accessibility to location was denied by user. " +
             "Allow location requests in your device settings or restart the application"
-    const val LOCATION_DENIED_WARNING_GER = "Die Berechtigung zum Anfordern eines Standorts wurde vom Benutzer widerrufen. " +
-            "Geben Sie die Berechtigung in Ihren Geräteeinstellungen ein oder installieren Sie die App neu."
+    const val LOCATION_DENIED_WARNING_GER =
+        "Die Berechtigung zum Anfordern eines Standorts wurde vom Benutzer widerrufen. " +
+                "Geben Sie die Berechtigung in Ihren Geräteeinstellungen ein oder installieren Sie die App neu."
 
     // Retrofit Client
 
@@ -68,9 +71,14 @@ object Helper {
 
     // Methods
 
+    fun View.setSafeOnClickListener(action: () -> Unit) = this.setOnClickListener {
+        action.invoke()
+        this.setOnClickListener(null)
+    }
+
     fun setTemp(intTemp: Int): String {
 
-        val temp = if (degreeUnit == UserPreferences.DegreeUnit.DEG_C)
+        val temp = if (degreeUnit == UserPreferences.TemperatureUnit.DEG_C)
             (intTemp - ABS_ZERO).toString() else
             ((intTemp - ABS_ZERO).fahrenheit().toString())
 
@@ -165,7 +173,6 @@ object Helper {
         if (time[1] == ':')
 
             (time[0].toString().toInt() + hours).toString() + time.substring(1 until time.length)
-
         else
             if (((time[0].toString() + time[1].toString()).toInt() + hours) >= 24)
 
@@ -176,7 +183,7 @@ object Helper {
                         time.substring(2 until time.length)
 
 
-    fun Int.fahrenheit() = this * 9/5 + 32
+    fun Int.fahrenheit() = this * 9 / 5 + 32
 
     fun <T> MutableLiveData<T>.value(value: T) {
 
@@ -185,7 +192,8 @@ object Helper {
     }
 
     fun isNightTime(time: String) =
-        (time[0].toString() + time[1].toString()) == "23" || (time[1] == ':' && time[0].toString().toInt() in 0..5)
+        (time[0].toString() + time[1].toString()) == "22" || (time[0].toString() + time[1].toString()) == "23" || (time[1] == ':' && time[0].toString()
+            .toInt() in 0..5)
 
     fun getMainDescription(isNight: Boolean, string: String): MainDescription {
 
@@ -248,5 +256,96 @@ object Helper {
     // Exception messages
     const val RECEIVED_DESCRIPTION_IS_NOT_EXIST = "Received description isn't exist"
 
+    // Other messages
+    const val RESTART_MESSAGE_ENG = "To apply changes, you need to restart the application"
+    const val RESTART_MESSAGE_RUS = "Чтобы применить изменения, необходимо перезагрузить приложение"
+    const val RESTART_MESSAGE_GER =
+        "Um Änderungen zu übernehmen, müssen Sie die Anwendung neu starten"
 
+    const val RESTART_ENG = "Restart"
+    const val RESTART_RUS = "Перезагрузить"
+    const val RESTART_GER = "Starten Sie neu"
+
+    const val CANCEL_ENG = "Cancel"
+    const val CANCEL_RUS = "Отмена"
+    const val CANCEL_GER = "Stornieren"
+
+    const val GPS_ERROR_RUS =
+        "Ошибка геолокации. Убедитесь, что локация включена на вашем устройстве"
+    const val GPS_ERROR_ENG = "Geolocation error. Make sure the location is enabled on your device"
+    const val GPS_ERROR_GER =
+        "Geolokalisierungsfehler. Stellen Sie sicher, dass der Speicherort auf Ihrem Gerät aktiviert ist"
+
+    val emptyInputErrorMessage: String
+    get() = when (language) {
+
+        UserPreferences.Language.RUS -> EMPTY_INPUT_ERROR_RUS
+        UserPreferences.Language.ENG -> EMPTY_INPUT_ERROR_ENG
+        UserPreferences.Language.GER -> EMPTY_INPUT_ERROR_GER
+
+    }
+
+    val restartMessage: String
+        get() = when (language) {
+
+            UserPreferences.Language.RUS -> RESTART_MESSAGE_RUS
+            UserPreferences.Language.ENG -> RESTART_MESSAGE_ENG
+            else -> RESTART_MESSAGE_GER
+
+        }
+
+    val gpsErrorMessage: String
+        get() = when (language) {
+
+            UserPreferences.Language.RUS -> GPS_ERROR_RUS
+            UserPreferences.Language.ENG -> GPS_ERROR_ENG
+            else -> GPS_ERROR_GER
+
+        }
+
+
+    val reboot: String
+        get() = when (language) {
+
+            UserPreferences.Language.RUS -> RESTART_RUS
+            UserPreferences.Language.ENG -> RESTART_ENG
+            else -> RESTART_GER
+
+        }
+
+    val cancel: String
+        get() = when (language) {
+
+            UserPreferences.Language.RUS -> CANCEL_RUS
+            UserPreferences.Language.ENG -> CANCEL_ENG
+            UserPreferences.Language.GER -> CANCEL_GER
+
+        }
+
+    val locationTitle: String
+        get() = when (language) {
+
+            UserPreferences.Language.RUS -> YOUR_LOCATION_RUS
+            UserPreferences.Language.ENG -> YOUR_LOCATION_ENG
+            UserPreferences.Language.GER -> YOUR_LOCATION_GER
+
+        }
+
+    val cityNotFoundDesc: String
+        get() = when (language) {
+
+            UserPreferences.Language.RUS -> CITY_NOT_FOUND_RUS
+            UserPreferences.Language.ENG -> CITY_NOT_FOUND_ENG
+            UserPreferences.Language.GER -> CITY_NOT_FOUND_GER
+
+        }
+
+    val hour: String
+        get() = when (language) {
+
+            UserPreferences.Language.RUS -> "часа"
+            UserPreferences.Language.ENG -> "hours"
+            UserPreferences.Language.GER -> "Stunden"
+
+        }
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -17,11 +18,13 @@
             android:layout_width="0dp"
             android:layout_height="match_parent">
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
+                app:autoSizeTextType="uniform"
+                app:autoSizeMinTextSize="5sp"
+                app:autoSizeMaxTextSize="14sp"
                 android:id="@+id/fTemp1"
                 android:textColor="@color/black"
                 android:textStyle="bold"
-                android:textSize="15sp"
                 android:text="Температура:"
                 android:layout_marginStart="12dp"
                 android:gravity="start|center"
@@ -29,13 +32,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="16">
-            </TextView>
+            </androidx.appcompat.widget.AppCompatTextView>
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
+                app:autoSizeTextType="uniform"
+                app:autoSizeMinTextSize="5sp"
+                app:autoSizeMaxTextSize="14sp"
                 android:id="@+id/fFeels1"
                 android:textColor="@color/black"
                 android:textStyle="bold"
-                android:textSize="15sp"
                 android:text="Ощущается как:"
                 android:layout_marginStart="12dp"
                 android:gravity="start|center"
@@ -43,13 +48,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="16">
-            </TextView>
+            </androidx.appcompat.widget.AppCompatTextView>
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
+                app:autoSizeTextType="uniform"
+                app:autoSizeMinTextSize="5sp"
+                app:autoSizeMaxTextSize="14sp"
                 android:id="@+id/fHumidity1"
                 android:textColor="@color/black"
                 android:textStyle="bold"
-                android:textSize="15sp"
                 android:text="Влажность:"
                 android:layout_marginStart="12dp"
                 android:gravity="start|center"
@@ -57,13 +64,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="16">
-            </TextView>
+            </androidx.appcompat.widget.AppCompatTextView>
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
+                app:autoSizeTextType="uniform"
+                app:autoSizeMinTextSize="5sp"
+                app:autoSizeMaxTextSize="14sp"
                 android:id="@+id/fWind1"
                 android:textColor="@color/black"
                 android:textStyle="bold"
-                android:textSize="15sp"
                 android:text="Ветер:"
                 android:layout_marginStart="12dp"
                 android:gravity="start|center"
@@ -71,14 +80,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="16">
-            </TextView>
+            </androidx.appcompat.widget.AppCompatTextView>
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
+                app:autoSizeTextType="uniform"
+                app:autoSizeMinTextSize="5sp"
+                app:autoSizeMaxTextSize="14sp"
                 android:id="@+id/fWindDir1"
                 android:layout_marginEnd="6dp"
                 android:textColor="@color/black"
                 android:textStyle="bold"
-                android:textSize="15sp"
                 android:text="Направление ветра:"
                 android:layout_marginStart="12dp"
                 android:gravity="start|center"
@@ -86,13 +97,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="16">
-            </TextView>
+            </androidx.appcompat.widget.AppCompatTextView>
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
+                app:autoSizeTextType="uniform"
+                app:autoSizeMinTextSize="5sp"
+                app:autoSizeMaxTextSize="14sp"
                 android:id="@+id/fPressure1"
                 android:textColor="@color/black"
                 android:textStyle="bold"
-                android:textSize="15sp"
                 android:text="Давление:"
                 android:layout_marginStart="12dp"
                 android:gravity="start|center"
@@ -100,7 +113,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="16">
-            </TextView>
+            </androidx.appcompat.widget.AppCompatTextView>
 
 
         </LinearLayout>
@@ -111,51 +124,62 @@
             android:layout_width="0dp"
             android:layout_height="match_parent">
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
+                app:autoSizeTextType="uniform"
+                app:autoSizeMinTextSize="5sp"
+                app:autoSizeMaxTextSize="14sp"
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:id="@+id/temp1"
                 android:textStyle="bold"
                 android:gravity="center"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:textSize="16sp">
-            </TextView>
+                android:layout_height="0dp">
+            </androidx.appcompat.widget.AppCompatTextView>
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
+                app:autoSizeTextType="uniform"
+                app:autoSizeMinTextSize="5sp"
+                app:autoSizeMaxTextSize="14sp"
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:id="@+id/feels1"
                 android:textStyle="bold"
                 android:gravity="center"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:textSize="16sp">
-            </TextView>
+                android:layout_height="0dp">
+            </androidx.appcompat.widget.AppCompatTextView>
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
+                app:autoSizeTextType="uniform"
+                app:autoSizeMinTextSize="5sp"
+                app:autoSizeMaxTextSize="14sp"
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:id="@+id/humidity1"
                 android:textStyle="bold"
                 android:gravity="center"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:textSize="16sp">
-            </TextView>
+                android:layout_height="0dp">
+            </androidx.appcompat.widget.AppCompatTextView>
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
+                app:autoSizeTextType="uniform"
+                app:autoSizeMinTextSize="5sp"
+                app:autoSizeMaxTextSize="14sp"
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:id="@+id/wind1"
                 android:textStyle="bold"
                 android:gravity="center"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:textSize="16sp">
-            </TextView>
+                android:layout_height="0dp">
+            </androidx.appcompat.widget.AppCompatTextView>
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
+                app:autoSizeTextType="uniform"
+                app:autoSizeMinTextSize="5sp"
+                app:autoSizeMaxTextSize="14sp"
                 android:layout_marginEnd="3dp"
                 android:layout_gravity="center"
                 android:layout_weight="1"
@@ -163,20 +187,21 @@
                 android:textStyle="bold"
                 android:gravity="center"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:textSize="14sp">
-            </TextView>
+                android:layout_height="0dp">
+            </androidx.appcompat.widget.AppCompatTextView>
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
+                app:autoSizeTextType="uniform"
+                app:autoSizeMinTextSize="5sp"
+                app:autoSizeMaxTextSize="14sp"
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:id="@+id/pressure1"
                 android:textStyle="bold"
                 android:gravity="center"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:textSize="16sp">
-            </TextView>
+                android:layout_height="0dp">
+            </androidx.appcompat.widget.AppCompatTextView>
 
         </LinearLayout>
 

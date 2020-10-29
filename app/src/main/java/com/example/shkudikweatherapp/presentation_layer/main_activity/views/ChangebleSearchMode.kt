@@ -8,13 +8,13 @@ import com.example.shkudikweatherapp.data_layer.providers.UserPreferences.search
 import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider
 import kotlinx.android.synthetic.main.activity_main.*
 
-interface ChangebleSearchMode {
+interface ChangeableSearchMode {
 
     fun setEnabledSearchMode()
 
 }
 
-class ChangebleSearchModeImpl(private val activity: MainActivity) : ChangebleSearchMode {
+class ChangeableSearchModeImpl(private val activity: MainActivity) : ChangeableSearchMode {
 
     override fun setEnabledSearchMode() { with(activity) {
 
@@ -39,6 +39,7 @@ class ChangebleSearchModeImpl(private val activity: MainActivity) : ChangebleSea
                     )
 
                 }
+
                 UserPreferences.SearchMode.GEO -> {
 
                     btn_change_city.setImageDrawable(
@@ -56,12 +57,8 @@ class ChangebleSearchModeImpl(private val activity: MainActivity) : ChangebleSea
                             null
                         )
                     )
-
                 }
-
             }
         }
-
     }
-
 }

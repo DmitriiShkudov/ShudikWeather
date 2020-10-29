@@ -1,16 +1,22 @@
 package com.example.shkudikweatherapp.presentation_layer.main_activity.views
 
+import android.graphics.Typeface.NORMAL
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.FOCUS_BEFORE_DESCENDANTS
 import androidx.core.content.res.ResourcesCompat
 import com.example.shkudikweatherapp.R
 import com.example.shkudikweatherapp.presentation_layer.main_activity.activity.MainActivity
 import com.example.shkudikweatherapp.presentation_layer.main_activity.activity.hideKeyboard
 import com.example.shkudikweatherapp.presentation_layer.main_activity.activity.showKeyboard
 import com.example.shkudikweatherapp.data_layer.providers.Helper
+import com.example.shkudikweatherapp.data_layer.providers.Helper.EMPTY
+import com.example.shkudikweatherapp.data_layer.providers.Helper.locationTitle
+import com.example.shkudikweatherapp.data_layer.providers.Helper.setSafeOnClickListener
 import com.example.shkudikweatherapp.data_layer.providers.UserPreferences
-import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider
-import com.example.shkudikweatherapp.presentation_layer.states.States
+import com.example.shkudikweatherapp.data_layer.providers.UserPreferences.searchMode
+import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.selectedCity
+import com.example.shkudikweatherapp.data_layer.states.States
 import kotlinx.android.synthetic.main.activity_main.*
 
 interface State {
@@ -19,11 +25,7 @@ interface State {
 
 }
 
-class StateImpl(private val activity: MainActivity,
-                private val moreInfoImpl: MoreInfoImpl,
-                private val recyclerHelpImpl: RecyclerHelpImpl,
-                private val changebleSearchModeImpl: ChangebleSearchModeImpl,
-                private val timeModeImpl: TimeModeImpl) : State {
+class StateImpl(private val activity: MainActivity) : State {
 
     override fun setState(state: States) { with(activity) {
 
@@ -32,12 +34,7 @@ class StateImpl(private val activity: MainActivity,
                 States.MORE_INFO -> {
 
                     moreInfoImpl.attach()
-                    root.setOnClickListener {
-
-                        moreInfoImpl.detach()
-                        root.setOnClickListener(null)
-
-                    }
+                    root.setSafeOnClickListener { moreInfoImpl.detach() }
 
                 }
 
@@ -49,20 +46,15 @@ class StateImpl(private val activity: MainActivity,
 
                     with(input_city) {
 
-                        setTypeface(null, android.graphics.Typeface.NORMAL)
-                        input_city_frame.descendantFocusability =
-                            ViewGroup.FOCUS_BEFORE_DESCENDANTS
-                        setText(Helper.EMPTY)
+                        setTypeface(null, NORMAL)
+                        input_city_frame.descendantFocusability = FOCUS_BEFORE_DESCENDANTS
+                        setText(EMPTY)
                         requestFocus()
                         showKeyboard(applicationContext)
 
                     }
 
-                    root.setOnClickListener {
-
-                        setState(States.CHANGING_CITY_CANCELLED)
-
-                    }
+                    root.setSafeOnClickListener { setState(States.CHANGING_CITY_CANCELLED) }
 
                     recyclerHelpImpl.update()
 
@@ -73,40 +65,35 @@ class StateImpl(private val activity: MainActivity,
                     // cancellation
                     btn_apply_city.isClickable = false
                     btn_change_city.isClickable = true
-                    input_city.clearFocus()
                     input_city_frame.descendantFocusability = ViewGroup.FOCUS_BLOCK_DESCENDANTS
-                    input_city.hideKeyboard(applicationContext)
-
-                    input_city.setText(
-                        if
-                                (UserPreferences.searchMode == UserPreferences.SearchMode.CITY) WeatherProvider.selectedCity
-                        else when (UserPreferences.language) {
-                            UserPreferences.Language.RUS -> Helper.YOUR_LOCATION_RUS
-                            UserPreferences.Language.ENG -> Helper.YOUR_LOCATION_ENG
-                            UserPreferences.Language.GER -> Helper.YOUR_LOCATION_GER
-                        }
-                    )
-
-                    main_background.setOnClickListener(null)
                     tvDescriptionIcon.visibility = View.VISIBLE
-
                     recyclerHelpImpl.hide()
+
+                    with(input_city) {
+                        clearFocus()
+                        hideKeyboard(applicationContext)
+
+                        setText(if (searchMode == UserPreferences.SearchMode.CITY) selectedCity
+                            else locationTitle)
+                    }
 
                 }
 
                 States.LOADING -> {
 
-                    input_city.background =
-                        ResourcesCompat.getDrawable(resources, R.drawable.input_empty, null)
+                    with(input_city) {
+                        background = ResourcesCompat.getDrawable(resources, R.drawable.input_empty, null)
+                        clearFocus()
+                        hideKeyboard(applicationContext)
+                    }
 
-                    btn_change_city.isClickable = true
+                    btn_change_city.isClickable = false
+                    btn_geo.isClickable = false
                     btn_apply_city.isClickable = false
-                    input_city.clearFocus()
                     input_city_frame.descendantFocusability = ViewGroup.FOCUS_BLOCK_DESCENDANTS
-                    input_city.hideKeyboard(applicationContext)
-                    bad_connection.visibility = View.GONE
                     cpv_loading.visibility = View.VISIBLE
                     recyclerHelpImpl.hide()
+
                 }
 
                 States.CITY_APPLIED -> tvDescriptionIcon.visibility = View.VISIBLE
@@ -114,31 +101,27 @@ class StateImpl(private val activity: MainActivity,
                 States.UPDATED -> {
 
                     btn_change_city.isClickable = true
+                    btn_geo.isClickable = true
                     bad_connection.visibility = View.GONE
                     cpv_loading.visibility = View.GONE
-
-                    changebleSearchModeImpl.setEnabledSearchMode()
-
-                }
-
-                States.BAD_CONNECTION -> {
-
-                    bad_connection.visibility = View.VISIBLE
-                    cpv_loading.visibility = View.GONE
+                    changeableSearchModeImpl.setEnabledSearchMode()
 
                 }
+
+                States.BAD_CONNECTION -> { bad_connection.visibility = View.VISIBLE }
 
                 States.WRONG_CITY -> {
 
                     cpv_loading.visibility = View.GONE
-                    bad_connection.visibility = View.GONE
-                    tvDescriptionIcon.visibility = View.VISIBLE
+
                     tvDescriptionIcon.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
 
                     windIcon.background =
                         ResourcesCompat.getDrawable(resources, R.drawable.back_icons_wrong, null)
+
                     humidityIcon.background =
                         ResourcesCompat.getDrawable(resources, R.drawable.back_icons_wrong, null)
+
                     tempIcon.background =
                         ResourcesCompat.getDrawable(resources, R.drawable.back_icons_wrong, null)
 
@@ -156,8 +139,7 @@ class StateImpl(private val activity: MainActivity,
 
                     }
 
-                    timeModeImpl.setDayMode()
-                    changebleSearchModeImpl.setEnabledSearchMode()
+                    changeableSearchModeImpl.setEnabledSearchMode()
 
                 }
 
