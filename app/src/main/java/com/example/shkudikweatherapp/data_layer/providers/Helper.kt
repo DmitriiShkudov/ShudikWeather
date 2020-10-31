@@ -1,6 +1,10 @@
 package com.example.shkudikweatherapp.data_layer.providers
 
+import android.content.Context
 import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import com.example.shkudikweatherapp.data_layer.providers.UserPreferences.degreeUnit
 import com.example.shkudikweatherapp.data_layer.providers.UserPreferences.language
@@ -33,6 +37,7 @@ object Helper {
 
     const val WEATHER_PREF = "Weather preferences"
     const val SELECTED_CITY_NAME_KEY = "Selected city name"
+    const val NOTIFICATION_CITY_NAME_KEY = "Notification city name"
     const val SELECTED_LAT_KEY = "Selected lat"
     const val SELECTED_LON_KEY = "Selected lon"
     const val DEFAULT_CITY_NAME = "Paris"
@@ -70,6 +75,23 @@ object Helper {
     const val KEY_API = "6a8c6db6e5c6f3972d7ae682ae812b52"
 
     // Methods
+
+    fun View.showKeyboard(context: Context) =
+
+        (context.getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager).
+        showSoftInput(this, 0)
+
+    fun View.hideKeyboard(context: Context) =
+
+        (context.getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager).
+        hideSoftInputFromWindow(this.windowToken, 0)
+
+    fun EditText.reformat() {
+
+        val text = this.text.toString()
+        this.setText("${text[0].toUpperCase()}${text.toLowerCase().substring(1..text.length - 1)}")
+
+    }
 
     fun View.setSafeOnClickListener(action: () -> Unit) = this.setOnClickListener {
         action.invoke()
@@ -348,4 +370,32 @@ object Helper {
             UserPreferences.Language.GER -> "Stunden"
 
         }
+
+    val windSpeed: String
+        get() = when (language) {
+
+            UserPreferences.Language.RUS -> "Скорость ветра"
+            UserPreferences.Language.ENG -> "Wind speed"
+            UserPreferences.Language.GER -> "Windgeschwindigkeit"
+
+        }
+
+    val direction: String
+        get() = when (language) {
+
+            UserPreferences.Language.RUS -> "направление"
+            UserPreferences.Language.ENG -> "direction"
+            UserPreferences.Language.GER -> "richtung"
+
+        }
+
+    val humidity: String
+        get() = when (language) {
+
+            UserPreferences.Language.RUS -> "Влажность"
+            UserPreferences.Language.ENG -> "Humidity"
+            UserPreferences.Language.GER -> "Feuchtigkeit"
+
+        }
+
 }

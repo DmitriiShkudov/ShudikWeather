@@ -21,7 +21,6 @@ class TimeModeImpl(private val activity: SettingsActivity) : TimeMode {
             ResourcesCompat.getColor(resources, R.color.black, null).also {
 
                 settings_header.setTextColor(it)
-                text_select_interval.setTextColor(it)
                 text_push_notif.setTextColor(it)
                 text_temp_unit.setTextColor(it)
                 text_language.setTextColor(it)
@@ -49,7 +48,6 @@ class TimeModeImpl(private val activity: SettingsActivity) : TimeMode {
 
 
                 settings_header.setTextColor(it)
-                text_select_interval.setTextColor(it)
                 text_push_notif.setTextColor(it)
                 text_temp_unit.setTextColor(it)
                 text_language.setTextColor(it)

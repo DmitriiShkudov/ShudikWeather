@@ -1,7 +1,10 @@
 package com.example.shkudikweatherapp.presentation_layer.viewmodels
 
+import android.annotation.SuppressLint
 import android.app.Application
+import android.location.LocationManager
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.example.shkudikweatherapp.data_layer.providers.Helper.ABS_ZERO
@@ -9,7 +12,7 @@ import com.example.shkudikweatherapp.data_layer.providers.Helper.METER_PER_SEC
 import com.example.shkudikweatherapp.data_layer.providers.Helper.METER_PER_SEC_RUS
 import com.example.shkudikweatherapp.data_layer.providers.Helper.PERCENT
 import com.example.shkudikweatherapp.data_layer.providers.Helper.fahrenheit
-import com.example.shkudikweatherapp.data_layer.http_client.Retrofit2Client
+import com.example.shkudikweatherapp.data_layer.http_client.ApplicationRetrofitClient
 import com.example.shkudikweatherapp.data_layer.pojo.forecast.Forecast
 import com.example.shkudikweatherapp.data_layer.pojo.time_utc.TimeUTC
 import com.example.shkudikweatherapp.data_layer.pojo.weather.Weather
@@ -17,6 +20,7 @@ import com.example.shkudikweatherapp.data_layer.providers.Helper
 import com.example.shkudikweatherapp.presentation_layer.main_activity.activity.MainActivity.Companion.isMoreInfoOpened
 import com.example.shkudikweatherapp.data_layer.providers.Helper.getMainDescription
 import com.example.shkudikweatherapp.data_layer.providers.Helper.isNightTime
+import com.example.shkudikweatherapp.data_layer.providers.Helper.reformat
 import com.example.shkudikweatherapp.data_layer.providers.Helper.setPressure
 import com.example.shkudikweatherapp.data_layer.providers.Helper.setTemp
 import com.example.shkudikweatherapp.data_layer.providers.Helper.setWindDirection
@@ -33,16 +37,16 @@ import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.select
 import com.example.shkudikweatherapp.data_layer.states.MainDescription
 import com.example.shkudikweatherapp.data_layer.states.States
 import com.example.shkudikweatherapp.presentation_layer.main_activity.activity.MainActivity
-import com.example.shkudikweatherapp.presentation_layer.main_activity.activity.reformat
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.Default
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
+import kotlin.math.roundToInt
 
 class MainViewModel(app: Application) : AndroidViewModel(app) {
 
-    private val retrofitClient = Retrofit2Client(this)
+    private val retrofitClient = ApplicationRetrofitClient(this)
 
     // Weather
     var isNight = MutableLiveData<Boolean>()
@@ -77,13 +81,11 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
             val weather =
                 coroutineScope.async { withContext(IO) {
-                    if (searchMode == UserPreferences.SearchMode.CITY) {
+                    when (searchMode) {
 
-                        retrofitClient.loadWeather(selectedCity)
+                        UserPreferences.SearchMode.CITY -> retrofitClient.loadWeather(selectedCity)
 
-                    } else {
-
-                        retrofitClient.loadLocalWeather(selectedLat, selectedLon)
+                        UserPreferences.SearchMode.GEO -> retrofitClient.loadWeather(selectedLat, selectedLon)
 
                     }
                 } }.await()
@@ -97,13 +99,11 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
             val forecast =
                 coroutineScope.async { withContext(IO) {
-                    if (searchMode == UserPreferences.SearchMode.CITY) {
+                    when (searchMode) {
 
-                        retrofitClient.loadForecast(selectedCity)
+                        UserPreferences.SearchMode.CITY -> retrofitClient.loadForecast(selectedCity)
 
-                    } else {
-
-                        retrofitClient.loadForecast(selectedLat, selectedLon)
+                        UserPreferences.SearchMode.GEO -> retrofitClient.loadForecast(selectedLat, selectedLon)
 
                     }
                 } }.await()
@@ -133,27 +133,26 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
          val hoursDelta = weather.timezone / 3600
          val delta = receivedTime.substring(0..1).toInt() + hoursDelta
 
-
          // Received forecast
-         val receivedFTemp1 = forecast.list[1].main.temp.toInt()
-         val receivedFTemp2 = forecast.list[2].main.temp.toInt()
-         val receivedFTemp3 = forecast.list[3].main.temp.toInt()
+         val receivedFTemp1 = weather.main.temp.toInt()
+         val receivedFTemp2 = forecast.list[1].main.temp.toInt()
+         val receivedFTemp3 = forecast.list[2].main.temp.toInt()
 
-         val receivedFFeels1 = forecast.list[1].main.feels_like.toInt()
-         val receivedFFeels2 = forecast.list[2].main.feels_like.toInt()
-         val receivedFFeels3 = forecast.list[3].main.feels_like.toInt()
+         val receivedFFeels1 = weather.main.feels_like.toInt()
+         val receivedFFeels2 = forecast.list[1].main.feels_like.toInt()
+         val receivedFFeels3 = forecast.list[2].main.feels_like.toInt()
 
-         val receivedFWind1 = forecast.list[1].windModel.speed.toInt()
-         val receivedFWind2 = forecast.list[2].windModel.speed.toInt()
-         val receivedFWind3 = forecast.list[3].windModel.speed.toInt()
+         val receivedFWind1 = weather.wind.speed.toInt()
+         val receivedFWind2 = forecast.list[1].windModel.speed.toInt()
+         val receivedFWind3 = forecast.list[2].windModel.speed.toInt()
 
-         val receivedFWindDir1 = forecast.list[1].windModel.deg
-         val receivedFWindDir2 = forecast.list[2].windModel.deg
-         val receivedFWindDir3 = forecast.list[3].windModel.deg
+         val receivedFWindDir1 = weather.wind.deg
+         val receivedFWindDir2 = forecast.list[1].windModel.deg
+         val receivedFWindDir3 = forecast.list[2].windModel.deg
 
-         val receivedFPressure1 = forecast.list[1].main.pressure
-         val receivedFPressure2 = forecast.list[2].main.pressure
-         val receivedFPressure3 = forecast.list[3].main.pressure
+         val receivedFPressure1 = weather.main.pressure
+         val receivedFPressure2 = forecast.list[1].main.pressure
+         val receivedFPressure3 = forecast.list[2].main.pressure
 
          // applying received info
 
@@ -178,7 +177,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
          }
 
 
-         // Setting forecast
+        // Setting forecast
 
         fTemp.value(arrayOf(setTemp(receivedFTemp1), setTemp(receivedFTemp2), setTemp(receivedFTemp3)))
 
@@ -190,9 +189,9 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
                                setWindDirection(receivedFWindDir2),
                                setWindDirection(receivedFWindDir3)))
 
-        fHumidity.value(arrayOf(forecast.list[1].main.humidity.toString() + PERCENT,
-                                forecast.list[2].main.humidity.toString() + PERCENT,
-                                forecast.list[3].main.humidity.toString() + PERCENT))
+        fHumidity.value(arrayOf(weather.main.humidity.toString() + PERCENT,
+                                forecast.list[1].main.humidity.toString() + PERCENT,
+                                forecast.list[2].main.humidity.toString() + PERCENT))
 
         fPressure.value(arrayOf(setPressure(receivedFPressure1),
                                 setPressure(receivedFPressure2),
@@ -227,7 +226,10 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
                 stateImpl.setState(States.CITY_APPLIED)
                 stateImpl.setState(States.LOADING)
 
-                CoroutineScope(Main).launch { viewModel.load(this) }
+                CoroutineScope(Main).launch {
+                    state.value(States.LOADING)
+                    viewModel.load(this)
+                }
 
             } else {
 
@@ -236,7 +238,39 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
             }
         }
-
     }
 
+    @SuppressLint("MissingPermission")
+    fun applyLocation(activity: MainActivity) {
+
+        if (UserPreferences.isLocationApplied) {
+
+            state.value(States.LOADING)
+
+            try {
+
+                val locationManager = activity.getSystemService(AppCompatActivity.LOCATION_SERVICE) as LocationManager?
+
+                locationManager!!.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1, 1f) { location ->
+
+                    activity.stateImpl.setState(States.CITY_APPLIED)
+                    activity.stateImpl.setState(States.LOADING)
+
+                    selectedLon = ((location.longitude * 1000).roundToInt() / 1000f)
+                    selectedLat = ((location.latitude * 1000).roundToInt() / 1000f)
+
+                    searchMode = UserPreferences.SearchMode.GEO
+                    activity.boardImpl.setUserLocationTitle()
+                    CoroutineScope(Main).launch { load(this) }
+
+                }
+
+            } catch (e: Throwable) {}
+
+        } else {
+
+            activity.locationAvailabilityImpl.showDenyError()
+
+        }
+    }
 }

@@ -66,7 +66,6 @@ class FirstPart : Fragment() {
         })
 
 
-
         temp1.text = MoreInfo.fTemp[0]
 
         feels1.text = MoreInfo.fFeels[0]

@@ -6,6 +6,10 @@
     </domain-config>
 
     <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">openweathermap.org</domain>
+    </domain-config>
+
+    <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">worldclockapi.com</domain>
     </domain-config>
 

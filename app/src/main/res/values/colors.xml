@@ -5,7 +5,7 @@
     <color name="colorAccent">#03DAC5</color>
     <color name="applyCityOff">#353535</color>
     <color name="settingsTextColor">#131313</color>
-    <color name="white">#AFAFAF</color>
+    <color name="white">#CFCFCF</color>
     <color name="black">#1B1B1B</color>
     <color name="bright_white">#ECECEC</color>
 </resources>

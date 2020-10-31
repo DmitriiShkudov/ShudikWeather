@@ -16,7 +16,6 @@ class NotificationImpl(private val activity: SettingsActivity) : Notification {
     override fun showNotificationOption() { with(activity) {
 
             layoutSetNotifications.visibility = View.VISIBLE
-            btn_apply_notifications.visibility = View.VISIBLE
 
         }
 

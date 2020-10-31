@@ -15,11 +15,11 @@ interface RecyclerHelp {
 
 }
 
-class RecyclerHelpImpl(private val activity: MainActivity, private val boardImpl: BoardImpl) : RecyclerHelp {
+class RecyclerHelpImpl(private val activity: MainActivity) : RecyclerHelp {
 
     override fun update() { with(activity) {
 
-            rvHelp.adapter = RvHelpAdapter(this@RecyclerHelpImpl, boardImpl, helpList)
+            rvHelp.adapter = RvHelpAdapter(this@RecyclerHelpImpl, activity.boardImpl, helpList)
             rvHelp.layoutManager = LinearLayoutManager(applicationContext)
 
         }

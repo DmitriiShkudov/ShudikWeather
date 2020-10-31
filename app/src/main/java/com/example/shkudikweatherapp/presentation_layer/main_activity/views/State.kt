@@ -6,17 +6,17 @@ import android.view.ViewGroup
 import android.view.ViewGroup.FOCUS_BEFORE_DESCENDANTS
 import androidx.core.content.res.ResourcesCompat
 import com.example.shkudikweatherapp.R
-import com.example.shkudikweatherapp.presentation_layer.main_activity.activity.MainActivity
-import com.example.shkudikweatherapp.presentation_layer.main_activity.activity.hideKeyboard
-import com.example.shkudikweatherapp.presentation_layer.main_activity.activity.showKeyboard
 import com.example.shkudikweatherapp.data_layer.providers.Helper
 import com.example.shkudikweatherapp.data_layer.providers.Helper.EMPTY
+import com.example.shkudikweatherapp.data_layer.providers.Helper.hideKeyboard
 import com.example.shkudikweatherapp.data_layer.providers.Helper.locationTitle
 import com.example.shkudikweatherapp.data_layer.providers.Helper.setSafeOnClickListener
+import com.example.shkudikweatherapp.data_layer.providers.Helper.showKeyboard
 import com.example.shkudikweatherapp.data_layer.providers.UserPreferences
 import com.example.shkudikweatherapp.data_layer.providers.UserPreferences.searchMode
 import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.selectedCity
 import com.example.shkudikweatherapp.data_layer.states.States
+import com.example.shkudikweatherapp.presentation_layer.main_activity.activity.MainActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 interface State {
@@ -108,7 +108,10 @@ class StateImpl(private val activity: MainActivity) : State {
 
                 }
 
-                States.BAD_CONNECTION -> { bad_connection.visibility = View.VISIBLE }
+                States.BAD_CONNECTION -> {
+                    cpv_loading.visibility = View.GONE
+                    bad_connection.visibility = View.VISIBLE
+                }
 
                 States.WRONG_CITY -> {
 

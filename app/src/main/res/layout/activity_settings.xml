@@ -368,11 +368,11 @@
                 android:layout_weight="9">
 
                 <Button
+                    android:textAllCaps="false"
                     app:autoSizeTextType="uniform"
                     app:autoSizeMinTextSize="5sp"
-                    app:autoSizeMaxTextSize="12sp"
+                    app:autoSizeMaxTextSize="14sp"
                     android:id="@+id/btn_set_notifications"
-                    android:text="@string/set"
                     android:layout_marginVertical="6sp"
                     android:layout_height="match_parent"
                     android:layout_width="match_parent">
@@ -389,157 +389,98 @@
 
         </LinearLayout>
 
-        <RelativeLayout
+        <View
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="2">
-        </RelativeLayout>
+            android:layout_weight="3">
+        </View>
 
         <LinearLayout
             android:visibility="invisible"
             android:id="@+id/layoutSetNotifications"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="10">
+            android:layout_weight="5">
 
             <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="3">
+                android:layout_weight="3.5">
             </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="15">
+                android:layout_weight="12">
 
                 <EditText
+                    android:maxLines="1"
+                    android:inputType="text"
                     app:autoSizeTextType="uniform"
                     app:autoSizeMinTextSize="5sp"
                     app:autoSizeMaxTextSize="17sp"
                     android:paddingStart="5sp"
                     android:background="@drawable/back_notification_city_input"
                     android:id="@+id/input_notification_city"
-                    android:layout_marginTop = "29sp"
-                    android:layout_marginStart="6sp"
-                    android:layout_marginEnd="55sp"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
                 </EditText>
 
             </RelativeLayout>
 
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2.5">
+            </View>
+
             <LinearLayout
-                android:orientation="vertical"
+                android:orientation="horizontal"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="12">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="2">
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_marginVertical="4sp"
-                        app:autoSizeTextType="uniform"
-                        app:autoSizeMinTextSize="5sp"
-                        app:autoSizeMaxTextSize="19sp"
-                        android:id="@+id/text_select_interval"
-                        android:textColor="@color/settingsTextColor"
-                        android:gravity="center"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-                    </androidx.appcompat.widget.AppCompatTextView>
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="3">
-
-                    <Spinner
-                        app:autoSizeTextType="uniform"
-                        app:autoSizeMinTextSize="5sp"
-                        app:autoSizeMaxTextSize="14sp"
-                        android:layout_marginTop="1sp"
-                        android:gravity="center"
-                        android:textAlignment="center"
-                        android:id="@+id/spinnerInterval"
-                        android:layout_marginHorizontal="15sp"
-                        android:background="@drawable/custom_spinner"
-                        android:layout_height="match_parent"
-                        android:layout_width="match_parent">
-                    </Spinner>
-
-                </RelativeLayout>
-
-
-            </LinearLayout>
-
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="3">
-            </RelativeLayout>
-
-        </LinearLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2">
-        </RelativeLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="7">
-
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2">
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1.5">
+                android:layout_weight="14">
 
                 <Button
+                    android:textAllCaps="false"
+                    android:textStyle="normal"
+                    android:background="@drawable/back_btn_apply_notification"
+                    android:layout_weight="1"
                     app:autoSizeTextType="uniform"
                     app:autoSizeMinTextSize="5sp"
-                    app:autoSizeMaxTextSize="16sp"
+                    app:autoSizeMaxTextSize="13sp"
                     android:id="@+id/btn_apply_notifications"
-                    android:visibility="invisible"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent">
                 </Button>
 
-            </RelativeLayout>
+                <Button
+                    android:textAllCaps="false"
+                    android:textStyle="normal"
+                    android:background="@drawable/back_btn_reset_notification"
+                    android:layout_weight="1"
+                    app:autoSizeTextType="uniform"
+                    app:autoSizeMinTextSize="5sp"
+                    app:autoSizeMaxTextSize="13sp"
+                    android:id="@+id/btn_reset_notifications"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent">
+                </Button>
 
-            <RelativeLayout
+            </LinearLayout>
+
+            <View
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="2">
-            </RelativeLayout>
+                android:layout_weight="1">
+            </View>
 
         </LinearLayout>
 
-        <RelativeLayout
+        <View
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="4">
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="32">
-        </RelativeLayout>
+            android:layout_weight="49">
+        </View>
 
     </LinearLayout>
 

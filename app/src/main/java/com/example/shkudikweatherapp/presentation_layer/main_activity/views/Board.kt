@@ -24,7 +24,7 @@ interface Board {
 
 class BoardImpl(private val activity: MainActivity) : Board {
 
-    private companion object {
+    companion object {
 
         const val CODE_ENTER = 5
 

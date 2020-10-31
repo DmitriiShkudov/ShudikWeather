@@ -39,9 +39,9 @@ class MoreInfo : Fragment() {
                 tab, position ->
             viewPager.setCurrentItem(tab.position, true) }.attach()
 
-        tabLayout.getTabAt(0)!!.text = Helper.countTime(time, 3)
-        tabLayout.getTabAt(1)!!.text = Helper.countTime(time, 6)
-        tabLayout.getTabAt(2)!!.text = Helper.countTime(time, 9)
+        tabLayout.getTabAt(0)!!.text = Helper.countTime(time, 0)
+        tabLayout.getTabAt(1)!!.text = Helper.countTime(time, 3)
+        tabLayout.getTabAt(2)!!.text = Helper.countTime(time, 6)
 
 
 

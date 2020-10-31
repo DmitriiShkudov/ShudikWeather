@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:alpha="0.82"
+        android:id="@+id/imgBackground"
+        android:scaleType="centerCrop"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </ImageView>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:autoSizeTextType="uniform"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:layout_gravity="center"
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            </TextView>
+
+            <ImageView
+                android:id="@+id/iconImg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            </ImageView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginStart="6dp"
+            android:layout_gravity="start"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:id="@+id/firstInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/TextAppearance.Compat.Notification">
+            </TextView>
+
+            <TextView
+                android:autoSizeTextType="uniform"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:id="@+id/secondInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxHeight="20sp"
+                style="@style/TextAppearance.Compat.Notification">
+            </TextView>
+
+            <TextView
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:id="@+id/thirdInfo"
+                android:layout_marginBottom="6dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/TextAppearance.Compat.Notification">
+            </TextView>
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

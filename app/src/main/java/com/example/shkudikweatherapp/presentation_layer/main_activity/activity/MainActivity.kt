@@ -44,24 +44,6 @@ import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 
-internal fun View.showKeyboard(context: Context) =
-
-    (context.getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager).
-        showSoftInput(this, 0)
-
-internal fun View.hideKeyboard(context: Context) =
-
-    (context.getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager).
-        hideSoftInputFromWindow(this.windowToken, 0)
-
-internal fun EditText.reformat() {
-
-    val text = this.text.toString()
-    this.setText("${text[0].toUpperCase()}${text.toLowerCase().substring(1..text.length - 1)}")
-
-}
-
-
 class MainActivity : AppCompatActivity() {
 
     companion object {
@@ -136,7 +118,7 @@ class MainActivity : AppCompatActivity() {
         moreInfoImpl = MoreInfoImpl(this)
         localeImpl =  LocaleImpl(this)
         locationAvailabilityImpl = LocationAvailabilityImpl(this)
-        recyclerHelpImpl = RecyclerHelpImpl(this, boardImpl)
+        recyclerHelpImpl = RecyclerHelpImpl(this)
         timeModeImpl = TimeModeImpl(this)
         weatherIconsImpl = WeatherIconsImpl(this)
         stateImpl = StateImpl(this)
@@ -170,7 +152,7 @@ class MainActivity : AppCompatActivity() {
             if (isMoreInfoOpened)
                 moreInfoImpl.detach()
 
-            applyLocationIfAllowed()
+            viewModel.applyLocation(this)
 
         }
 
@@ -242,79 +224,21 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    // Business logic //
+    private fun openSettings() =
+        startActivity(Intent(this@MainActivity, SettingsActivity::class.java))
 
-        private fun openSettings() =
-            startActivity(Intent(this@MainActivity, SettingsActivity::class.java))
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
 
-        fun applyCity() {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-
-
-        }
-
-        override fun onRequestPermissionsResult(
-            requestCode: Int,
-            permissions: Array<out String>,
-            grantResults: IntArray
-        ) {
-
-            super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-                isLocationApplied = (grantResults.isNotEmpty()
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-
-            }
-
-
-        @SuppressLint("MissingPermission")
-        private fun applyLocationIfAllowed() {
-
-            if (isLocationApplied) {
-
-                    try {
-
-                        val locationManager = getSystemService(LOCATION_SERVICE) as LocationManager?
-
-                        locationManager!!.requestLocationUpdates(
-                            LocationManager.GPS_PROVIDER,
-                            1,
-                            1f,
-                            locationListener)
-
-                    } catch (e: Throwable) {}
-
-                } else {
-
-                    locationAvailabilityImpl.showDenyError()
-
-                }
-        }
-
-        private fun secondInit() {
-
-
+            isLocationApplied = (grantResults.isNotEmpty()
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED)
 
         }
 
-    //define the listener
-    private val locationListener = object : LocationListener {
-        override fun onLocationChanged(location: Location) {
-
-            stateImpl.setState(States.CITY_APPLIED)
-            stateImpl.setState(States.LOADING)
-
-            selectedLon = ((location.longitude * 1000).roundToInt() / 1000f)
-            selectedLat = ((location.latitude * 1000).roundToInt() / 1000f)
-
-            searchMode = UserPreferences.SearchMode.GEO
-            boardImpl.setUserLocationTitle()
-            CoroutineScope(Main).launch { viewModel.load(this) }
-
-        }
-        override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}
-        override fun onProviderEnabled(provider: String) {}
-        override fun onProviderDisabled(provider: String) {}
-    }
 }
 

@@ -5,6 +5,7 @@ import com.example.shkudikweatherapp.data_layer.providers.Helper.DEFAULT_CITY_NA
 import com.example.shkudikweatherapp.data_layer.providers.Helper.EMPTY
 import com.example.shkudikweatherapp.data_layer.providers.Helper.HELP_KEY
 import com.example.shkudikweatherapp.data_layer.providers.Helper.MAX_HELP_CITIES
+import com.example.shkudikweatherapp.data_layer.providers.Helper.NOTIFICATION_CITY_NAME_KEY
 import com.example.shkudikweatherapp.data_layer.providers.Helper.SELECTED_CITY_NAME_KEY
 import com.example.shkudikweatherapp.data_layer.providers.Helper.SELECTED_LAT_KEY
 import com.example.shkudikweatherapp.data_layer.providers.Helper.SELECTED_LON_KEY
@@ -17,6 +18,10 @@ object WeatherProvider {
 
     private val pref
         get() = this.context?.getSharedPreferences(WEATHER_PREF, 0)
+
+    var notificationCity: String?
+        get() = this.pref?.getString(NOTIFICATION_CITY_NAME_KEY, null)
+        set(value) = this.pref?.edit()?.putString(NOTIFICATION_CITY_NAME_KEY, value)?.apply()!!
 
     var selectedCity: String
         get() = this.pref?.getString(SELECTED_CITY_NAME_KEY, DEFAULT_CITY_NAME) ?: DEFAULT_CITY_NAME

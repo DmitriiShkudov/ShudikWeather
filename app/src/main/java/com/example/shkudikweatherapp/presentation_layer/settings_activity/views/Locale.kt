@@ -31,12 +31,11 @@ class LocaleImpl(private val activity: SettingsActivity) : Locale {
                             it.textSize = 15f
                         }.hint =
                             "Введите город"
-                        text_select_interval -> text_select_interval.also { it.textSize = 14f }.text =
-                            "Выберите интервал"
                         btn_apply_notifications -> btn_apply_notifications.also {
                             it.textSize = 12f
-                        }.text =
-                            "Применить"
+                        }.text = "Применить"
+
+                        btn_reset_notifications -> btn_reset_notifications.text = "Сбросить"
 
                     }
 
@@ -54,9 +53,8 @@ class LocaleImpl(private val activity: SettingsActivity) : Locale {
                             it.textSize = 16f
                         }.hint =
                             "Stadt betreten"
-                        text_select_interval -> text_select_interval.also { it.textSize = 13f }.text =
-                            "Wählen Sie das Intervall"
                         btn_apply_notifications -> btn_apply_notifications.text = "Anwenden"
+                        btn_reset_notifications -> btn_reset_notifications.text = "Zurücksetzen"
 
                     }
 
@@ -73,9 +71,8 @@ class LocaleImpl(private val activity: SettingsActivity) : Locale {
                         input_notification_city -> input_notification_city.also {
                             it.textSize = 18f
                         }.hint = "Enter city"
-                        text_select_interval -> text_select_interval.also { it.textSize = 15f }.text =
-                            "Select the interval"
                         btn_apply_notifications -> btn_apply_notifications.text = "Apply"
+                        btn_reset_notifications -> btn_reset_notifications.text = "Reset"
 
                     }
 
@@ -90,12 +87,7 @@ class LocaleImpl(private val activity: SettingsActivity) : Locale {
             setLocaleText(text_temp_unit)
             setLocaleText(input_notification_city)
             setLocaleText(btn_apply_notifications)
-            setLocaleText(text_select_interval)
-
-            spinnerInterval.adapter = ArrayAdapter(
-                applicationContext,
-                R.layout.tv_spinner, listOf("2 $hour", "4 $hour", "8 $hour", "12 $hour", "24 $hour")
-            )
+            setLocaleText(btn_reset_notifications)
 
         }
     }

@@ -2,21 +2,39 @@ package com.example.shkudikweatherapp.presentation_layer.settings_activity.activ
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.content.Intent
 import android.icu.util.Calendar
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.example.shkudikweatherapp.NotificationService
 import com.example.shkudikweatherapp.R
+import com.example.shkudikweatherapp.data_layer.http_client.NotificationServiceRetrofitClient
+import com.example.shkudikweatherapp.data_layer.providers.Helper.cityNotFoundDesc
+import com.example.shkudikweatherapp.data_layer.providers.Helper.emptyInputErrorMessage
+import com.example.shkudikweatherapp.data_layer.providers.Helper.hideKeyboard
 import com.example.shkudikweatherapp.data_layer.providers.Helper.hour
+import com.example.shkudikweatherapp.data_layer.providers.Helper.reformat
 import com.example.shkudikweatherapp.data_layer.providers.UserPreferences
 import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.mainDesc
+import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.notificationCity
+import com.example.shkudikweatherapp.presentation_layer.main_activity.views.BoardImpl
 import com.example.shkudikweatherapp.presentation_layer.settings_activity.views.*
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_settings.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -57,10 +75,101 @@ class SettingsActivity : AppCompatActivity() {
 
         }
 
+        input_notification_city.setOnEditorActionListener { textView, i, keyEvent ->
+
+            Log.d("i===", "$i")
+
+            if (i == 6) {
+
+                CoroutineScope(Main).launch {
+
+                    if (input_notification_city.text.isNotEmpty()) {
+
+                        input_notification_city.reformat()
+                        val enteredCity = input_notification_city.text.toString()
+
+                        if (testLoad(enteredCity) != null) {
+
+                            notificationCity = enteredCity
+                            startService(Intent(applicationContext, NotificationService::class.java))
+                            Toast.makeText(applicationContext, "Successfully", Toast.LENGTH_LONG).show()
+
+                        } else {
+
+                            Toast.makeText(applicationContext, cityNotFoundDesc, Toast.LENGTH_SHORT)
+                                .show()
+
+                        }
+
+                    } else {
+
+                        Toast.makeText(applicationContext, emptyInputErrorMessage, Toast.LENGTH_SHORT)
+                            .show()
+
+                    }
+                }
+
+                input_notification_city.hideKeyboard(applicationContext)
+
+            }
+            true
+        }
+
+
+        btn_apply_notifications.setOnClickListener {
+
+            CoroutineScope(Main).launch {
+
+                if (input_notification_city.text.isNotEmpty()) {
+
+                    input_notification_city.reformat()
+                    val enteredCity = input_notification_city.text.toString()
+
+                    if (testLoad(enteredCity) != null) {
+
+                        notificationCity = enteredCity
+                        startService(Intent(applicationContext, NotificationService::class.java))
+                        Toast.makeText(applicationContext, "Successfully", Toast.LENGTH_LONG).show()
+
+                    } else {
+
+                        Toast.makeText(applicationContext, cityNotFoundDesc, Toast.LENGTH_SHORT)
+                            .show()
+
+                    }
+
+                } else {
+
+                    Toast.makeText(applicationContext, emptyInputErrorMessage, Toast.LENGTH_SHORT)
+                        .show()
+
+                }
+
+            }
+
+            input_notification_city.clearFocus()
+            input_notification_city.hideKeyboard(applicationContext)
+
+        }
+
+        input_notification_city.onFocusChangeListener =
+            View.OnFocusChangeListener { p0, p1 ->
+                if (p1) {
+                    input_notification_city.text.clear()
+                }
+            }
 
         btn_set_notifications.setOnClickListener {
 
             notificationImpl.showNotificationOption()
+            input_notification_city.setText(notificationCity)
+
+        }
+
+        btn_reset_notifications.setOnClickListener {
+
+            stopService(Intent(applicationContext, NotificationService::class.java))
+            Toast.makeText(applicationContext, "Notifications was successfully reset", Toast.LENGTH_LONG).show()
 
         }
 
@@ -99,27 +208,6 @@ class SettingsActivity : AppCompatActivity() {
 
         }
 
-        spinnerInterval.adapter = ArrayAdapter(
-            applicationContext,
-            R.layout.tv_spinner, listOf("2 $hour", "4 $hour", "8 $hour", "12 $hour", "24 $hour")
-        )
-
-        spinnerInterval.setSelection(
-            when (UserPreferences.notifInterval) {
-
-                2 -> 0
-                4 -> 1
-                8 -> 2
-                12 -> 3
-                24 -> 4
-
-                else -> throw Exception("The interval was set wrong")
-            }
-        )
-
-        input_notification_city.setText(UserPreferences.notifCity)
-
-
         cbFullscreen.setOnClickListener {
 
             fullscreenImpl.setChecked(cbFullscreen.isChecked)
@@ -139,28 +227,8 @@ class SettingsActivity : AppCompatActivity() {
         })
     }
 
-    fun applyNotifications() {
+    private suspend fun testLoad(city: String)
+            = CoroutineScope(IO).async { NotificationServiceRetrofitClient().loadWeather(city) }.await()
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
-            val nChannel = NotificationChannel("m", "m", NotificationManager.IMPORTANCE_HIGH)
-            val manager = getSystemService(NotificationManager::class.java)
-            manager.createNotificationChannel(nChannel)
-
-        }
-
-        btn_apply_notifications.setOnClickListener {
-
-            val nBuilder = NotificationCompat.Builder(this@SettingsActivity, "m").
-            setSmallIcon(R.drawable.settings).
-            setContentTitle("Keulor Vamos").
-            setContentText("Districtskoye - vamosskoye").
-            setAutoCancel(true).
-            setWhen(Calendar.getInstance().timeInMillis - 3000)
-
-            val nManager = NotificationManagerCompat.from(this@SettingsActivity)
-
-            nManager.notify(1, nBuilder.build())
-        }
-    }
 }
