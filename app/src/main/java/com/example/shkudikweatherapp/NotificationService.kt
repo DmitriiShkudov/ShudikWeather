@@ -9,27 +9,21 @@ import android.os.IBinder
 import android.widget.*
 import androidx.core.app.NotificationCompat
 import androidx.core.content.res.ResourcesCompat
-import com.example.shkudikweatherapp.data_layer.http_client.ApplicationRetrofitClient
 import com.example.shkudikweatherapp.data_layer.http_client.NotificationServiceRetrofitClient
 import com.example.shkudikweatherapp.data_layer.providers.Helper
 import com.example.shkudikweatherapp.data_layer.providers.Helper.PERCENT
 import com.example.shkudikweatherapp.data_layer.providers.Helper.direction
 import com.example.shkudikweatherapp.data_layer.providers.Helper.getMainDescription
-import com.example.shkudikweatherapp.data_layer.providers.Helper.humidity
 import com.example.shkudikweatherapp.data_layer.providers.Helper.isNightTime
 import com.example.shkudikweatherapp.data_layer.providers.Helper.setTemp
 import com.example.shkudikweatherapp.data_layer.providers.Helper.setWindDirection
 import com.example.shkudikweatherapp.data_layer.providers.Helper.setWindSpeed
 import com.example.shkudikweatherapp.data_layer.providers.Helper.windSpeed
 import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider
-import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.context
-import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.mainDesc
 import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.notificationCity
-import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.selectedCity
-import com.example.shkudikweatherapp.data_layer.states.MainDescription
+import com.example.shkudikweatherapp.data_layer.enums.MainDescription
 import com.example.shkudikweatherapp.presentation_layer.main_activity.activity.MainActivity
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.activity_settings.*
 import java.lang.Thread.sleep
 
 

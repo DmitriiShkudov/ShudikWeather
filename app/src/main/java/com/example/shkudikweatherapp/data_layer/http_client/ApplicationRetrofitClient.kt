@@ -2,18 +2,12 @@ package com.example.shkudikweatherapp.data_layer.http_client
 
 import com.example.shkudikweatherapp.data_layer.http_client.RetrofitClient.Data.retrofitTime
 import com.example.shkudikweatherapp.data_layer.http_client.RetrofitClient.Data.retrofitWeather
-import com.example.shkudikweatherapp.data_layer.providers.Helper.BASE_URL_TIME
-import com.example.shkudikweatherapp.data_layer.providers.Helper.BASE_URL_WEATHER
 import com.example.shkudikweatherapp.data_layer.providers.Helper.KEY_API
 import com.example.shkudikweatherapp.data_layer.providers.Helper.cityNotFoundDesc
 import com.example.shkudikweatherapp.data_layer.providers.UserPreferences.language
 import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.isSelectedCityExists
-import com.example.shkudikweatherapp.data_layer.states.States
-import com.example.shkudikweatherapp.presentation_layer.viewmodels.MainViewModel
-import okhttp3.OkHttpClient
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit
+import com.example.shkudikweatherapp.presentation_layer.main_activity.states.MainStates
+import com.example.shkudikweatherapp.presentation_layer.main_activity.activity.MainViewModel
 
 
 class ApplicationRetrofitClient(private val viewModel: MainViewModel) : RetrofitClient() {
@@ -42,8 +36,8 @@ class ApplicationRetrofitClient(private val viewModel: MainViewModel) : Retrofit
 
                     viewModel.desc.postValue(cityNotFoundDesc)
 
-                    viewModel.state.postValue(States.UPDATED)
-                    viewModel.state.postValue(States.WRONG_CITY)
+                    viewModel.state.postValue(MainStates.UPDATED)
+                    viewModel.state.postValue(MainStates.WRONG_CITY)
                     isSelectedCityExists = false
                     null
 
@@ -53,7 +47,7 @@ class ApplicationRetrofitClient(private val viewModel: MainViewModel) : Retrofit
 
         } catch (e: Throwable) {
 
-            viewModel.state.postValue(States.BAD_CONNECTION)
+            viewModel.state.postValue(MainStates.BAD_CONNECTION)
             null
 
         }
@@ -75,8 +69,8 @@ class ApplicationRetrofitClient(private val viewModel: MainViewModel) : Retrofit
 
                 } else {
 
-                    viewModel.state.postValue(States.UPDATED)
-                    viewModel.state.postValue(States.WRONG_CITY)
+                    viewModel.state.postValue(MainStates.UPDATED)
+                    viewModel.state.postValue(MainStates.WRONG_CITY)
 
                     null
 
@@ -86,7 +80,7 @@ class ApplicationRetrofitClient(private val viewModel: MainViewModel) : Retrofit
 
         } catch (e: Throwable) {
 
-            viewModel.state.postValue(States.BAD_CONNECTION)
+            viewModel.state.postValue(MainStates.BAD_CONNECTION)
             null
 
         }
@@ -126,7 +120,7 @@ class ApplicationRetrofitClient(private val viewModel: MainViewModel) : Retrofit
 
         } catch (e: Throwable) {
 
-            viewModel.state.postValue(States.BAD_CONNECTION)
+            viewModel.state.postValue(MainStates.BAD_CONNECTION)
             null
 
         }

@@ -1,4 +1,4 @@
-package com.example.shkudikweatherapp.data_layer.states
+package com.example.shkudikweatherapp.data_layer.enums
 
 enum class MainDescription(val string: String, val icon: String) {
 

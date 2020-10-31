@@ -1,47 +1,28 @@
 package com.example.shkudikweatherapp.presentation_layer.main_activity.activity
 
-import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.location.Location
-import android.location.LocationListener
-import android.location.LocationManager
 import android.os.Bundle
-import android.view.View
-import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.shkudikweatherapp.R
-import com.example.shkudikweatherapp.data_layer.providers.Helper.EMPTY_INPUT_ERROR_ENG
-import com.example.shkudikweatherapp.data_layer.providers.Helper.EMPTY_INPUT_ERROR_GER
-import com.example.shkudikweatherapp.data_layer.providers.Helper.EMPTY_INPUT_ERROR_RUS
-import com.example.shkudikweatherapp.data_layer.providers.Helper.emptyInputErrorMessage
 import com.example.shkudikweatherapp.data_layer.providers.UserPreferences
 import com.example.shkudikweatherapp.data_layer.providers.UserPreferences.isLocationApplied
-import com.example.shkudikweatherapp.data_layer.providers.UserPreferences.language
 import com.example.shkudikweatherapp.data_layer.providers.UserPreferences.searchMode
 import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider
 import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.desc
 import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.isNight
 import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.isSelectedCityExists
 import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.mainDesc
-import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.selectedCity
-import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.selectedLat
-import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.selectedLon
 import com.example.shkudikweatherapp.presentation_layer.fragments.MoreInfo
+import com.example.shkudikweatherapp.presentation_layer.main_activity.states.StateImpl
 import com.example.shkudikweatherapp.presentation_layer.main_activity.views.*
 import com.example.shkudikweatherapp.presentation_layer.settings_activity.activity.SettingsActivity
-import com.example.shkudikweatherapp.data_layer.states.States
-import com.example.shkudikweatherapp.presentation_layer.viewmodels.MainViewModel
-import com.google.android.gms.location.LocationServices
+import com.example.shkudikweatherapp.presentation_layer.main_activity.states.MainStates
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
-import kotlin.math.roundToInt
 
 
 class MainActivity : AppCompatActivity() {
@@ -130,7 +111,7 @@ class MainActivity : AppCompatActivity() {
             boardImpl.setCity() else boardImpl.setUserLocationTitle()
 
         recyclerHelpImpl.update()
-        stateImpl.setState(States.LOADING)
+        stateImpl.setState(MainStates.LOADING)
         boardImpl.setOnEnterClickEvent()
         viewModel.update()
 
@@ -138,7 +119,7 @@ class MainActivity : AppCompatActivity() {
 
         btn_change_city.setOnClickListener {
 
-            stateImpl.setState(States.CHANGING_CITY)
+            stateImpl.setState(MainStates.CHANGING_CITY)
 
             if (isMoreInfoOpened)
                 moreInfoImpl.detach()
@@ -147,7 +128,7 @@ class MainActivity : AppCompatActivity() {
 
         btn_geo.setOnClickListener {
 
-            stateImpl.setState(States.CHANGING_CITY_CANCELLED)
+            stateImpl.setState(MainStates.CHANGING_CITY_CANCELLED)
 
             if (isMoreInfoOpened)
                 moreInfoImpl.detach()
@@ -175,7 +156,7 @@ class MainActivity : AppCompatActivity() {
 
             if (isSelectedCityExists) {
 
-                stateImpl.setState(States.MORE_INFO)
+                stateImpl.setState(MainStates.MORE_INFO)
                 isMoreInfoOpened = true
 
             }

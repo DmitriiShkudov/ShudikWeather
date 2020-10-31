@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import com.example.shkudikweatherapp.data_layer.providers.UserPreferences.degreeUnit
 import com.example.shkudikweatherapp.data_layer.providers.UserPreferences.language
-import com.example.shkudikweatherapp.data_layer.states.MainDescription
+import com.example.shkudikweatherapp.data_layer.enums.MainDescription
 
 object Helper {
 

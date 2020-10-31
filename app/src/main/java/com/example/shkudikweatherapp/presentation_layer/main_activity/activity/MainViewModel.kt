@@ -1,4 +1,4 @@
-package com.example.shkudikweatherapp.presentation_layer.viewmodels
+package com.example.shkudikweatherapp.presentation_layer.main_activity.activity
 
 import android.annotation.SuppressLint
 import android.app.Application
@@ -34,9 +34,8 @@ import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider
 import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.selectedCity
 import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.selectedLat
 import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.selectedLon
-import com.example.shkudikweatherapp.data_layer.states.MainDescription
-import com.example.shkudikweatherapp.data_layer.states.States
-import com.example.shkudikweatherapp.presentation_layer.main_activity.activity.MainActivity
+import com.example.shkudikweatherapp.data_layer.enums.MainDescription
+import com.example.shkudikweatherapp.presentation_layer.main_activity.states.MainStates
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.Default
@@ -51,7 +50,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     // Weather
     var isNight = MutableLiveData<Boolean>()
     var temp = MutableLiveData<String>()
-    var state = MutableLiveData<States>()
+    var state = MutableLiveData<MainStates>()
     var mainDesc = MutableLiveData<MainDescription>()
     var desc = MutableLiveData<String>()
     var humidity = MutableLiveData<String>()
@@ -211,7 +210,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
                     if (language != UserPreferences.Language.RUS) METER_PER_SEC else METER_PER_SEC_RUS
         )
 
-        state.value(States.UPDATED)
+        state.value(MainStates.UPDATED)
 
     }
 
@@ -223,11 +222,11 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
                 input_city.reformat()
                 selectedCity = input_city.text.toString()
-                stateImpl.setState(States.CITY_APPLIED)
-                stateImpl.setState(States.LOADING)
+                stateImpl.setState(MainStates.CITY_APPLIED)
+                stateImpl.setState(MainStates.LOADING)
 
                 CoroutineScope(Main).launch {
-                    state.value(States.LOADING)
+                    state.value(MainStates.LOADING)
                     viewModel.load(this)
                 }
 
@@ -245,7 +244,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
         if (UserPreferences.isLocationApplied) {
 
-            state.value(States.LOADING)
+            state.value(MainStates.LOADING)
 
             try {
 
@@ -253,8 +252,8 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
                 locationManager!!.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1, 1f) { location ->
 
-                    activity.stateImpl.setState(States.CITY_APPLIED)
-                    activity.stateImpl.setState(States.LOADING)
+                    activity.stateImpl.setState(MainStates.CITY_APPLIED)
+                    activity.stateImpl.setState(MainStates.LOADING)
 
                     selectedLon = ((location.longitude * 1000).roundToInt() / 1000f)
                     selectedLat = ((location.latitude * 1000).roundToInt() / 1000f)

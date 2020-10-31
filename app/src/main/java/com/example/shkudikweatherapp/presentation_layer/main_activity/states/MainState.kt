@@ -1,4 +1,4 @@
-package com.example.shkudikweatherapp.presentation_layer.main_activity.views
+package com.example.shkudikweatherapp.presentation_layer.main_activity.states
 
 import android.graphics.Typeface.NORMAL
 import android.view.View
@@ -15,30 +15,33 @@ import com.example.shkudikweatherapp.data_layer.providers.Helper.showKeyboard
 import com.example.shkudikweatherapp.data_layer.providers.UserPreferences
 import com.example.shkudikweatherapp.data_layer.providers.UserPreferences.searchMode
 import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.selectedCity
-import com.example.shkudikweatherapp.data_layer.states.States
+import com.example.shkudikweatherapp.presentation_layer.common_protocols.State
 import com.example.shkudikweatherapp.presentation_layer.main_activity.activity.MainActivity
+import com.example.shkudikweatherapp.presentation_layer.main_activity.states.MainStates.MORE_INFO
+import com.example.shkudikweatherapp.presentation_layer.main_activity.states.MainStates.CHANGING_CITY
+import com.example.shkudikweatherapp.presentation_layer.main_activity.states.MainStates.CITY_APPLIED
+import com.example.shkudikweatherapp.presentation_layer.main_activity.states.MainStates.CHANGING_CITY_CANCELLED
+import com.example.shkudikweatherapp.presentation_layer.main_activity.states.MainStates.BAD_CONNECTION
+import com.example.shkudikweatherapp.presentation_layer.main_activity.states.MainStates.WRONG_CITY
+import com.example.shkudikweatherapp.presentation_layer.main_activity.states.MainStates.LOADING
+import com.example.shkudikweatherapp.presentation_layer.main_activity.states.MainStates.UPDATED
+import com.example.shkudikweatherapp.presentation_layer.main_activity.states.MainStates
 import kotlinx.android.synthetic.main.activity_main.*
 
-interface State {
+class MainStateImpl(private val activity: MainActivity) : State {
 
-    fun setState(state: States)
-
-}
-
-class StateImpl(private val activity: MainActivity) : State {
-
-    override fun setState(state: States) { with(activity) {
+    override fun <MainStates> setState(state: MainStates) { with(activity) {
 
             when (state) {
 
-                States.MORE_INFO -> {
+                MORE_INFO -> {
 
                     moreInfoImpl.attach()
                     root.setSafeOnClickListener { moreInfoImpl.detach() }
 
                 }
 
-                States.CHANGING_CITY -> {
+                CHANGING_CITY -> {
 
                     tvDescriptionIcon.visibility = View.INVISIBLE
                     rvHelp.visibility = View.VISIBLE
@@ -54,13 +57,15 @@ class StateImpl(private val activity: MainActivity) : State {
 
                     }
 
-                    root.setSafeOnClickListener { setState(States.CHANGING_CITY_CANCELLED) }
+                    root.setSafeOnClickListener {
+                        setState(CHANGING_CITY_CANCELLED)
+                    }
 
                     recyclerHelpImpl.update()
 
                 }
 
-                States.CHANGING_CITY_CANCELLED -> {
+                CHANGING_CITY_CANCELLED -> {
 
                     // cancellation
                     btn_apply_city.isClickable = false
@@ -79,7 +84,7 @@ class StateImpl(private val activity: MainActivity) : State {
 
                 }
 
-                States.LOADING -> {
+                LOADING -> {
 
                     with(input_city) {
                         background = ResourcesCompat.getDrawable(resources, R.drawable.input_empty, null)
@@ -96,9 +101,9 @@ class StateImpl(private val activity: MainActivity) : State {
 
                 }
 
-                States.CITY_APPLIED -> tvDescriptionIcon.visibility = View.VISIBLE
+                CITY_APPLIED -> tvDescriptionIcon.visibility = View.VISIBLE
 
-                States.UPDATED -> {
+                UPDATED -> {
 
                     btn_change_city.isClickable = true
                     btn_geo.isClickable = true
@@ -108,12 +113,12 @@ class StateImpl(private val activity: MainActivity) : State {
 
                 }
 
-                States.BAD_CONNECTION -> {
+                BAD_CONNECTION -> {
                     cpv_loading.visibility = View.GONE
                     bad_connection.visibility = View.VISIBLE
                 }
 
-                States.WRONG_CITY -> {
+                WRONG_CITY -> {
 
                     cpv_loading.visibility = View.GONE
 
@@ -145,10 +150,7 @@ class StateImpl(private val activity: MainActivity) : State {
                     changeableSearchModeImpl.setEnabledSearchMode()
 
                 }
-
             }
         }
-
     }
-
 }

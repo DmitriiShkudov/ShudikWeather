@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.lifecycle.ViewModelProvider
 import com.example.shkudikweatherapp.NotificationService
 import com.example.shkudikweatherapp.R
 import com.example.shkudikweatherapp.data_layer.http_client.NotificationServiceRetrofitClient
@@ -38,13 +39,22 @@ import kotlinx.coroutines.withContext
 
 class SettingsActivity : AppCompatActivity() {
 
-    private lateinit var fullscreenImpl: FullscreenImpl
-    private lateinit var temperatureUnitImpl: TemperatureUnitImpl
-    private lateinit var backgroundImpl: BackgroundImpl
-    private lateinit var languageImpl: LanguageImpl
-    private lateinit var localeImpl: LocaleImpl
-    private lateinit var notificationImpl: NotificationImpl
-    private lateinit var timeModeImpl: TimeModeImpl
+    lateinit var fullscreenImpl: FullscreenImpl
+        private set
+    lateinit var temperatureUnitImpl: TemperatureUnitImpl
+        private set
+    lateinit var backgroundImpl: BackgroundImpl
+        private set
+    lateinit var languageImpl: LanguageImpl
+        private set
+    lateinit var localeImpl: LocaleImpl
+        private set
+    lateinit var notificationImpl: NotificationImpl
+        private set
+    lateinit var timeModeImpl: TimeModeImpl
+        private set
+
+    lateinit var viewModel: SettingsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -64,6 +74,8 @@ class SettingsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_settings)
         //
 
+        viewModel = ViewModelProvider(this).get(SettingsViewModel::class.java)
+
         localeImpl.setLocale()
         backgroundImpl.setBackground(mainDesc)
 
@@ -76,8 +88,6 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         input_notification_city.setOnEditorActionListener { textView, i, keyEvent ->
-
-            Log.d("i===", "$i")
 
             if (i == 6) {
 
@@ -115,7 +125,6 @@ class SettingsActivity : AppCompatActivity() {
             true
         }
 
-
         btn_apply_notifications.setOnClickListener {
 
             CoroutineScope(Main).launch {
@@ -129,22 +138,20 @@ class SettingsActivity : AppCompatActivity() {
 
                         notificationCity = enteredCity
                         startService(Intent(applicationContext, NotificationService::class.java))
-                        Toast.makeText(applicationContext, "Successfully", Toast.LENGTH_LONG).show()
+
+                        notificationImpl.notificationSet()
 
                     } else {
 
-                        Toast.makeText(applicationContext, cityNotFoundDesc, Toast.LENGTH_SHORT)
-                            .show()
+                        notificationImpl.showError(cityNotFoundDesc)
 
                     }
 
                 } else {
 
-                    Toast.makeText(applicationContext, emptyInputErrorMessage, Toast.LENGTH_SHORT)
-                        .show()
+                    notificationImpl.showError(emptyInputErrorMessage)
 
                 }
-
             }
 
             input_notification_city.clearFocus()
@@ -169,7 +176,7 @@ class SettingsActivity : AppCompatActivity() {
         btn_reset_notifications.setOnClickListener {
 
             stopService(Intent(applicationContext, NotificationService::class.java))
-            Toast.makeText(applicationContext, "Notifications was successfully reset", Toast.LENGTH_LONG).show()
+            notificationImpl.notificationReset()
 
         }
 
@@ -226,9 +233,5 @@ class SettingsActivity : AppCompatActivity() {
 
         })
     }
-
-    private suspend fun testLoad(city: String)
-            = CoroutineScope(IO).async { NotificationServiceRetrofitClient().loadWeather(city) }.await()
-
 
 }

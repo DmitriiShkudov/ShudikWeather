@@ -3,12 +3,8 @@ package com.example.shkudikweatherapp.data_layer.http_client
 import com.example.shkudikweatherapp.data_layer.http_client.RetrofitClient.Data.retrofitTime
 import com.example.shkudikweatherapp.data_layer.http_client.RetrofitClient.Data.retrofitWeather
 import com.example.shkudikweatherapp.data_layer.pojo.forecast.Forecast
-import com.example.shkudikweatherapp.data_layer.pojo.time_utc.TimeUTC
-import com.example.shkudikweatherapp.data_layer.pojo.weather.Weather
 import com.example.shkudikweatherapp.data_layer.providers.Helper
 import com.example.shkudikweatherapp.data_layer.providers.UserPreferences
-import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider
-import com.example.shkudikweatherapp.data_layer.states.States
 
 class NotificationServiceRetrofitClient : RetrofitClient() {
 
