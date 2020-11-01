@@ -4,7 +4,8 @@ import android.view.View
 import android.widget.ArrayAdapter
 import com.example.shkudikweatherapp.R
 import com.example.shkudikweatherapp.data_layer.providers.Helper.hour
-import com.example.shkudikweatherapp.data_layer.providers.UserPreferences
+import com.example.shkudikweatherapp.data_layer.providers.UserPreferences.Language.*
+import com.example.shkudikweatherapp.data_layer.providers.UserPreferences.language
 import com.example.shkudikweatherapp.presentation_layer.common_protocols.Locale
 import com.example.shkudikweatherapp.presentation_layer.settings_activity.activity.SettingsActivity
 import kotlinx.android.synthetic.main.activity_settings.*
@@ -15,9 +16,9 @@ class LocaleImpl(private val activity: SettingsActivity) : Locale {
 
             fun setLocaleText(obj: View) {
 
-                when (UserPreferences.language) {
+                when (language) {
 
-                    UserPreferences.Language.RUS -> when (obj) {
+                    RUS -> when (obj) {
 
                         settings_header -> settings_header.text = "Настройки"
                         text_fullscreen -> text_fullscreen.text = "Полный экран"
@@ -39,7 +40,7 @@ class LocaleImpl(private val activity: SettingsActivity) : Locale {
 
                     }
 
-                    UserPreferences.Language.GER -> when (obj) {
+                    GER -> when (obj) {
 
                         settings_header -> settings_header.text = "Einstellungen"
                         text_fullscreen -> text_fullscreen.text = "Vollbildschirm"
@@ -58,7 +59,7 @@ class LocaleImpl(private val activity: SettingsActivity) : Locale {
 
                     }
 
-                    UserPreferences.Language.ENG -> when (obj) {
+                    ENG -> when (obj) {
 
                         settings_header -> settings_header.text = "Settings"
                         text_fullscreen -> text_fullscreen.text = "Fullscreen"
@@ -91,5 +92,4 @@ class LocaleImpl(private val activity: SettingsActivity) : Locale {
 
         }
     }
-
 }

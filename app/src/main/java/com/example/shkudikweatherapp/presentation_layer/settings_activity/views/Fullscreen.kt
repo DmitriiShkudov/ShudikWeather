@@ -34,6 +34,8 @@ class FullscreenImpl(private val activity: SettingsActivity) : Fullscreen {
                     fullscreen = value
 
                     val intent = Intent(applicationContext, MainActivity::class.java).apply {
+                        addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS).
+                        addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).
                         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     }
 

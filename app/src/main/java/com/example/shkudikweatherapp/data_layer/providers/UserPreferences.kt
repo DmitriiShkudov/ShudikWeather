@@ -38,14 +38,6 @@ object UserPreferences {
         set(value) = this.pref?.edit()?.putBoolean(SEARCH_MODE_KEY, value.isCity)?.apply()!!
 
 
-    var notifCity
-        get() = this.pref?.getString(NOTIF_CITY_KEY, EMPTY) ?: EMPTY
-        set(value) = this.pref?.edit()?.putString(NOTIF_CITY_KEY, value)?.apply()!!
-
-    var notifInterval
-        get() = this.pref?.getInt(NOTIF_INTERVAL_KEY, 2) ?: 2
-        set(value) = this.pref?.edit()?.putInt(NOTIF_INTERVAL_KEY, value)?.apply()!!
-
     var language
         get() = when (this.pref?.getString(LANG_KEY, Language.ENG.str) ?: Language.ENG.str) {
             Language.RUS.str -> Language.RUS

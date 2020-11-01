@@ -1,6 +1,8 @@
 package com.example.shkudikweatherapp.presentation_layer.main_activity.views
 
+import android.opengl.Visibility
 import android.view.View
+import android.view.View.GONE
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.shkudikweatherapp.presentation_layer.adapters.RvHelpAdapter
 import com.example.shkudikweatherapp.presentation_layer.main_activity.activity.MainActivity
@@ -25,10 +27,6 @@ class RecyclerHelpImpl(private val activity: MainActivity) : RecyclerHelp {
         }
     }
 
-    override fun hide() {
-
-        activity.rvHelp.visibility = View.GONE
-
-    }
+    override fun hide() = activity.rvHelp.setVisibility(GONE)
 
 }

@@ -2,7 +2,7 @@ package com.example.shkudikweatherapp.presentation_layer.main_activity.views
 
 import android.view.View
 import com.example.shkudikweatherapp.presentation_layer.main_activity.activity.MainActivity
-import com.example.shkudikweatherapp.data_layer.providers.UserPreferences
+import com.example.shkudikweatherapp.data_layer.providers.UserPreferences.Language.*
 import com.example.shkudikweatherapp.data_layer.providers.UserPreferences.language
 import com.example.shkudikweatherapp.presentation_layer.common_protocols.Locale
 import kotlinx.android.synthetic.main.activity_main.*
@@ -17,7 +17,7 @@ class LocaleImpl(private val activity: MainActivity) : Locale {
 
                 when (language) {
 
-                    UserPreferences.Language.RUS -> when (obj) {
+                    RUS -> when (obj) {
 
                         text_temp -> text_temp.text = "Температура"
                         text_wind -> text_wind.also { it.textSize = 16f }.text = "Скорость ветра"
@@ -27,7 +27,7 @@ class LocaleImpl(private val activity: MainActivity) : Locale {
 
                     }
 
-                    UserPreferences.Language.GER -> when (obj) {
+                    GER -> when (obj) {
 
                         text_temp -> text_temp.text = "Temperatur"
                         text_wind -> text_wind.also { it.textSize = 13f }.text =
@@ -38,7 +38,7 @@ class LocaleImpl(private val activity: MainActivity) : Locale {
 
                     }
 
-                    UserPreferences.Language.ENG -> when (obj) {
+                    ENG -> when (obj) {
 
                         text_temp -> text_temp.text = "Temperature"
                         text_wind -> text_wind.also { it.textSize = 16f }.text = "Wind speed"

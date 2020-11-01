@@ -4,13 +4,25 @@ import android.content.Context
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.MutableLiveData
+import com.example.shkudikweatherapp.R
 import com.example.shkudikweatherapp.data_layer.providers.UserPreferences.degreeUnit
 import com.example.shkudikweatherapp.data_layer.providers.UserPreferences.language
+import com.example.shkudikweatherapp.data_layer.providers.UserPreferences.Language.*
 import com.example.shkudikweatherapp.data_layer.enums.MainDescription
+import com.example.shkudikweatherapp.data_layer.providers.Helper.GPS_ERROR_ENG
+import com.example.shkudikweatherapp.data_layer.providers.Helper.GPS_ERROR_RUS
+import com.example.shkudikweatherapp.data_layer.providers.Helper.RESTART_MESSAGE_ENG
+import com.example.shkudikweatherapp.data_layer.providers.Helper.RESTART_MESSAGE_GER
+import com.example.shkudikweatherapp.data_layer.providers.Helper.RESTART_MESSAGE_RUS
 
 object Helper {
+
+    const val KEY_BOARD_CODE_5 = 5
+    const val KEY_BOARD_CODE_6 = 6
 
     // User Preferences
 
@@ -81,10 +93,12 @@ object Helper {
         (context.getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager).
         showSoftInput(this, 0)
 
+
     fun View.hideKeyboard(context: Context) =
 
         (context.getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager).
         hideSoftInputFromWindow(this.windowToken, 0)
+
 
     fun EditText.reformat() {
 
@@ -93,10 +107,12 @@ object Helper {
 
     }
 
+
     fun View.setSafeOnClickListener(action: () -> Unit) = this.setOnClickListener {
         action.invoke()
         this.setOnClickListener(null)
     }
+
 
     fun setTemp(intTemp: Int): String {
 
@@ -109,73 +125,72 @@ object Helper {
 
 
     fun <T> setWindSpeed(wind: T) =
+        wind.toString() + if (language != RUS) METER_PER_SEC else METER_PER_SEC_RUS
 
-        wind.toString() +
-                if (language != UserPreferences.Language.RUS) METER_PER_SEC else METER_PER_SEC_RUS
 
     fun setWindDirection(deg: Int) = when (deg) {
 
         in 0..15, in 345..360 -> when (language) {
 
-            UserPreferences.Language.RUS -> "восточное"
-            UserPreferences.Language.ENG -> "eastern"
-            UserPreferences.Language.GER -> "östlich"
+            RUS -> "восточное"
+            ENG -> "eastern"
+            GER -> "östlich"
 
         }
 
         in 15..75 -> when (language) {
 
-            UserPreferences.Language.RUS -> "северо-восточное"
-            UserPreferences.Language.ENG -> "northeast"
-            UserPreferences.Language.GER -> "nordost"
+            RUS -> "северо-восточное"
+            ENG -> "northeast"
+            GER -> "nordost"
 
         }
 
         in 75..105 -> when (language) {
 
-            UserPreferences.Language.RUS -> "северное"
-            UserPreferences.Language.ENG -> "northern"
-            UserPreferences.Language.GER -> "nord"
+            RUS -> "северное"
+            ENG -> "northern"
+            GER -> "nord"
 
         }
 
         in 105..165 -> when (language) {
 
-            UserPreferences.Language.RUS -> "северо-западное"
-            UserPreferences.Language.ENG -> "northwest"
-            UserPreferences.Language.GER -> "nordwest"
+            RUS -> "северо-западное"
+            ENG -> "northwest"
+            GER -> "nordwest"
 
         }
 
         in 165..195 -> when (language) {
 
-            UserPreferences.Language.RUS -> "западное"
-            UserPreferences.Language.ENG -> "western"
-            UserPreferences.Language.GER -> "western"
+            RUS -> "западное"
+            ENG -> "western"
+            GER -> "western"
 
         }
 
         in 195..255 -> when (language) {
 
-            UserPreferences.Language.RUS -> "юго-западное"
-            UserPreferences.Language.ENG -> "southwestern"
-            UserPreferences.Language.GER -> "südwestlich"
+            RUS -> "юго-западное"
+            ENG -> "southwestern"
+            GER -> "südwestlich"
 
         }
 
         in 255..285 -> when (language) {
 
-            UserPreferences.Language.RUS -> "южное"
-            UserPreferences.Language.ENG -> "southern"
-            UserPreferences.Language.GER -> "süd"
+            RUS -> "южное"
+            ENG -> "southern"
+            GER -> "süd"
 
         }
 
         else -> when (language) {
 
-            UserPreferences.Language.RUS -> "юго-восточное"
-            UserPreferences.Language.ENG -> "southeast"
-            UserPreferences.Language.GER -> "Süd-Ost"
+            RUS -> "юго-восточное"
+            ENG -> "southeast"
+            GER -> "Süd-Ost"
 
         }
 
@@ -184,10 +199,16 @@ object Helper {
 
     fun setPressure(intPressure: Int) = when (language) {
 
-        UserPreferences.Language.RUS -> (intPressure / 1.333).toInt().toString() + PRESSURE_RUS
+        RUS -> (intPressure / 1.333).toInt().toString() + PRESSURE_RUS
         else -> (intPressure / 1.333).toInt().toString() + PRESSURE
 
     }
+
+
+    fun getDrawable(context: Context, resId: Int) = ResourcesCompat.getDrawable(
+        context.resources,
+        resId,
+        null)
 
 
     fun countTime(time: String, hours: Int) =
@@ -207,15 +228,18 @@ object Helper {
 
     fun Int.fahrenheit() = this * 9 / 5 + 32
 
+
     fun <T> MutableLiveData<T>.value(value: T) {
 
         this.value = value
 
     }
 
+
     fun isNightTime(time: String) =
-        (time[0].toString() + time[1].toString()) == "22" || (time[0].toString() + time[1].toString()) == "23" || (time[1] == ':' && time[0].toString()
-            .toInt() in 0..5)
+        (time[0].toString() + time[1].toString()) == "22" || (time[0].toString() + time[1].toString()) == "23"
+                || (time[1] == ':' && time[0].toString().toInt() in 0..5)
+
 
     fun getMainDescription(isNight: Boolean, string: String): MainDescription {
 
@@ -270,9 +294,7 @@ object Helper {
             }
 
             throw Exception(RECEIVED_DESCRIPTION_IS_NOT_EXIST)
-
         }
-
     }
 
     // Exception messages
@@ -301,17 +323,26 @@ object Helper {
     val emptyInputErrorMessage: String
     get() = when (language) {
 
-        UserPreferences.Language.RUS -> EMPTY_INPUT_ERROR_RUS
-        UserPreferences.Language.ENG -> EMPTY_INPUT_ERROR_ENG
-        UserPreferences.Language.GER -> EMPTY_INPUT_ERROR_GER
+        RUS -> EMPTY_INPUT_ERROR_RUS
+        ENG -> EMPTY_INPUT_ERROR_ENG
+        GER -> EMPTY_INPUT_ERROR_GER
 
-    }
+        }
+
+    val locationDeniedError: String
+        get() = when (language) {
+
+            RUS -> LOCATION_DENIED_WARNING_RUS
+            ENG -> LOCATION_DENIED_WARNING_ENG
+            GER -> LOCATION_DENIED_WARNING_GER
+
+        }
 
     val restartMessage: String
         get() = when (language) {
 
-            UserPreferences.Language.RUS -> RESTART_MESSAGE_RUS
-            UserPreferences.Language.ENG -> RESTART_MESSAGE_ENG
+            RUS -> RESTART_MESSAGE_RUS
+            ENG -> RESTART_MESSAGE_ENG
             else -> RESTART_MESSAGE_GER
 
         }
@@ -319,83 +350,108 @@ object Helper {
     val gpsErrorMessage: String
         get() = when (language) {
 
-            UserPreferences.Language.RUS -> GPS_ERROR_RUS
-            UserPreferences.Language.ENG -> GPS_ERROR_ENG
+            RUS -> GPS_ERROR_RUS
+            ENG -> GPS_ERROR_ENG
             else -> GPS_ERROR_GER
 
         }
 
+    val cityIsAlreadyAttachedToNotificationsMessage: String
+        get() = when (language) {
+
+           RUS -> "Введённый город уже привязан к уведомлению"
+           ENG -> "Entered city is already attached to notification"
+            else -> "Die eingegebene Stadt ist bereits mit der Benachrichtigung verknüpft"
+
+        }
+
+    val notificationsWasResetSuccessfully: String
+        get() = when (language) {
+
+            RUS -> "Уведомления отменены"
+            ENG -> "Notifications is reset"
+            else -> "Benachrichtigungen abgebrochen"
+
+        }
 
     val reboot: String
         get() = when (language) {
 
-            UserPreferences.Language.RUS -> RESTART_RUS
-            UserPreferences.Language.ENG -> RESTART_ENG
+            RUS -> RESTART_RUS
+            ENG -> RESTART_ENG
             else -> RESTART_GER
+
+        }
+
+    val successMessage: String
+        get() = when (language) {
+
+            RUS -> "Успешно"
+            ENG -> "Successful"
+            else -> "Erfolgreich"
 
         }
 
     val cancel: String
         get() = when (language) {
 
-            UserPreferences.Language.RUS -> CANCEL_RUS
-            UserPreferences.Language.ENG -> CANCEL_ENG
-            UserPreferences.Language.GER -> CANCEL_GER
+            RUS -> CANCEL_RUS
+            ENG -> CANCEL_ENG
+            GER -> CANCEL_GER
 
         }
 
     val locationTitle: String
         get() = when (language) {
 
-            UserPreferences.Language.RUS -> YOUR_LOCATION_RUS
-            UserPreferences.Language.ENG -> YOUR_LOCATION_ENG
-            UserPreferences.Language.GER -> YOUR_LOCATION_GER
+            RUS -> YOUR_LOCATION_RUS
+            ENG -> YOUR_LOCATION_ENG
+            GER -> YOUR_LOCATION_GER
 
         }
 
     val cityNotFoundDesc: String
         get() = when (language) {
 
-            UserPreferences.Language.RUS -> CITY_NOT_FOUND_RUS
-            UserPreferences.Language.ENG -> CITY_NOT_FOUND_ENG
-            UserPreferences.Language.GER -> CITY_NOT_FOUND_GER
+            RUS -> CITY_NOT_FOUND_RUS
+            ENG -> CITY_NOT_FOUND_ENG
+            GER -> CITY_NOT_FOUND_GER
 
         }
 
     val hour: String
         get() = when (language) {
 
-            UserPreferences.Language.RUS -> "часа"
-            UserPreferences.Language.ENG -> "hours"
-            UserPreferences.Language.GER -> "Stunden"
+            RUS -> "часа"
+            ENG -> "hours"
+            GER -> "Stunden"
 
         }
 
     val windSpeed: String
         get() = when (language) {
 
-            UserPreferences.Language.RUS -> "Скорость ветра"
-            UserPreferences.Language.ENG -> "Wind speed"
-            UserPreferences.Language.GER -> "Windgeschwindigkeit"
+            RUS -> "Скорость ветра"
+            ENG -> "Wind speed"
+            GER -> "Windgeschwindigkeit"
 
         }
 
     val direction: String
         get() = when (language) {
 
-            UserPreferences.Language.RUS -> "направление"
-            UserPreferences.Language.ENG -> "direction"
-            UserPreferences.Language.GER -> "richtung"
+            RUS -> "направление"
+            ENG -> "direction"
+            GER -> "richtung"
 
         }
 
     val humidity: String
         get() = when (language) {
 
-            UserPreferences.Language.RUS -> "Влажность"
-            UserPreferences.Language.ENG -> "Humidity"
-            UserPreferences.Language.GER -> "Feuchtigkeit"
+            RUS -> "Влажность"
+            ENG -> "Humidity"
+            GER -> "Feuchtigkeit"
 
         }
-
 }

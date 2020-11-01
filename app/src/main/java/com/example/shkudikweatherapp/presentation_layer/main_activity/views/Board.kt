@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.Toast
 import com.example.shkudikweatherapp.presentation_layer.main_activity.activity.MainActivity
 import com.example.shkudikweatherapp.data_layer.providers.Helper
+import com.example.shkudikweatherapp.data_layer.providers.Helper.KEY_BOARD_CODE_5
 import com.example.shkudikweatherapp.data_layer.providers.Helper.locationTitle
 import com.example.shkudikweatherapp.data_layer.providers.UserPreferences
 import com.example.shkudikweatherapp.data_layer.providers.UserPreferences.language
@@ -24,21 +25,13 @@ interface Board {
 
 class BoardImpl(private val activity: MainActivity) : Board {
 
-    companion object {
-
-        const val CODE_ENTER = 5
-
-    }
-
     override fun setOnEnterClickEvent() { with(activity) {
 
             input_city.setOnEditorActionListener { textView, i, keyEvent ->
 
-                if (i == CODE_ENTER) {
-
+                if (i == KEY_BOARD_CODE_5)
                     activity.viewModel.applyCity(this)
 
-                }
                 true
             }
         }

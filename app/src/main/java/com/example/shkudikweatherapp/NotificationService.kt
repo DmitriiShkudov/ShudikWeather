@@ -2,6 +2,7 @@ package com.example.shkudikweatherapp
 
 import android.app.*
 import android.app.PendingIntent.FLAG_CANCEL_CURRENT
+import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Build
@@ -146,9 +147,6 @@ class NotificationService : Service() {
 
                 }
 
-
-
-
             } else {
 
                 setTextColor(R.id.firstInfo, ResourcesCompat.getColor(resources, R.color.black, null))
@@ -173,7 +171,7 @@ class NotificationService : Service() {
             setContentIntent(PendingIntent.getActivity(applicationContext,
                                                        0,
                                                        Intent(applicationContext, MainActivity::class.java),
-                                                       FLAG_CANCEL_CURRENT,
+                                                       FLAG_UPDATE_CURRENT,
                                                        null))
 
         return nBuilder.build()

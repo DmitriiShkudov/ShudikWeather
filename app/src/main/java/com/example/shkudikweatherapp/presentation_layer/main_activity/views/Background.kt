@@ -1,7 +1,10 @@
 package com.example.shkudikweatherapp.presentation_layer.main_activity.views
 
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.example.shkudikweatherapp.R
+import com.example.shkudikweatherapp.data_layer.enums.MainDescription
+import com.example.shkudikweatherapp.data_layer.enums.MainDescription.*
 import com.example.shkudikweatherapp.presentation_layer.main_activity.activity.MainActivity
 import com.example.shkudikweatherapp.data_layer.providers.Helper.LOW_ENG
 import com.example.shkudikweatherapp.data_layer.providers.Helper.LOW_GER
@@ -11,7 +14,8 @@ import com.example.shkudikweatherapp.data_layer.providers.Helper.OVERCAST_GER
 import com.example.shkudikweatherapp.data_layer.providers.Helper.OVERCAST_RUS
 import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.desc
 import com.example.shkudikweatherapp.presentation_layer.common_protocols.Background
-import com.example.shkudikweatherapp.data_layer.enums.MainDescription
+import com.example.shkudikweatherapp.data_layer.enums.MainDescription.*
+import com.example.shkudikweatherapp.data_layer.providers.Helper
 import kotlinx.android.synthetic.main.activity_main.*
 
 class BackgroundImpl(private val activity: MainActivity) : Background {
@@ -22,173 +26,101 @@ class BackgroundImpl(private val activity: MainActivity) : Background {
 
                 when (description) {
 
-                    MainDescription.CLEAR -> {
+                    CLEAR -> {
 
-                        tempIcon.background = ResourcesCompat.getDrawable(
-                            resources,
-                            R.drawable.back_icons_clear,
-                            null
-                        )
+                        tempIcon.background = ContextCompat.getDrawable(activity, R.drawable.back_icons_clear)
 
-                        windIcon.background = ResourcesCompat.getDrawable(
-                            resources,
-                            R.drawable.back_icons_clear,
-                            null
-                        )
-                        humidityIcon.background = ResourcesCompat.getDrawable(
-                            resources,
-                            R.drawable.back_icons_clear,
-                            null
-                        )
+                        windIcon.background = ContextCompat.getDrawable(activity, R.drawable.back_icons_clear)
 
-                        ResourcesCompat.getDrawable(resources, R.drawable.clear, null)
+                        humidityIcon.background = ContextCompat.getDrawable(activity, R.drawable.back_icons_clear)
+
+                        ContextCompat.getDrawable(activity, R.drawable.clear)
+
                     }
 
-                    MainDescription.CLEAR_NIGHT -> ResourcesCompat.getDrawable(resources, R.drawable.clear_night, null)
+                    CLEAR_NIGHT -> ContextCompat.getDrawable(activity, R.drawable.clear_night)
 
-
-
-                    MainDescription.CLOUDS -> {
+                    CLOUDS -> {
 
                         val isOvercast = desc.contains(OVERCAST_ENG) ||
                                          desc.contains(OVERCAST_RUS) ||
                                          desc.contains(OVERCAST_GER)
 
-                        tempIcon.background = ResourcesCompat.getDrawable(
-                            resources,
-                            R.drawable.back_icons_cloudy,
-                            null
-                        )
+                        tempIcon.background = ContextCompat.getDrawable(activity, R.drawable.back_icons_cloudy)
 
-                        windIcon.background = ResourcesCompat.getDrawable(
-                            resources,
-                            R.drawable.back_icons_cloudy,
-                            null
-                        )
-                        humidityIcon.background = ResourcesCompat.getDrawable(
-                            resources,
-                            R.drawable.back_icons_cloudy,
-                            null
-                        )
+                        windIcon.background = ContextCompat.getDrawable(activity, R.drawable.back_icons_cloudy)
 
-                        ResourcesCompat.getDrawable(
-                            resources,
-                            if (isOvercast) R.drawable.cloud else R.drawable.low_cloud,
-                            null
-                        )
+                        humidityIcon.background = ContextCompat.getDrawable(activity, R.drawable.back_icons_cloudy)
+
+                        ContextCompat.getDrawable(activity, if (isOvercast) R.drawable.cloud else R.drawable.low_cloud)
+
                     }
 
-                    MainDescription.CLOUDS_NIGHT -> {
+                    CLOUDS_NIGHT -> {
 
                         val isOvercast = desc.contains(OVERCAST_ENG) ||
                                          desc.contains(OVERCAST_RUS) ||
                                          desc.contains(OVERCAST_GER)
 
-                        ResourcesCompat.getDrawable(
-                            resources,
-                            if (isOvercast) R.drawable.cloud_night else R.drawable.low_cloud_night,
-                            null
-                        )
+                        ContextCompat.getDrawable(activity,
+                            if (isOvercast) R.drawable.cloud_night else R.drawable.low_cloud_night)
 
                     }
 
-                    MainDescription.RAIN, MainDescription.DRIZZLE -> {
+                    RAIN, DRIZZLE -> {
 
-                        tempIcon.background = ResourcesCompat.getDrawable(
-                            resources,
-                            R.drawable.back_icons_rainy,
-                            null
-                        )
+                        tempIcon.background = ContextCompat.getDrawable(activity, R.drawable.back_icons_rainy)
 
-                        windIcon.background = ResourcesCompat.getDrawable(
-                            resources,
-                            R.drawable.back_icons_rainy,
-                            null
-                        )
-                        humidityIcon.background = ResourcesCompat.getDrawable(
-                            resources,
-                            R.drawable.back_icons_rainy,
-                            null
-                        )
+                        windIcon.background = ContextCompat.getDrawable(activity, R.drawable.back_icons_rainy)
 
-                        ResourcesCompat.getDrawable(resources, R.drawable.rain, null)
-                    }
+                        humidityIcon.background = ContextCompat.getDrawable(activity, R.drawable.back_icons_rainy)
 
-                    MainDescription.RAIN_NIGHT, MainDescription.DRIZZLE_NIGHT ->
-                        ResourcesCompat.getDrawable(resources, R.drawable.rain_night, null)
-
-
-                    MainDescription.HAZE, MainDescription.MIST, MainDescription.DUST,
-                    MainDescription.FOG, MainDescription.SMOKE, MainDescription.ASH, MainDescription.SAND -> {
-
-                        tempIcon.background = ResourcesCompat.getDrawable(
-                            resources,
-                            R.drawable.back_icons_humid,
-                            null
-                        )
-                        windIcon.background = ResourcesCompat.getDrawable(
-                            resources,
-                            R.drawable.back_icons_humid,
-                            null
-                        )
-                        humidityIcon.background = ResourcesCompat.getDrawable(
-                            resources,
-                            R.drawable.back_icons_humid,
-                            null
-                        )
-
-                        ResourcesCompat.getDrawable(resources, R.drawable.humid, null)
-                    }
-
-                    MainDescription.HAZE_NIGHT, MainDescription.MIST_NIGHT, MainDescription.DUST_NIGHT,
-                    MainDescription.FOG_NIGHT, MainDescription.SMOKE_NIGHT, MainDescription.ASH_NIGHT,
-                    MainDescription.SAND_NIGHT-> {
-
-                        ResourcesCompat.getDrawable(resources, R.drawable.humid_night, null)
+                        ContextCompat.getDrawable(activity, R.drawable.back_icons_rainy)
 
                     }
 
-                    MainDescription.SNOW -> {
+                    RAIN_NIGHT, DRIZZLE_NIGHT -> ContextCompat.getDrawable(activity, R.drawable.rain_night)
+
+
+                    HAZE, MIST, DUST, FOG, SMOKE, ASH, SAND -> {
+
+                        tempIcon.background = ContextCompat.getDrawable(activity, R.drawable.back_icons_humid)
+
+                        windIcon.background = ContextCompat.getDrawable(activity, R.drawable.back_icons_humid)
+
+                        humidityIcon.background = ContextCompat.getDrawable(activity, R.drawable.back_icons_humid)
+
+                        ContextCompat.getDrawable(activity, R.drawable.humid)
+
+                    }
+
+                    HAZE_NIGHT, MIST_NIGHT, DUST_NIGHT, FOG_NIGHT, SMOKE_NIGHT, ASH_NIGHT, SAND_NIGHT ->
+                        ContextCompat.getDrawable(activity, R.drawable.humid_night)
+
+                    SNOW -> {
 
                         val isLow = desc.contains(LOW_ENG) ||
                                     desc.contains(LOW_RUS) ||
                                     desc.contains(LOW_GER)
 
-                        tempIcon.background = ResourcesCompat.getDrawable(
-                            resources,
-                            R.drawable.back_icons_snow,
-                            null
-                        )
-                        windIcon.background = ResourcesCompat.getDrawable(
-                            resources,
-                            R.drawable.back_icons_snow,
-                            null
-                        )
-                        humidityIcon.background = ResourcesCompat.getDrawable(
-                            resources,
-                            R.drawable.back_icons_snow,
-                            null
-                        )
+                        tempIcon.background = ContextCompat.getDrawable(activity, R.drawable.back_icons_snow)
 
-                        ResourcesCompat.getDrawable(
-                            resources, if (isLow) R.drawable.low_snow else
-                                R.drawable.snow, null
-                        )
+                        windIcon.background = ContextCompat.getDrawable(activity, R.drawable.back_icons_snow)
+
+                        humidityIcon.background = ContextCompat.getDrawable(activity, R.drawable.back_icons_snow)
+
+                        ContextCompat.getDrawable(activity, if (isLow) R.drawable.low_snow else R.drawable.snow)
                     }
 
-                    MainDescription.SNOW_NIGHT ->
-                        ResourcesCompat.getDrawable(resources, R.drawable.snow_night, null)
+                    SNOW_NIGHT -> ContextCompat.getDrawable(activity, R.drawable.snow_night)
 
-                    MainDescription.THUNDERSTORM, MainDescription.THUNDERSTORM_NIGHT ->
-                        ResourcesCompat.getDrawable(resources, R.drawable.thunder, null)
+                    THUNDERSTORM, THUNDERSTORM_NIGHT -> ContextCompat.getDrawable(activity, R.drawable.thunder)
 
-                    MainDescription.TORNADO, MainDescription.TORNADO_NIGHT ->
-                        ResourcesCompat.getDrawable(resources, R.drawable.tornado, null)
+                    TORNADO, TORNADO_NIGHT -> ContextCompat.getDrawable(activity, R.drawable.tornado)
 
-                    else -> ResourcesCompat.getDrawable(resources, R.drawable.humid_night, null)
+                    else -> ContextCompat.getDrawable(activity, R.drawable.humid_night)
 
                 })
         }
     }
-
 }

@@ -19,8 +19,8 @@ object WeatherProvider {
     private val pref
         get() = this.context?.getSharedPreferences(WEATHER_PREF, 0)
 
-    var notificationCity: String?
-        get() = this.pref?.getString(NOTIFICATION_CITY_NAME_KEY, null)
+    var notificationCity: String
+        get() = this.pref?.getString(NOTIFICATION_CITY_NAME_KEY, EMPTY) ?: EMPTY
         set(value) = this.pref?.edit()?.putString(NOTIFICATION_CITY_NAME_KEY, value)?.apply()!!
 
     var selectedCity: String

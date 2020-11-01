@@ -15,7 +15,7 @@ import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.isNigh
 import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.isSelectedCityExists
 import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.mainDesc
 import com.example.shkudikweatherapp.presentation_layer.fragments.MoreInfo
-import com.example.shkudikweatherapp.presentation_layer.main_activity.states.StateImpl
+import com.example.shkudikweatherapp.presentation_layer.main_activity.states.MainStateImpl
 import com.example.shkudikweatherapp.presentation_layer.main_activity.views.*
 import com.example.shkudikweatherapp.presentation_layer.settings_activity.activity.SettingsActivity
 import com.example.shkudikweatherapp.presentation_layer.main_activity.states.MainStates
@@ -31,41 +31,25 @@ class MainActivity : AppCompatActivity() {
 
         var isMoreInfoOpened = false
         const val FRAGMENT_TAG = "fragment"
+        const val REQUEST_PERMISSION_CODE = 44
+
 
     }
 
     lateinit var viewModel: MainViewModel
 
     //
-    lateinit var backgroundImpl: BackgroundImpl
-        private set
-
-    lateinit var boardImpl: BoardImpl
-        private set
-
-    lateinit var changeableSearchModeImpl: ChangeableSearchModeImpl
-        private set
-
-    lateinit var moreInfoImpl: MoreInfoImpl
-        private set
-
-    lateinit var localeImpl: LocaleImpl
-        private set
-
-    lateinit var locationAvailabilityImpl: LocationAvailabilityImpl
-        private set
-
-    lateinit var recyclerHelpImpl: RecyclerHelpImpl
-        private set
-
-    lateinit var stateImpl: StateImpl
-        private set
-
-    lateinit var timeModeImpl: TimeModeImpl
-        private set
-
-    lateinit var weatherIconsImpl: WeatherIconsImpl
-        private set
+    internal val backgroundImpl = BackgroundImpl(this)
+    internal val boardImpl = BoardImpl(this)
+    internal val changeableSearchModeImpl = ChangeableSearchModeImpl(this)
+    internal val moreInfoImpl = MoreInfoImpl(this)
+    internal val localeImpl =  LocaleImpl(this)
+    internal val locationAvailabilityImpl = LocationAvailabilityImpl(this)
+    internal val recyclerHelpImpl = RecyclerHelpImpl(this)
+    internal val timeModeImpl = TimeModeImpl(this)
+    internal val weatherIconsImpl = WeatherIconsImpl(this)
+    internal val stateImpl = MainStateImpl(this)
+    internal val iconMoreInfoImpl = IconMoreInfoImpl(this)
     //
 
     override fun onResume() {
@@ -92,17 +76,6 @@ class MainActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        backgroundImpl = BackgroundImpl(this)
-        boardImpl = BoardImpl(this)
-        changeableSearchModeImpl = ChangeableSearchModeImpl(this)
-        moreInfoImpl = MoreInfoImpl(this)
-        localeImpl =  LocaleImpl(this)
-        locationAvailabilityImpl = LocationAvailabilityImpl(this)
-        recyclerHelpImpl = RecyclerHelpImpl(this)
-        timeModeImpl = TimeModeImpl(this)
-        weatherIconsImpl = WeatherIconsImpl(this)
-        stateImpl = StateImpl(this)
 
         if (!isLocationApplied)
             locationAvailabilityImpl.askPermission()
@@ -206,7 +179,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun openSettings() =
-        startActivity(Intent(this@MainActivity, SettingsActivity::class.java))
+        startActivity(Intent(this@MainActivity, SettingsActivity::class.java).apply {
+
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
+
+        })
 
     override fun onRequestPermissionsResult(
         requestCode: Int,

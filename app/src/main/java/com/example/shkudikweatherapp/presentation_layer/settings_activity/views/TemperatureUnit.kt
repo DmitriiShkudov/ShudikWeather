@@ -2,6 +2,8 @@ package com.example.shkudikweatherapp.presentation_layer.settings_activity.views
 
 import android.widget.CompoundButton
 import com.example.shkudikweatherapp.data_layer.providers.UserPreferences
+import com.example.shkudikweatherapp.data_layer.providers.UserPreferences.TemperatureUnit.*
+import com.example.shkudikweatherapp.data_layer.providers.UserPreferences.degreeUnit
 import com.example.shkudikweatherapp.presentation_layer.settings_activity.activity.SettingsActivity
 import kotlinx.android.synthetic.main.activity_settings.*
 
@@ -18,11 +20,11 @@ class TemperatureUnitImpl(private val activity: SettingsActivity) : TemperatureU
     private val checkedChangeListener =
 
         CompoundButton.OnCheckedChangeListener { rb, isChecked ->
-            UserPreferences.degreeUnit =
+            degreeUnit =
                 if (activity.rb_c_unit.isChecked)
-                    UserPreferences.TemperatureUnit.DEG_C
+                    DEG_C
                 else
-                    UserPreferences.TemperatureUnit.DEG_F
+                    DEG_F
 
         }
 
@@ -30,8 +32,8 @@ class TemperatureUnitImpl(private val activity: SettingsActivity) : TemperatureU
 
         when (temperatureUnit) {
 
-            UserPreferences.TemperatureUnit.DEG_C -> setCelsiumUnit()
-            UserPreferences.TemperatureUnit.DEG_F -> setFahrenheitUnit()
+            DEG_C -> setCelsiumUnit()
+            DEG_F -> setFahrenheitUnit()
 
         }
 
@@ -40,8 +42,6 @@ class TemperatureUnitImpl(private val activity: SettingsActivity) : TemperatureU
     override fun setCelsiumUnit() {
         activity.rb_c_unit.also { it.setOnCheckedChangeListener(checkedChangeListener) }.isChecked = true
     }
-
-
 
     override fun setFahrenheitUnit() {
         activity.rb_f_unit.also { it.setOnCheckedChangeListener(checkedChangeListener) }.isChecked = true

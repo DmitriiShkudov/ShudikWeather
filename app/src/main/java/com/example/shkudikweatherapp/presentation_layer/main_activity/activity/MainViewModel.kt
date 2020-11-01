@@ -35,6 +35,8 @@ import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.select
 import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.selectedLat
 import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.selectedLon
 import com.example.shkudikweatherapp.data_layer.enums.MainDescription
+import com.example.shkudikweatherapp.data_layer.providers.Helper.locationDeniedError
+import com.example.shkudikweatherapp.data_layer.providers.UserPreferences.isLocationApplied
 import com.example.shkudikweatherapp.presentation_layer.main_activity.states.MainStates
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.*
@@ -214,7 +216,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     }
 
-    fun applyCity(activity: MainActivity) { with(activity) {
+    internal fun applyCity(activity: MainActivity) { with(activity) {
 
             if (input_city.text!!.isNotEmpty()) {
 
@@ -240,9 +242,9 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     @SuppressLint("MissingPermission")
-    fun applyLocation(activity: MainActivity) {
+    internal fun applyLocation(activity: MainActivity) {
 
-        if (UserPreferences.isLocationApplied) {
+        if (isLocationApplied) {
 
             state.value(MainStates.LOADING)
 
@@ -268,7 +270,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
         } else {
 
-            activity.locationAvailabilityImpl.showDenyError()
+            activity.locationAvailabilityImpl.showError(locationDeniedError)
 
         }
     }

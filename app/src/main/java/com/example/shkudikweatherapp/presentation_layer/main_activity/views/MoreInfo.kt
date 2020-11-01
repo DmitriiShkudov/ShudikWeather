@@ -18,13 +18,11 @@ class MoreInfoImpl(private val activity: MainActivity) : IMoreInfo {
 
         supportFragmentManager.
             beginTransaction().
-            setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).
-            addToBackStack(null).
+            setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).
             replace(R.id.main_layout, MoreInfo(), MainActivity.FRAGMENT_TAG).
             commit()
 
         }
-
     }
 
     override fun detach() { with(activity) {

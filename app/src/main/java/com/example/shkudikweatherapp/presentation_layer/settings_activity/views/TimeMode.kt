@@ -1,5 +1,6 @@
 package com.example.shkudikweatherapp.presentation_layer.settings_activity.views
 
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.example.shkudikweatherapp.R
 import com.example.shkudikweatherapp.presentation_layer.common_protocols.TimeMode
@@ -21,6 +22,8 @@ class TimeModeImpl(private val activity: SettingsActivity) : TimeMode {
             ResourcesCompat.getColor(resources, R.color.black, null).also {
 
                 settings_header.setTextColor(it)
+                settings_header.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                    R.drawable.settings_small,0,0,0)
                 text_push_notif.setTextColor(it)
                 text_temp_unit.setTextColor(it)
                 text_language.setTextColor(it)
@@ -32,10 +35,10 @@ class TimeModeImpl(private val activity: SettingsActivity) : TimeMode {
 
             }
         }
-
     }
 
     override fun setNightMode() { with(activity) {
+
             imgLanguage.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.language_night, null))
 
             imgFullscreen.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.fullscreen_night, null))
@@ -48,6 +51,8 @@ class TimeModeImpl(private val activity: SettingsActivity) : TimeMode {
 
 
                 settings_header.setTextColor(it)
+                settings_header.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                    R.drawable.settings_small_night,0,0,0)
                 text_push_notif.setTextColor(it)
                 text_temp_unit.setTextColor(it)
                 text_language.setTextColor(it)
@@ -63,6 +68,5 @@ class TimeModeImpl(private val activity: SettingsActivity) : TimeMode {
     }
 
     override fun setTimeMode(isNight: Boolean) = if (isNight) setNightMode() else setDayMode()
-
 
 }
