@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.shkudikweatherapp.R
 import com.example.shkudikweatherapp.data_layer.providers.UserPreferences
 import com.example.shkudikweatherapp.data_layer.providers.UserPreferences.isLocationApplied
-import com.example.shkudikweatherapp.data_layer.providers.UserPreferences.searchMode
 import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider
 import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.desc
 import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.isNight
@@ -58,37 +57,11 @@ class MainActivity : AppCompatActivity() {
 
         CoroutineScope(Main).launch { viewModel.load(this) }
 
-        localeImpl.setLocale()
-
-        if (searchMode == UserPreferences.SearchMode.GEO) {
-            boardImpl.setUserLocationTitle()
-        }
-
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
 
-        // init
-        WeatherProvider.context = applicationContext
-        UserPreferences.context = applicationContext
-        viewModel = ViewModelProvider(this@MainActivity).get(MainViewModel::class.java)
-        if (UserPreferences.fullscreen) setTheme(R.style.fullscreen)
-
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        if (!isLocationApplied)
-            locationAvailabilityImpl.askPermission()
-
-        if (searchMode == UserPreferences.SearchMode.CITY)
-            boardImpl.setCity() else boardImpl.setUserLocationTitle()
-
-        recyclerHelpImpl.update()
-        stateImpl.setState(MainStates.LOADING)
-        boardImpl.setOnEnterClickEvent()
-        viewModel.update()
-
-        // On Clicks //
+    override fun onStart() {
+        super.onStart()
 
         btn_change_city.setOnClickListener {
 
@@ -136,7 +109,38 @@ class MainActivity : AppCompatActivity() {
 
         }
 
-        // observers //
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+
+        // init before drawing the interface
+
+        WeatherProvider.context = applicationContext
+        UserPreferences.context = applicationContext
+        viewModel = ViewModelProvider(this@MainActivity).get(MainViewModel::class.java)
+        if (UserPreferences.fullscreen) setTheme(R.style.fullscreen)
+
+        //
+
+        // drawing interface
+
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        //
+
+        // init
+
+        boardImpl.setOnEnterClickEvent()
+        locationAvailabilityImpl.askPermission(!isLocationApplied)
+
+        stateImpl.setState(MainStates.UPDATED)
+        stateImpl.setState(MainStates.LOADING)
+        viewModel.update()
+
+        //
+
+        // Reactions
 
         viewModel.state.observe(this, { stateImpl.setState(it) })
 

@@ -237,8 +237,10 @@ object Helper {
 
 
     fun isNightTime(time: String) =
-        (time[0].toString() + time[1].toString()) == "22" || (time[0].toString() + time[1].toString()) == "23"
-                || (time[1] == ':' && time[0].toString().toInt() in 0..5)
+        (time[0].toString() + time[1].toString()) == "21" ||
+        (time[0].toString() + time[1].toString()) == "22" ||
+        (time[0].toString() + time[1].toString()) == "23" ||
+        (time[1] == ':' && time[0].toString().toInt() in 0..5)
 
 
     fun getMainDescription(isNight: Boolean, string: String): MainDescription {

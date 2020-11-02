@@ -7,7 +7,6 @@ import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.notifi
 import com.example.shkudikweatherapp.presentation_layer.common_protocols.State
 import com.example.shkudikweatherapp.presentation_layer.settings_activity.activity.SettingsActivity
 import com.example.shkudikweatherapp.presentation_layer.settings_activity.states.SettingsStates.CHANGING_NOTIFICATION_CITY
-import com.example.shkudikweatherapp.presentation_layer.settings_activity.states.SettingsStates.UPDATED
 import kotlinx.android.synthetic.main.activity_settings.*
 
 class SettingsStateImpl(private val activity: SettingsActivity): State {

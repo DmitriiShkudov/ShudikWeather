@@ -4,10 +4,8 @@ import androidx.core.content.res.ResourcesCompat
 import com.example.shkudikweatherapp.R
 import com.example.shkudikweatherapp.data_layer.providers.UserPreferences
 import com.example.shkudikweatherapp.data_layer.providers.UserPreferences.Language.*
-import com.example.shkudikweatherapp.presentation_layer.common_protocols.Locale
 import com.example.shkudikweatherapp.presentation_layer.settings_activity.activity.SettingsActivity
 import kotlinx.android.synthetic.main.activity_settings.*
-import java.security.Key
 
 interface Language {
 

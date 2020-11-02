@@ -11,15 +11,21 @@ import com.example.shkudikweatherapp.presentation_layer.main_activity.activity.M
 
 interface LocationAvailability: IError {
 
-    fun askPermission()
+    fun askPermission(isDenied: Boolean)
 
 }
 
 class LocationAvailabilityImpl(private val activity: MainActivity) : LocationAvailability {
 
-    override fun askPermission() =
-        ActivityCompat.requestPermissions(activity,
-            Array(1) { Manifest.permission.ACCESS_FINE_LOCATION }, REQUEST_PERMISSION_CODE)
+    override fun askPermission(isDenied: Boolean) {
+
+        if (isDenied) {
+
+            ActivityCompat.requestPermissions(activity,
+                Array(1) { Manifest.permission.ACCESS_FINE_LOCATION }, REQUEST_PERMISSION_CODE)
+
+        }
+    }
 
     override fun showError(message: String) =
         Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()

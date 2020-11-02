@@ -1,48 +1,26 @@
 package com.example.shkudikweatherapp.presentation_layer.settings_activity.activity
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.content.Intent
-import android.icu.util.Calendar
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
-import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.shkudikweatherapp.NotificationService
 import com.example.shkudikweatherapp.R
-import com.example.shkudikweatherapp.data_layer.http_client.NotificationServiceRetrofitClient
 import com.example.shkudikweatherapp.data_layer.providers.Helper.EMPTY
 import com.example.shkudikweatherapp.data_layer.providers.Helper.KEY_BOARD_CODE_6
-import com.example.shkudikweatherapp.data_layer.providers.Helper.cityNotFoundDesc
-import com.example.shkudikweatherapp.data_layer.providers.Helper.emptyInputErrorMessage
-import com.example.shkudikweatherapp.data_layer.providers.Helper.hideKeyboard
-import com.example.shkudikweatherapp.data_layer.providers.Helper.hour
-import com.example.shkudikweatherapp.data_layer.providers.Helper.reformat
 import com.example.shkudikweatherapp.data_layer.providers.UserPreferences
 import com.example.shkudikweatherapp.data_layer.providers.UserPreferences.fullscreen
 import com.example.shkudikweatherapp.data_layer.providers.UserPreferences.language
 import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.isNight
 import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.mainDesc
 import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.notificationCity
-import com.example.shkudikweatherapp.presentation_layer.main_activity.views.BoardImpl
 import com.example.shkudikweatherapp.presentation_layer.settings_activity.states.SettingsStateImpl
 import com.example.shkudikweatherapp.presentation_layer.settings_activity.states.SettingsStates
 import com.example.shkudikweatherapp.presentation_layer.settings_activity.views.*
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_settings.*
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class SettingsActivity : AppCompatActivity() {
 

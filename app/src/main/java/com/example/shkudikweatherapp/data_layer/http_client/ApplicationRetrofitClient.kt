@@ -36,7 +36,6 @@ class ApplicationRetrofitClient(private val viewModel: MainViewModel) : Retrofit
 
                     viewModel.desc.postValue(cityNotFoundDesc)
 
-                    viewModel.state.postValue(MainStates.UPDATED)
                     viewModel.state.postValue(MainStates.WRONG_CITY)
                     isSelectedCityExists = false
                     null
@@ -69,7 +68,6 @@ class ApplicationRetrofitClient(private val viewModel: MainViewModel) : Retrofit
 
                 } else {
 
-                    viewModel.state.postValue(MainStates.UPDATED)
                     viewModel.state.postValue(MainStates.WRONG_CITY)
 
                     null

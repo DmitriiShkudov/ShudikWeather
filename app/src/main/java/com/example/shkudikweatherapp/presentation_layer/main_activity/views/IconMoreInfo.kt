@@ -1,7 +1,6 @@
 package com.example.shkudikweatherapp.presentation_layer.main_activity.views
 
 import com.example.shkudikweatherapp.R
-import com.example.shkudikweatherapp.presentation_layer.common_protocols.TimeMode
 import com.example.shkudikweatherapp.presentation_layer.main_activity.activity.MainActivity
 import kotlinx.android.synthetic.main.activity_main.*
 

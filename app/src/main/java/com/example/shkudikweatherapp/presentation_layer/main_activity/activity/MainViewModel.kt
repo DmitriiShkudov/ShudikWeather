@@ -16,7 +16,6 @@ import com.example.shkudikweatherapp.data_layer.http_client.ApplicationRetrofitC
 import com.example.shkudikweatherapp.data_layer.pojo.forecast.Forecast
 import com.example.shkudikweatherapp.data_layer.pojo.time_utc.TimeUTC
 import com.example.shkudikweatherapp.data_layer.pojo.weather.Weather
-import com.example.shkudikweatherapp.data_layer.providers.Helper
 import com.example.shkudikweatherapp.presentation_layer.main_activity.activity.MainActivity.Companion.isMoreInfoOpened
 import com.example.shkudikweatherapp.data_layer.providers.Helper.getMainDescription
 import com.example.shkudikweatherapp.data_layer.providers.Helper.isNightTime
@@ -35,6 +34,7 @@ import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.select
 import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.selectedLat
 import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.selectedLon
 import com.example.shkudikweatherapp.data_layer.enums.MainDescription
+import com.example.shkudikweatherapp.data_layer.providers.Helper.emptyInputErrorMessage
 import com.example.shkudikweatherapp.data_layer.providers.Helper.locationDeniedError
 import com.example.shkudikweatherapp.data_layer.providers.UserPreferences.isLocationApplied
 import com.example.shkudikweatherapp.presentation_layer.main_activity.states.MainStates
@@ -234,8 +234,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
             } else {
 
-                Toast.makeText(applicationContext, Helper.emptyInputErrorMessage, Toast.LENGTH_LONG)
-                    .show()
+                Toast.makeText(applicationContext, emptyInputErrorMessage, Toast.LENGTH_LONG).show()
 
             }
         }

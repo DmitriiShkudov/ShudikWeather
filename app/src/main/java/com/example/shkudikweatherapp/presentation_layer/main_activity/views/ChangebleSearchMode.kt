@@ -22,6 +22,8 @@ class ChangeableSearchModeImpl(private val activity: MainActivity) : ChangeableS
 
                 CITY -> {
 
+                    boardImpl.setCity()
+
                     btn_change_city.setImageDrawable(ResourcesCompat.getDrawable(
                         resources,
                         if (WeatherProvider.isNight) R.drawable.replace_enabled_night else R.drawable.replace_enabled,
@@ -35,6 +37,8 @@ class ChangeableSearchModeImpl(private val activity: MainActivity) : ChangeableS
                 }
 
                 GEO -> {
+
+                    boardImpl.setUserLocationTitle()
 
                     btn_change_city.setImageDrawable(ResourcesCompat.getDrawable(
                         resources,

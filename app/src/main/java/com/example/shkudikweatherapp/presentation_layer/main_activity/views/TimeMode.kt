@@ -1,8 +1,6 @@
 package com.example.shkudikweatherapp.presentation_layer.main_activity.views
 
-import android.content.Context
 import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import com.example.shkudikweatherapp.R
 import com.example.shkudikweatherapp.presentation_layer.main_activity.activity.MainActivity
 import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.isSelectedCityExists
@@ -76,7 +74,7 @@ class TimeModeImpl(val activity: MainActivity) : TimeMode {
             humidityIcon.background = ContextCompat.getDrawable(activity, R.drawable.back_icons_night)
 
             input_city.background = ContextCompat.getDrawable(activity, R.drawable.back_city_input_night)
-        
+
         }
 
     }

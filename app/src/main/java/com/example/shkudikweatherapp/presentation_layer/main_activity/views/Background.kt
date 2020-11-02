@@ -1,7 +1,6 @@
 package com.example.shkudikweatherapp.presentation_layer.main_activity.views
 
 import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import com.example.shkudikweatherapp.R
 import com.example.shkudikweatherapp.data_layer.enums.MainDescription
 import com.example.shkudikweatherapp.data_layer.enums.MainDescription.*
@@ -14,8 +13,6 @@ import com.example.shkudikweatherapp.data_layer.providers.Helper.OVERCAST_GER
 import com.example.shkudikweatherapp.data_layer.providers.Helper.OVERCAST_RUS
 import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.desc
 import com.example.shkudikweatherapp.presentation_layer.common_protocols.Background
-import com.example.shkudikweatherapp.data_layer.enums.MainDescription.*
-import com.example.shkudikweatherapp.data_layer.providers.Helper
 import kotlinx.android.synthetic.main.activity_main.*
 
 class BackgroundImpl(private val activity: MainActivity) : Background {
@@ -75,7 +72,7 @@ class BackgroundImpl(private val activity: MainActivity) : Background {
 
                         humidityIcon.background = ContextCompat.getDrawable(activity, R.drawable.back_icons_rainy)
 
-                        ContextCompat.getDrawable(activity, R.drawable.back_icons_rainy)
+                        ContextCompat.getDrawable(activity, R.drawable.rain)
 
                     }
 

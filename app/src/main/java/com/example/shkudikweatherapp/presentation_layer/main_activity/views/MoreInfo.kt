@@ -29,7 +29,7 @@ class MoreInfoImpl(private val activity: MainActivity) : IMoreInfo {
 
         supportFragmentManager.
             beginTransaction().
-            detach(supportFragmentManager.findFragmentByTag(MainActivity.FRAGMENT_TAG)!!).
+            detach(supportFragmentManager.findFragmentByTag(MainActivity.FRAGMENT_TAG) ?: return).
             setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE).
             commit()
 

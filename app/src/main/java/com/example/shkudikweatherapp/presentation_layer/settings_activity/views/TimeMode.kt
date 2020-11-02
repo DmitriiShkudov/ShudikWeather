@@ -1,6 +1,5 @@
 package com.example.shkudikweatherapp.presentation_layer.settings_activity.views
 
-import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.example.shkudikweatherapp.R
 import com.example.shkudikweatherapp.presentation_layer.common_protocols.TimeMode

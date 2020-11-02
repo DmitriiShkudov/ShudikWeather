@@ -1,10 +1,8 @@
 package com.example.shkudikweatherapp.presentation_layer.settings_activity.views
 
 import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import com.example.shkudikweatherapp.R
 import com.example.shkudikweatherapp.data_layer.enums.MainDescription
-import com.example.shkudikweatherapp.data_layer.providers.Helper
 import com.example.shkudikweatherapp.data_layer.providers.Helper.OVERCAST_ENG
 import com.example.shkudikweatherapp.data_layer.providers.Helper.OVERCAST_GER
 import com.example.shkudikweatherapp.data_layer.providers.Helper.OVERCAST_RUS

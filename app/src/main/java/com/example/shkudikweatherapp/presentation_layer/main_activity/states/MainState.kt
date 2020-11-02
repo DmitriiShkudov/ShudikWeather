@@ -22,10 +22,8 @@ import com.example.shkudikweatherapp.presentation_layer.main_activity.states.Mai
 import com.example.shkudikweatherapp.presentation_layer.main_activity.states.MainStates.CITY_APPLIED
 import com.example.shkudikweatherapp.presentation_layer.main_activity.states.MainStates.CHANGING_CITY_CANCELLED
 import com.example.shkudikweatherapp.presentation_layer.main_activity.states.MainStates.BAD_CONNECTION
-import com.example.shkudikweatherapp.presentation_layer.main_activity.states.MainStates.WRONG_CITY
 import com.example.shkudikweatherapp.presentation_layer.main_activity.states.MainStates.LOADING
 import com.example.shkudikweatherapp.presentation_layer.main_activity.states.MainStates.UPDATED
-import com.example.shkudikweatherapp.presentation_layer.main_activity.states.MainStates
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainStateImpl(private val activity: MainActivity) : State {
@@ -109,16 +107,22 @@ class MainStateImpl(private val activity: MainActivity) : State {
                     btn_geo.isClickable = true
                     bad_connection.visibility = View.GONE
                     cpv_loading.visibility = View.GONE
+                    recyclerHelpImpl.update()
                     changeableSearchModeImpl.setEnabledSearchMode()
+                    localeImpl.setLocale()
 
                 }
 
                 BAD_CONNECTION -> {
+
                     cpv_loading.visibility = View.GONE
                     bad_connection.visibility = View.VISIBLE
+
                 }
 
-                WRONG_CITY -> {
+                else -> {
+
+                    setState(UPDATED)
 
                     cpv_loading.visibility = View.GONE
 
@@ -146,9 +150,6 @@ class MainStateImpl(private val activity: MainActivity) : State {
                         tvTemp.text = it
 
                     }
-
-                    changeableSearchModeImpl.setEnabledSearchMode()
-
                 }
             }
         }

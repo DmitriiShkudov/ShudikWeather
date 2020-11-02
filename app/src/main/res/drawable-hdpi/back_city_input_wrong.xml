@@ -12,11 +12,11 @@
             </corners>
 
             <stroke
-                android:width="2dp"
-                android:color="@color/white">
+                android:width="1sp"
+                android:color="#A80000">
             </stroke>
 
-            <solid android:color="#39494949">
+            <solid android:color="#56FF0000">
             </solid>
 
         </shape>

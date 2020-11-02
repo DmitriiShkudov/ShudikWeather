@@ -2,13 +2,11 @@ package com.example.shkudikweatherapp.presentation_layer.settings_activity.views
 
 import android.content.DialogInterface
 import android.content.Intent
-import android.view.View
 import androidx.appcompat.app.AlertDialog
 import com.example.shkudikweatherapp.R
 import com.example.shkudikweatherapp.data_layer.providers.Helper.cancel
 import com.example.shkudikweatherapp.data_layer.providers.Helper.reboot
 import com.example.shkudikweatherapp.data_layer.providers.Helper.restartMessage
-import com.example.shkudikweatherapp.data_layer.providers.UserPreferences
 import com.example.shkudikweatherapp.data_layer.providers.UserPreferences.fullscreen
 import com.example.shkudikweatherapp.presentation_layer.main_activity.activity.MainActivity
 import com.example.shkudikweatherapp.presentation_layer.settings_activity.activity.SettingsActivity
