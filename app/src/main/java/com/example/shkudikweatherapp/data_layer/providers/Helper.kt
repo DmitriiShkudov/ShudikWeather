@@ -6,13 +6,15 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.MutableLiveData
 import com.example.shkudikweatherapp.R
+import com.example.shkudikweatherapp.data_layer.enums.MainDescription
 import com.example.shkudikweatherapp.data_layer.providers.UserPreferences.degreeUnit
 import com.example.shkudikweatherapp.data_layer.providers.UserPreferences.language
 import com.example.shkudikweatherapp.data_layer.providers.UserPreferences.Language.*
-import com.example.shkudikweatherapp.data_layer.enums.MainDescription
+import com.example.shkudikweatherapp.data_layer.enums.MainDescription.*
 import com.example.shkudikweatherapp.data_layer.providers.Helper.GPS_ERROR_ENG
 import com.example.shkudikweatherapp.data_layer.providers.Helper.GPS_ERROR_RUS
 import com.example.shkudikweatherapp.data_layer.providers.Helper.RESTART_MESSAGE_ENG
@@ -21,20 +23,14 @@ import com.example.shkudikweatherapp.data_layer.providers.Helper.RESTART_MESSAGE
 
 object Helper {
 
+    private val context: Context? = null
+
     const val KEY_BOARD_CODE_5 = 5
     const val KEY_BOARD_CODE_6 = 6
 
     // User Preferences
 
-    const val PRESSURE_RUS = " мм.рт.ст."
-    const val PRESSURE = " mmHg"
-    const val PERCENT = "%"
-    const val METER_PER_SEC = " m/s"
-    const val METER_PER_SEC_RUS = " м/с"
     const val ABS_ZERO = 273
-    const val CITY_NOT_FOUND_RUS = "Город не найден"
-    const val CITY_NOT_FOUND_ENG = "City is not found"
-    const val CITY_NOT_FOUND_GER = "Stadt nicht gefunden"
     const val USER_PREF = "User pref"
     const val NOTIF_CITY_KEY = "City key"
     const val NOTIF_INTERVAL_KEY = "Interval key"
@@ -55,30 +51,6 @@ object Helper {
     const val DEFAULT_CITY_NAME = "Paris"
     const val HELP_KEY = "Help_"
     const val MAX_HELP_CITIES = 3
-
-    // MA
-
-    const val OVERCAST_ENG = "rcast"
-    const val OVERCAST_RUS = "пасм"
-    const val OVERCAST_GER = "Bedeckt"
-    const val LOW_ENG = "light"
-    const val LOW_RUS = "небольшой"
-    const val LOW_GER = "iger"
-    const val EMPTY_INPUT_ERROR_RUS = "Введите город"
-    const val EMPTY_INPUT_ERROR_ENG = "Enter the city"
-    const val EMPTY_INPUT_ERROR_GER = "Stadt betreten"
-    const val MINUS = "-"
-    const val YOUR_LOCATION_RUS = "Локация"
-    const val YOUR_LOCATION_ENG = "Your location"
-    const val YOUR_LOCATION_GER = "Ihr Standort"
-    const val LOCATION_DENIED_WARNING_RUS =
-        "Разрешение на запрос локации было отменено пользователем." +
-                "Дайте разрешение в настройках вашего устройства или перезапустите приложение."
-    const val LOCATION_DENIED_WARNING_ENG = "Accessibility to location was denied by user. " +
-            "Allow location requests in your device settings or restart the application"
-    const val LOCATION_DENIED_WARNING_GER =
-        "Die Berechtigung zum Anfordern eines Standorts wurde vom Benutzer widerrufen. " +
-                "Geben Sie die Berechtigung in Ihren Geräteeinstellungen ein oder installieren Sie die App neu."
 
     // Retrofit Client
 
@@ -125,90 +97,89 @@ object Helper {
 
 
     fun <T> setWindSpeed(wind: T) =
-        wind.toString() + if (language != RUS) METER_PER_SEC else METER_PER_SEC_RUS
-
+        wind.toString() + if (language != RUS) context?.getString(R.string.meter_per_sec_eng_ger)
+            else context?.getString(R.string.meter_per_sec_rus)
 
     fun setWindDirection(deg: Int) = when (deg) {
 
         in 0..15, in 345..360 -> when (language) {
 
-            RUS -> "восточное"
-            ENG -> "eastern"
-            GER -> "östlich"
+            RUS -> context?.getString(R.string.wind_dir_eastern_rus)
+            ENG -> context?.getString(R.string.wind_dir_eastern_eng)
+            GER -> context?.getString(R.string.wind_dir_eastern_ger)
 
         }
 
         in 15..75 -> when (language) {
 
-            RUS -> "северо-восточное"
-            ENG -> "northeast"
-            GER -> "nordost"
+            RUS -> context?.getString(R.string.wind_dir_north_east_rus)
+            ENG -> context?.getString(R.string.wind_dir_north_east_eng)
+            GER -> context?.getString(R.string.wind_dir_north_east_ger)
 
         }
 
         in 75..105 -> when (language) {
 
-            RUS -> "северное"
-            ENG -> "northern"
-            GER -> "nord"
+            RUS -> context?.getString(R.string.wind_dir_northern_rus)
+            ENG -> context?.getString(R.string.wind_dir_northern_eng)
+            GER -> context?.getString(R.string.wind_dir_northern_ger)
 
         }
 
         in 105..165 -> when (language) {
 
-            RUS -> "северо-западное"
-            ENG -> "northwest"
-            GER -> "nordwest"
+            RUS -> context?.getString(R.string.wind_dir_north_west_rus)
+            ENG -> context?.getString(R.string.wind_dir_north_west_eng)
+            GER -> context?.getString(R.string.wind_dir_north_west_ger)
 
         }
 
         in 165..195 -> when (language) {
 
-            RUS -> "западное"
-            ENG -> "western"
-            GER -> "western"
+            RUS -> context?.getString(R.string.wind_dir_western_rus)
+            ENG -> context?.getString(R.string.wind_dir_western_eng)
+            GER -> context?.getString(R.string.wind_dir_western_ger)
 
         }
 
         in 195..255 -> when (language) {
 
-            RUS -> "юго-западное"
-            ENG -> "southwestern"
-            GER -> "südwestlich"
+            RUS -> context?.getString(R.string.wind_dir_south_west_rus)
+            ENG -> context?.getString(R.string.wind_dir_south_west_eng)
+            GER -> context?.getString(R.string.wind_dir_south_west_ger)
 
         }
 
         in 255..285 -> when (language) {
 
-            RUS -> "южное"
-            ENG -> "southern"
-            GER -> "süd"
+            RUS -> context?.getString(R.string.wind_dir_southern_rus)
+            ENG -> context?.getString(R.string.wind_dir_southern_eng)
+            GER -> context?.getString(R.string.wind_dir_southern_ger)
 
         }
 
         else -> when (language) {
 
-            RUS -> "юго-восточное"
-            ENG -> "southeast"
-            GER -> "Süd-Ost"
+            RUS -> context?.getString(R.string.wind_dir_north_east_rus)
+            ENG -> context?.getString(R.string.wind_dir_north_east_eng)
+            GER -> context?.getString(R.string.wind_dir_north_east_ger)
 
         }
 
     }
 
-
     fun setPressure(intPressure: Int) = when (language) {
 
-        RUS -> (intPressure / 1.333).toInt().toString() + PRESSURE_RUS
-        else -> (intPressure / 1.333).toInt().toString() + PRESSURE
+        RUS -> (intPressure / 1.333).toInt().toString() + context?.getString(R.string.pressure_unit_rus)
+        else -> (intPressure / 1.333).toInt().toString() + context?.getString(R.string.pressure_unit_eng_ger)
 
     }
 
 
     fun getDrawable(context: Context, resId: Int) = ResourcesCompat.getDrawable(
-        context.resources,
-        resId,
-        null)
+                                                                                context.resources,
+                                                                                resId,
+                                                                                null)
 
 
     fun countTime(time: String, hours: Int) =
@@ -227,7 +198,6 @@ object Helper {
 
 
     fun Int.fahrenheit() = this * 9 / 5 + 32
-
 
     fun <T> MutableLiveData<T>.value(value: T) {
 
@@ -248,21 +218,21 @@ object Helper {
         if (!isNight) {
 
             listOf(
-                MainDescription.THUNDERSTORM,
-                MainDescription.DRIZZLE,
-                MainDescription.RAIN,
-                MainDescription.CLEAR,
-                MainDescription.MIST,
-                MainDescription.SMOKE,
-                MainDescription.HAZE,
-                MainDescription.DUST,
-                MainDescription.FOG,
-                MainDescription.SAND,
-                MainDescription.ASH,
-                MainDescription.SQUALL,
-                MainDescription.TORNADO,
-                MainDescription.CLOUDS,
-                MainDescription.SNOW
+                THUNDERSTORM,
+                DRIZZLE,
+                RAIN,
+                CLEAR,
+                MIST,
+                SMOKE,
+                HAZE,
+                DUST,
+                FOG,
+                SAND,
+                ASH,
+                SQUALL,
+                TORNADO,
+                CLOUDS,
+                SNOW
             ).forEach {
 
                 if (string == it.string) return it
@@ -274,21 +244,21 @@ object Helper {
         } else {
 
             listOf(
-                MainDescription.THUNDERSTORM_NIGHT,
-                MainDescription.DRIZZLE_NIGHT,
-                MainDescription.RAIN_NIGHT,
-                MainDescription.CLEAR_NIGHT,
-                MainDescription.MIST_NIGHT,
-                MainDescription.SMOKE_NIGHT,
-                MainDescription.HAZE_NIGHT,
-                MainDescription.DUST_NIGHT,
-                MainDescription.FOG_NIGHT,
-                MainDescription.SAND_NIGHT,
-                MainDescription.ASH_NIGHT,
-                MainDescription.SQUALL_NIGHT,
-                MainDescription.TORNADO_NIGHT,
-                MainDescription.CLOUDS_NIGHT,
-                MainDescription.SNOW_NIGHT
+                THUNDERSTORM_NIGHT,
+                DRIZZLE_NIGHT,
+                RAIN_NIGHT,
+                CLEAR_NIGHT,
+                MIST_NIGHT,
+                SMOKE_NIGHT,
+                HAZE_NIGHT,
+                DUST_NIGHT,
+                FOG_NIGHT,
+                SAND_NIGHT,
+                ASH_NIGHT,
+                SQUALL_NIGHT,
+                TORNADO_NIGHT,
+                CLOUDS_NIGHT,
+                SNOW_NIGHT
             ).forEach {
 
                 if (string == it.string) return it
@@ -302,61 +272,6 @@ object Helper {
     // Exception messages
     const val RECEIVED_DESCRIPTION_IS_NOT_EXIST = "Received description isn't exist"
 
-    // Other messages
-    const val RESTART_MESSAGE_ENG = "To apply changes, you need to restart the application"
-    const val RESTART_MESSAGE_RUS = "Чтобы применить изменения, необходимо перезагрузить приложение"
-    const val RESTART_MESSAGE_GER =
-        "Um Änderungen zu übernehmen, müssen Sie die Anwendung neu starten"
-
-    const val RESTART_ENG = "Restart"
-    const val RESTART_RUS = "Перезагрузить"
-    const val RESTART_GER = "Starten Sie neu"
-
-    const val CANCEL_ENG = "Cancel"
-    const val CANCEL_RUS = "Отмена"
-    const val CANCEL_GER = "Stornieren"
-
-    const val GPS_ERROR_RUS =
-        "Ошибка геолокации. Убедитесь, что локация включена на вашем устройстве"
-    const val GPS_ERROR_ENG = "Geolocation error. Make sure the location is enabled on your device"
-    const val GPS_ERROR_GER =
-        "Geolokalisierungsfehler. Stellen Sie sicher, dass der Speicherort auf Ihrem Gerät aktiviert ist"
-
-    val emptyInputErrorMessage: String
-    get() = when (language) {
-
-        RUS -> EMPTY_INPUT_ERROR_RUS
-        ENG -> EMPTY_INPUT_ERROR_ENG
-        GER -> EMPTY_INPUT_ERROR_GER
-
-        }
-
-    val locationDeniedError: String
-        get() = when (language) {
-
-            RUS -> LOCATION_DENIED_WARNING_RUS
-            ENG -> LOCATION_DENIED_WARNING_ENG
-            GER -> LOCATION_DENIED_WARNING_GER
-
-        }
-
-    val restartMessage: String
-        get() = when (language) {
-
-            RUS -> RESTART_MESSAGE_RUS
-            ENG -> RESTART_MESSAGE_ENG
-            else -> RESTART_MESSAGE_GER
-
-        }
-
-    val gpsErrorMessage: String
-        get() = when (language) {
-
-            RUS -> GPS_ERROR_RUS
-            ENG -> GPS_ERROR_ENG
-            else -> GPS_ERROR_GER
-
-        }
 
     val cityIsAlreadyAttachedToNotificationsMessage: String
         get() = when (language) {
@@ -373,87 +288,6 @@ object Helper {
             RUS -> "Уведомления отменены"
             ENG -> "Notifications is reset"
             else -> "Benachrichtigungen abgebrochen"
-
-        }
-
-    val reboot: String
-        get() = when (language) {
-
-            RUS -> RESTART_RUS
-            ENG -> RESTART_ENG
-            else -> RESTART_GER
-
-        }
-
-    val successMessage: String
-        get() = when (language) {
-
-            RUS -> "Успешно"
-            ENG -> "Successful"
-            else -> "Erfolgreich"
-
-        }
-
-    val cancel: String
-        get() = when (language) {
-
-            RUS -> CANCEL_RUS
-            ENG -> CANCEL_ENG
-            GER -> CANCEL_GER
-
-        }
-
-    val locationTitle: String
-        get() = when (language) {
-
-            RUS -> YOUR_LOCATION_RUS
-            ENG -> YOUR_LOCATION_ENG
-            GER -> YOUR_LOCATION_GER
-
-        }
-
-    val cityNotFoundDesc: String
-        get() = when (language) {
-
-            RUS -> CITY_NOT_FOUND_RUS
-            ENG -> CITY_NOT_FOUND_ENG
-            GER -> CITY_NOT_FOUND_GER
-
-        }
-
-    val hour: String
-        get() = when (language) {
-
-            RUS -> "часа"
-            ENG -> "hours"
-            GER -> "Stunden"
-
-        }
-
-    val windSpeed: String
-        get() = when (language) {
-
-            RUS -> "Скорость ветра"
-            ENG -> "Wind speed"
-            GER -> "Windgeschwindigkeit"
-
-        }
-
-    val direction: String
-        get() = when (language) {
-
-            RUS -> "направление"
-            ENG -> "direction"
-            GER -> "richtung"
-
-        }
-
-    val humidity: String
-        get() = when (language) {
-
-            RUS -> "Влажность"
-            ENG -> "Humidity"
-            GER -> "Feuchtigkeit"
 
         }
 }

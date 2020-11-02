@@ -1,7 +1,5 @@
 <resources>
     <string name="app_name">ShkudikWeatherApp</string>
-    <string name="temperature">Temperature</string>
-    <string name="wind_speed">Wind speed</string>
     <string name="title_activity_settings">SettingsActivity</string>
 
     <!-- Preference Titles -->
@@ -22,9 +20,188 @@
     This string is used for square devices and overridden by hello_world in
     values-round/strings.xml for round devices.
     -->
-    <string name="hello_world">Hello Square World!</string>
+
+    <!-- Common -->
+
+    <string name="message_successful_rus">Успешно</string>
+    <string name="message_successful_eng">Successful</string>
+    <string name="message_successful_ger">Erfolgreich</string>
+
+    <string name="minus">-</string>
+    <string name="percent">%</string>
+
+    <!-- MAIN ACTIVITY -->
+    <!-- OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO -->
+    <!-- OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO -->
+    <!-- OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO -->
+    <!-- OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO -->
+
+
+    <!-- Buttons text -->
     <string name="set">Set</string>
     <string name="enter_city">Enter city</string>
+
+    <!-- Weather units -->
     <string name="deg_f">°F</string>
     <string name="deg_c">°С</string>
+
+    <string name="pressure_unit_rus"> мм рт. ст.</string>
+    <string name="pressure_unit_eng_ger"> mmHg</string>
+
+    <string name="meter_per_sec_rus"> м/с</string>
+    <string name="meter_per_sec_eng_ger"> м/с</string>
+
+    <string name="wind_dir_southern_rus">южное</string>
+    <string name="wind_dir_southern_eng">southern</string>
+    <string name="wind_dir_southern_ger">süd</string>
+
+    <string name="wind_dir_northern_rus">северное</string>
+    <string name="wind_dir_northern_eng">northern</string>
+    <string name="wind_dir_northern_ger">nord</string>
+
+    <string name="wind_dir_western_rus">западное</string>
+    <string name="wind_dir_western_eng">western</string>
+    <string name="wind_dir_western_ger">western</string>
+
+    <string name="wind_dir_eastern_rus">восточное</string>
+    <string name="wind_dir_eastern_eng">eastern</string>
+    <string name="wind_dir_eastern_ger">östlich</string>
+
+    <string name="wind_dir_north_east_rus">северо-восточное</string>
+    <string name="wind_dir_north_east_eng">north-east</string>
+    <string name="wind_dir_north_east_ger">nordost</string>
+
+    <string name="wind_dir_north_west_rus">северо-западное</string>
+    <string name="wind_dir_north_west_eng">north-west</string>
+    <string name="wind_dir_north_west_ger">nordwest</string>
+
+    <string name="wind_dir_south_west_rus">юго-западное</string>
+    <string name="wind_dir_south_west_eng">south-west</string>
+    <string name="wind_dir_south_west_ger">südwesten</string>
+
+    <string name="wind_dir_south_east_rus">юго-восточное</string>
+    <string name="wind_dir_south_east_eng">south-east</string>
+    <string name="wind_dir_south_east_ger">Süd-Ost</string>
+
+    <!-- Forecast headers -->
+    <string name="temperature_rus">Температура</string>
+    <string name="temperature_eng">Temperature</string>
+    <string name="temperature_ger">Temperatur</string>
+
+    <string name="feels_like_rus">Ощущается как</string>
+    <string name="feels_like_eng">Feels like</string>
+    <string name="feels_like_ger">Fühlt sich an wie</string>
+
+    <string name="humidity_rus">Влажность</string>
+    <string name="humidity_eng">Humidity</string>
+    <string name="humidity_ger">Feuchtigkeit</string>
+
+    <string name="wind_rus">Ветер</string>
+    <string name="wind_eng">Wind</string>
+    <string name="wind_ger">Wind</string>
+
+    <string name="wind_dir_rus">Направление ветра</string>
+    <string name="wind_dir_eng">Wind direction</string>
+    <string name="wind_dir_ger">Windrichtung</string>
+
+    <string name="pressure_rus">Давление</string>
+    <string name="pressure_eng">Pressure</string>
+    <string name="pressure_ger">Druck</string>
+
+    <!-- Location -->
+    <string name="location_rus">Локация</string>
+    <string name="location_eng">Location</string>
+    <string name="location_ger">Lage</string>
+
+    <!-- Hints -->
+    <string name="enter_city_hint_rus">Введите город</string>
+    <string name="enter_city_hint_eng">Enter city</string>
+    <string name="enter_city_hint_ger">Stadt betreten</string>
+
+    <!-- Messages -->
+    <string name="message_empty_city_input_rus">Введите город</string>
+    <string name="message_empty_city_input_eng">Enter the city</string>
+    <string name="message_empty_city_input_ger">Stadt betreten</string>
+
+    <string name="message_city_is_not_exists_rus">Город не существует</string>
+    <string name="message_city_is_not_exists_eng">City is not exists</string>
+    <string name="message_city_is_not_exists_ger">Die Stadt existiert nicht</string>
+
+    <string name="message_location_was_denied_by_user_rus">Доступ к местоположению был запрещён пользователем</string>
+    <string name="message_location_was_denied_by_user_eng">Geolocation was denied by user</string>
+    <string name="message_location_was_denied_by_user_ger">Der Standortzugriff wurde vom Benutzer verweigert</string>
+
+
+    <!-- SETTINGS ACTIVITY -->
+
+    <!-- OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO -->
+    <!-- OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO -->
+    <!-- OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO -->
+    <!-- OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO -->
+
+    <!-- Headers and names -->
+    <string name="settings_rus">Настройки</string>
+    <string name="settings_eng">Settings</string>
+    <string name="settings_ger">Anpassung</string>
+
+    <string name="fullscreen_rus">Полный экран</string>
+    <string name="fullscreen_eng">Fullscreen</string>
+    <string name="fullscreen_ger">Vollbild</string>
+
+    <string name="language_rus">Язык</string>
+    <string name="language_eng">Language</string>
+    <string name="language_ger">Sprache</string>
+
+    <string name="temperature_unit_rus">Размерность температуры</string>
+    <string name="temperature_unit_eng">Temperature unit</string>
+    <string name="temperature_unit_ger">Dimension der Temperatur</string>
+
+    <string name="notifications_rus">Уведомления</string>
+    <string name="notifications_eng">Notifications</string>
+    <string name="notifications_ger">Benachrichtigungen</string>
+
+    <!-- Buttons text -->
+    <string name="set_btn_rus">Установить</string>
+    <string name="set_btn_eng">Set</string>
+    <string name="set_btn_ger">Einstellen</string>
+
+    <string name="apply_btn_rus">Применить</string>
+    <string name="apply_btn_eng">Apply</string>
+    <string name="apply_btn_ger">Bewerben</string>
+
+    <string name="reset_btn_rus">Сбросить</string>
+    <string name="reset_btn_eng">Reset</string>
+    <string name="reset_btn_ger">Zurücksetzen</string>
+
+    <string name="restart_btn_rus">Перезагрузить</string>
+    <string name="restart_btn_eng">Restart</string>
+    <string name="restart_btn_ger">Neustart</string>
+
+    <string name="cancel_btn_rus">Отмена</string>
+    <string name="cancel_btn_eng">Cancel</string>
+    <string name="cancel_btn_ger">Stornieren</string>
+
+    <!-- Messages -->
+    <string name="message_restart_rus">Чтобы применить изменения, необходимо перезагрузить приложение</string>
+    <string name="message_restart_eng">To apply changes, you need to restart the application</string>
+    <string name="message_restart_ger">"Um Änderungen zu übernehmen, müssen Sie die Anwendung neu starten"</string>
+
+
+    <!-- OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO -->
+    <!-- OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO -->
+    <!-- OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO -->
+    <!-- OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO -->
+
+
+    <!-- Weather info parts -->
+    <string name="overcast_rus">пасмурно</string>
+    <string name="overcast_eng">overcast</string>
+    <string name="overcast_ger">Bedeckt</string>
+
+    <string name="low_rus">небольшой</string>
+    <string name="low_eng">light</string>
+    <string name="low_ger">iger</string>
+
+
+
 </resources>
