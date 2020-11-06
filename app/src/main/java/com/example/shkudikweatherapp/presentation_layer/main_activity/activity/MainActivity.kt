@@ -35,7 +35,6 @@ class MainActivity : AppCompatActivity() {
         const val FRAGMENT_TAG = "fragment"
         const val REQUEST_PERMISSION_CODE = 44
 
-
     }
 
     lateinit var viewModel: MainViewModel

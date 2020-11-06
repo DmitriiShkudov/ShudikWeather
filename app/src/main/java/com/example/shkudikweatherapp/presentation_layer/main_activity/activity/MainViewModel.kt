@@ -183,6 +183,8 @@ class MainViewModel(val app: Application) : AndroidViewModel(app) {
              mainDesc.postValue(getMainDescription(isNight.value!!, receivedMainDesc))
          }
 
+        state.value(MainStates.UPDATED)
+
         withContext(Main) {
             // Setting forecast
 
@@ -245,7 +247,6 @@ class MainViewModel(val app: Application) : AndroidViewModel(app) {
 
             wind.value(receivedWind.toString() + windUnit)
 
-            state.value(MainStates.UPDATED)
         }
 
     }
