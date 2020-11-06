@@ -2,8 +2,9 @@ package com.example.shkudikweatherapp.data_layer.http_client
 
 import com.example.shkudikweatherapp.data_layer.http_client.RetrofitClient.Data.retrofitTime
 import com.example.shkudikweatherapp.data_layer.http_client.RetrofitClient.Data.retrofitWeather
+import com.example.shkudikweatherapp.data_layer.providers.Helper
 import com.example.shkudikweatherapp.data_layer.providers.Helper.KEY_API
-import com.example.shkudikweatherapp.data_layer.providers.Helper.cityNotFoundDesc
+import com.example.shkudikweatherapp.data_layer.providers.Helper.Messages.cityNotExistsMessage
 import com.example.shkudikweatherapp.data_layer.providers.UserPreferences.language
 import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.isSelectedCityExists
 import com.example.shkudikweatherapp.presentation_layer.main_activity.states.MainStates
@@ -34,7 +35,7 @@ class ApplicationRetrofitClient(private val viewModel: MainViewModel) : Retrofit
 
                 } else {
 
-                    viewModel.desc.postValue(cityNotFoundDesc)
+                    viewModel.desc.postValue(cityNotExistsMessage)
 
                     viewModel.state.postValue(MainStates.WRONG_CITY)
                     isSelectedCityExists = false

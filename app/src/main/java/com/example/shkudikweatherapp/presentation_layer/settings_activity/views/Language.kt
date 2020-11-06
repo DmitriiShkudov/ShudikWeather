@@ -1,5 +1,6 @@
 package com.example.shkudikweatherapp.presentation_layer.settings_activity.views
 
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.example.shkudikweatherapp.R
 import com.example.shkudikweatherapp.data_layer.providers.UserPreferences
@@ -20,11 +21,10 @@ class LanguageImpl(private val activity: SettingsActivity) : Language {
 
         imgLang.setImageDrawable(when (language) {
 
-                GER -> ResourcesCompat.getDrawable(resources, R.drawable.germany, null)
+                GER -> ContextCompat.getDrawable(this, R.drawable.germany)
+                ENG -> ContextCompat.getDrawable(this, R.drawable.england)
+                RUS -> ContextCompat.getDrawable(this, R.drawable.russia)
 
-                ENG -> ResourcesCompat.getDrawable(resources, R.drawable.england, null)
-
-                RUS -> ResourcesCompat.getDrawable(resources, R.drawable.russia, null)
             })
         }
     }
@@ -35,21 +35,21 @@ class LanguageImpl(private val activity: SettingsActivity) : Language {
 
                 ENG -> {
 
-                    imgLang.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.england, null))
+                    imgLang.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.england))
                     UserPreferences.language = ENG
 
                 }
 
                 RUS -> {
 
-                    imgLang.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.russia, null))
+                    imgLang.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.russia))
                     UserPreferences.language = RUS
 
                 }
 
                 GER -> {
 
-                    imgLang.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.germany, null))
+                    imgLang.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.germany))
                     UserPreferences.language = GER
 
                 }

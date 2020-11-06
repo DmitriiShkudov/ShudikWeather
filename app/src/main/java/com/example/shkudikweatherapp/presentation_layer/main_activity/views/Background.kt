@@ -5,12 +5,6 @@ import com.example.shkudikweatherapp.R
 import com.example.shkudikweatherapp.data_layer.enums.MainDescription
 import com.example.shkudikweatherapp.data_layer.enums.MainDescription.*
 import com.example.shkudikweatherapp.presentation_layer.main_activity.activity.MainActivity
-import com.example.shkudikweatherapp.data_layer.providers.Helper.LOW_ENG
-import com.example.shkudikweatherapp.data_layer.providers.Helper.LOW_GER
-import com.example.shkudikweatherapp.data_layer.providers.Helper.LOW_RUS
-import com.example.shkudikweatherapp.data_layer.providers.Helper.OVERCAST_ENG
-import com.example.shkudikweatherapp.data_layer.providers.Helper.OVERCAST_GER
-import com.example.shkudikweatherapp.data_layer.providers.Helper.OVERCAST_RUS
 import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.desc
 import com.example.shkudikweatherapp.presentation_layer.common_protocols.Background
 import kotlinx.android.synthetic.main.activity_main.*
@@ -39,9 +33,9 @@ class BackgroundImpl(private val activity: MainActivity) : Background {
 
                     CLOUDS -> {
 
-                        val isOvercast = desc.contains(OVERCAST_ENG) ||
-                                         desc.contains(OVERCAST_RUS) ||
-                                         desc.contains(OVERCAST_GER)
+                        val isOvercast = desc.contains(getString(R.string.overcast_rus)) ||
+                                         desc.contains(getString(R.string.overcast_eng)) ||
+                                         desc.contains(getString(R.string.overcast_ger))
 
                         tempIcon.background = ContextCompat.getDrawable(activity, R.drawable.back_icons_cloudy)
 
@@ -55,9 +49,9 @@ class BackgroundImpl(private val activity: MainActivity) : Background {
 
                     CLOUDS_NIGHT -> {
 
-                        val isOvercast = desc.contains(OVERCAST_ENG) ||
-                                         desc.contains(OVERCAST_RUS) ||
-                                         desc.contains(OVERCAST_GER)
+                        val isOvercast = desc.contains(getString(R.string.overcast_rus)) ||
+                                         desc.contains(getString(R.string.overcast_eng)) ||
+                                         desc.contains(getString(R.string.overcast_ger))
 
                         ContextCompat.getDrawable(activity,
                             if (isOvercast) R.drawable.cloud_night else R.drawable.low_cloud_night)
@@ -96,9 +90,9 @@ class BackgroundImpl(private val activity: MainActivity) : Background {
 
                     SNOW -> {
 
-                        val isLow = desc.contains(LOW_ENG) ||
-                                    desc.contains(LOW_RUS) ||
-                                    desc.contains(LOW_GER)
+                        val isLow = desc.contains(getString(R.string.low_rus)) ||
+                                    desc.contains(getString(R.string.low_eng)) ||
+                                    desc.contains(getString(R.string.low_ger))
 
                         tempIcon.background = ContextCompat.getDrawable(activity, R.drawable.back_icons_snow)
 

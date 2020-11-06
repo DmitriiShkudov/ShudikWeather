@@ -4,8 +4,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/more_info_layout"
     android:orientation="vertical"
-    android:layout_width="240dp"
-    android:layout_height="300dp"
+    android:layout_width="@dimen/dpi400_fragment_width"
+    android:layout_height="@dimen/dpi400_fragment_height"
     android:background="@drawable/back_more_info_fragment">
 
     <com.google.android.material.tabs.TabLayout

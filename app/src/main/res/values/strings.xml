@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ShkudikWeatherApp</string>
+    <string name="app_name">ShkudikWeather</string>
     <string name="title_activity_settings">SettingsActivity</string>
 
     <!-- Preference Titles -->
@@ -27,8 +27,16 @@
     <string name="message_successful_eng">Successful</string>
     <string name="message_successful_ger">Erfolgreich</string>
 
+    <string name="message_bad_connection_rus">Плохое соединение…</string>
+    <string name="message_bad_connection_eng">Bad connection…</string>
+    <string name="message_bad_connection_ger">Schlechte Verbindung…</string>
+
     <string name="minus">-</string>
     <string name="percent">%</string>
+
+    <string name="direction_rus">направление</string>
+    <string name="direction_eng">direction</string>
+    <string name="direction_ger">richtung</string>
 
     <!-- MAIN ACTIVITY -->
     <!-- OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO -->
@@ -48,8 +56,8 @@
     <string name="pressure_unit_rus"> мм рт. ст.</string>
     <string name="pressure_unit_eng_ger"> mmHg</string>
 
-    <string name="meter_per_sec_rus"> м/с</string>
-    <string name="meter_per_sec_eng_ger"> м/с</string>
+    <string name="meter_per_sec_rus">м/с</string>
+    <string name="meter_per_sec_eng_ger">m/s</string>
 
     <string name="wind_dir_southern_rus">южное</string>
     <string name="wind_dir_southern_eng">southern</string>
@@ -127,6 +135,10 @@
     <string name="message_city_is_not_exists_eng">City is not exists</string>
     <string name="message_city_is_not_exists_ger">Die Stadt existiert nicht</string>
 
+    <string name="message_location_is_unavailable_rus">Убедитесь, что доступ к геолокации включён на вашем устройстве</string>
+    <string name="message_location_is_unavailable_eng">Make sure the location is enabled on your device</string>
+    <string name="message_location_is_unavailable_ger">Stellen Sie sicher, dass der Standortzugriff auf Ihrem Gerät aktiviert ist</string>
+
     <string name="message_location_was_denied_by_user_rus">Доступ к местоположению был запрещён пользователем</string>
     <string name="message_location_was_denied_by_user_eng">Geolocation was denied by user</string>
     <string name="message_location_was_denied_by_user_ger">Der Standortzugriff wurde vom Benutzer verweigert</string>
@@ -185,6 +197,14 @@
     <string name="message_restart_rus">Чтобы применить изменения, необходимо перезагрузить приложение</string>
     <string name="message_restart_eng">To apply changes, you need to restart the application</string>
     <string name="message_restart_ger">"Um Änderungen zu übernehmen, müssen Sie die Anwendung neu starten"</string>
+
+    <string name="message_notification_is_already_attached_rus">Введённый город уже привязан к уведомлению</string>
+    <string name="message_notification_is_already_attached_eng">Entered city is already attached to notification</string>
+    <string name="message_notification_is_already_attached_ger">"Die eingegebene Stadt ist bereits mit der Benachrichtigung verknüpft"</string>
+
+    <string name="message_notification_is_reset_rus">Уведомление отменено</string>
+    <string name="message_notification_is_reset_eng">Notification is reset</string>
+    <string name="message_notification_is_reset_ger">Kündigung storniert</string>
 
 
     <!-- OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO -->

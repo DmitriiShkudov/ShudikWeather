@@ -1,6 +1,7 @@
 package com.example.shkudikweatherapp.presentation_layer.main_activity.views
 
 import android.view.View
+import com.example.shkudikweatherapp.R
 import com.example.shkudikweatherapp.presentation_layer.main_activity.activity.MainActivity
 import com.example.shkudikweatherapp.data_layer.providers.UserPreferences.Language.*
 import com.example.shkudikweatherapp.data_layer.providers.UserPreferences.language
@@ -19,35 +20,33 @@ class LocaleImpl(private val activity: MainActivity) : Locale {
 
                     RUS -> when (obj) {
 
-                        text_temp -> text_temp.text = "Температура"
-                        text_wind -> text_wind.also { it.textSize = 16f }.text = "Скорость ветра"
-                        text_humidity -> text_humidity.text = "Влажность"
-                        input_city -> input_city.hint = "Город"
-                        text_bad_connection -> text_bad_connection.text = "Плохое соединение..."
+                        text_temp -> text_temp.text = getString(R.string.temperature_rus)
+                        text_wind -> text_wind.text = getString(R.string.wind_rus)
+                        text_humidity -> text_humidity.text = getString(R.string.humidity_rus)
+                        input_city -> input_city.hint = getString(R.string.enter_city_hint_rus)
+                        text_bad_connection -> text_bad_connection.text = getString(R.string.message_bad_connection_rus)
 
                     }
 
                     GER -> when (obj) {
 
-                        text_temp -> text_temp.text = "Temperatur"
-                        text_wind -> text_wind.also { it.textSize = 13f }.text =
-                            "Windgeschwindigkeit"
-                        text_humidity -> text_humidity.text = "Feuchtigkeit"
-                        input_city -> input_city.hint = "Stadt"
-                        text_bad_connection -> text_bad_connection.text = "Schlechte Verbindung..."
+                        text_temp -> text_temp.text = getString(R.string.temperature_ger)
+                        text_wind -> text_wind.text = getString(R.string.wind_ger)
+                        text_humidity -> text_humidity.text = getString(R.string.humidity_ger)
+                        input_city -> input_city.hint = getString(R.string.enter_city_hint_ger)
+                        text_bad_connection -> text_bad_connection.text = getString(R.string.message_bad_connection_ger)
 
                     }
 
                     ENG -> when (obj) {
 
-                        text_temp -> text_temp.text = "Temperature"
-                        text_wind -> text_wind.also { it.textSize = 16f }.text = "Wind speed"
-                        text_humidity -> text_humidity.text = "Humidity"
-                        input_city -> input_city.hint = "City"
-                        text_bad_connection -> text_bad_connection.text = "Bad connection..."
+                        text_temp -> text_temp.text = getString(R.string.temperature_eng)
+                        text_wind -> text_wind.text = getString(R.string.wind_eng)
+                        text_humidity -> text_humidity.text = getString(R.string.humidity_eng)
+                        input_city -> input_city.hint = getString(R.string.enter_city_hint_eng)
+                        text_bad_connection -> text_bad_connection.text = getString(R.string.message_bad_connection_eng)
 
                     }
-
                 }
             }
 

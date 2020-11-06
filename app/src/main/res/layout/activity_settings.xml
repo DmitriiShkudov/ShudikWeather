@@ -14,10 +14,23 @@
         android:id="@+id/settingsBackground">
     </ImageView>
 
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_gravity="start|top"
+        android:textSize="@dimen/standard_text_size_14"
+        android:id="@+id/settings_header"
+        android:layout_margin="@dimen/up_small_offset"
+        android:drawablePadding="@dimen/smallest_offset"
+        android:gravity="center"
+        android:text="Settings"
+        android:drawableStart="@drawable/settings_small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    </androidx.appcompat.widget.AppCompatTextView>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#43000000">
+        android:background="@color/blackout">
     </RelativeLayout>
 
     <LinearLayout
@@ -30,28 +43,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="5">
-
-            <androidx.appcompat.widget.AppCompatTextView
-                app:autoSizeTextType="uniform"
-                app:autoSizeMinTextSize="5sp"
-                app:autoSizeMaxTextSize="15sp"
-                android:id="@+id/settings_header"
-                android:paddingStart="3dp"
-                android:drawablePadding="1dp"
-                android:gravity="center"
-                android:text="Settings"
-                android:drawableStart="@drawable/settings_small"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent">
-            </androidx.appcompat.widget.AppCompatTextView>
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="6">
+            android:layout_weight="8">
         </RelativeLayout>
 
         <LinearLayout
@@ -88,11 +80,10 @@
                 android:layout_weight="15">
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:paddingEnd="4sp"
+                    android:paddingEnd="@dimen/compact_offset"
                     app:autoSizeTextType="uniform"
-                    app:autoSizeMinTextSize="5sp"
-                    app:autoSizeMaxTextSize="15sp"
-                    android:textSize="14sp"
+                    app:autoSizeMinTextSize="@dimen/small_text_size"
+                    app:autoSizeMaxTextSize="@dimen/standard_text_size_15"
                     android:text="Fullscreen"
                     android:textColor="@color/settingsTextColor"
                     android:layout_width="match_parent"
@@ -111,7 +102,7 @@
 
                 <CheckBox
                     android:id="@+id/cbFullscreen"
-                    android:layout_marginTop="3sp"
+                    android:layout_marginTop="@dimen/smallest_offset"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
                 </CheckBox>
@@ -159,11 +150,10 @@
                 android:layout_weight="15">
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:paddingEnd="4sp"
+                    android:paddingEnd="@dimen/compact_offset"
                     app:autoSizeTextType="uniform"
-                    app:autoSizeMinTextSize="5sp"
-                    app:autoSizeMaxTextSize="15sp"
-                    android:textSize="14sp"
+                    app:autoSizeMinTextSize="@dimen/small_text_size"
+                    app:autoSizeMaxTextSize="@dimen/standard_text_size_15"
                     android:id="@+id/text_language"
                     android:textColor="@color/settingsTextColor"
                     android:layout_width="match_parent"
@@ -189,11 +179,10 @@
                         android:id="@+id/imgLang"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginStart="-4sp">
+                        android:layout_marginStart="@dimen/start_offset">
                     </ImageView>
 
                 </RelativeLayout>
-
 
                 <RelativeLayout
                     android:layout_width="0dp"
@@ -208,8 +197,6 @@
                     </Spinner>
 
                 </RelativeLayout>
-
-
 
             </LinearLayout>
 
@@ -226,11 +213,11 @@
             android:layout_height="0dp"
             android:layout_weight="8">
 
-            <RelativeLayout
+            <View
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="3">
-            </RelativeLayout>
+            </View>
 
             <RelativeLayout
                 android:layout_width="0dp"
@@ -254,11 +241,10 @@
                 android:layout_weight="15">
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:paddingEnd="4sp"
+                    android:paddingEnd="@dimen/compact_offset"
                     app:autoSizeTextType="uniform"
-                    app:autoSizeMinTextSize="5sp"
-                    app:autoSizeMaxTextSize="15sp"
-                    android:textSize="14sp"
+                    app:autoSizeMinTextSize="@dimen/small_text_size"
+                    app:autoSizeMaxTextSize="@dimen/standard_text_size_15"
                     android:id="@+id/text_temp_unit"
                     android:textColor="@color/settingsTextColor"
                     android:layout_width="match_parent"
@@ -282,11 +268,11 @@
 
                     <RadioButton
                         app:autoSizeTextType="uniform"
-                        app:autoSizeMinTextSize="5sp"
-                        app:autoSizeMaxTextSize="17sp"
+                        app:autoSizeMinTextSize="@dimen/small_text_size"
+                        app:autoSizeMaxTextSize="@dimen/standard_text_size_16"
                         android:id="@+id/rb_f_unit"
                         android:text="@string/deg_f"
-                        android:layout_marginVertical="6sp"
+                        android:layout_marginVertical="@dimen/compact_offset"
                         android:layout_height="match_parent"
                         android:layout_width="0dp"
                         android:layout_weight="1">
@@ -294,10 +280,11 @@
 
                     <RadioButton
                         app:autoSizeTextType="uniform"
-                        app:autoSizeMinTextSize="5sp"
-                        app:autoSizeMaxTextSize="17sp"                        android:id="@+id/rb_c_unit"
+                        app:autoSizeMinTextSize="@dimen/small_text_size"
+                        app:autoSizeMaxTextSize="@dimen/standard_text_size_16"
+                        android:id="@+id/rb_c_unit"
                         android:text="@string/deg_c"
-                        android:layout_marginVertical="6sp"
+                        android:layout_marginVertical="@dimen/compact_offset"
                         android:layout_height="match_parent"
                         android:layout_width="0dp"
                         android:layout_weight="1">
@@ -312,7 +299,6 @@
                 android:layout_height="match_parent"
                 android:layout_weight="3">
             </RelativeLayout>
-
 
         </LinearLayout>
 
@@ -349,11 +335,10 @@
                 android:layout_weight="15">
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:paddingEnd="4sp"
+                    android:paddingEnd="@dimen/compact_offset"
                     app:autoSizeTextType="uniform"
-                    app:autoSizeMinTextSize="5sp"
-                    app:autoSizeMaxTextSize="15sp"
-                    android:textSize="14sp"
+                    app:autoSizeMinTextSize="@dimen/small_text_size"
+                    app:autoSizeMaxTextSize="@dimen/standard_text_size_15"
                     android:id="@+id/text_push_notif"
                     android:textColor="@color/settingsTextColor"
                     android:layout_width="match_parent"
@@ -371,23 +356,24 @@
                 android:layout_weight="9">
 
                 <Button
+                    android:lines="1"
                     android:textAllCaps="false"
                     app:autoSizeTextType="uniform"
-                    app:autoSizeMinTextSize="5sp"
-                    app:autoSizeMaxTextSize="14sp"
+                    app:autoSizeMinTextSize="@dimen/small_text_size"
+                    app:autoSizeMaxTextSize="@dimen/standard_text_size_14"
                     android:id="@+id/btn_set_notifications"
-                    android:layout_marginVertical="6sp"
+                    android:layout_marginVertical="@dimen/small_offset"
                     android:layout_height="match_parent"
                     android:layout_width="match_parent">
                 </Button>
 
             </LinearLayout>
 
-            <RelativeLayout
+            <View
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="3">
-            </RelativeLayout>
+            </View>
 
 
         </LinearLayout>
@@ -405,11 +391,11 @@
             android:layout_height="0dp"
             android:layout_weight="5">
 
-            <RelativeLayout
+            <View
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="3.5">
-            </RelativeLayout>
+            </View>
 
             <RelativeLayout
                 android:layout_width="0dp"
@@ -417,12 +403,11 @@
                 android:layout_weight="12">
 
                 <EditText
-                    android:maxLines="1"
                     android:inputType="text"
                     app:autoSizeTextType="uniform"
-                    app:autoSizeMinTextSize="5sp"
-                    app:autoSizeMaxTextSize="17sp"
-                    android:paddingStart="5sp"
+                    app:autoSizeMinTextSize="@dimen/small_text_size"
+                    app:autoSizeMaxTextSize="@dimen/standard_text_size_14"
+                    android:paddingStart="@dimen/up_small_offset"
                     android:background="@drawable/back_notification_city_input"
                     android:id="@+id/input_notification_city"
                     android:layout_width="match_parent"
@@ -444,26 +429,32 @@
                 android:layout_weight="14">
 
                 <Button
+                    android:lines="1"
+                    android:paddingStart="@dimen/smallest_offset"
+                    android:paddingEnd="@dimen/smallest_offset"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMinTextSize="@dimen/small_text_size"
+                    android:autoSizeMaxTextSize="@dimen/standard_text_size_12"
                     android:textAllCaps="false"
                     android:textStyle="normal"
                     android:background="@drawable/back_btn_apply_notification"
                     android:layout_weight="1"
-                    app:autoSizeTextType="uniform"
-                    app:autoSizeMinTextSize="5sp"
-                    app:autoSizeMaxTextSize="12sp"
                     android:id="@+id/btn_apply_notifications"
                     android:layout_width="0dp"
                     android:layout_height="match_parent">
                 </Button>
 
                 <Button
+                    android:lines="1"
+                    android:paddingStart="@dimen/smallest_offset"
+                    android:paddingEnd="@dimen/smallest_offset"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMinTextSize="@dimen/small_text_size"
+                    android:autoSizeMaxTextSize="@dimen/standard_text_size_12"
                     android:textAllCaps="false"
                     android:textStyle="normal"
                     android:background="@drawable/back_btn_reset_notification"
                     android:layout_weight="1"
-                    app:autoSizeTextType="uniform"
-                    app:autoSizeMinTextSize="5sp"
-                    app:autoSizeMaxTextSize="12sp"
                     android:id="@+id/btn_reset_notifications"
                     android:layout_width="0dp"
                     android:layout_height="match_parent">

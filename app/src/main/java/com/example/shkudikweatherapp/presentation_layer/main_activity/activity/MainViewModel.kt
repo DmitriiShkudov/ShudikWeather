@@ -7,10 +7,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import com.example.shkudikweatherapp.R
 import com.example.shkudikweatherapp.data_layer.providers.Helper.ABS_ZERO
-import com.example.shkudikweatherapp.data_layer.providers.Helper.METER_PER_SEC
-import com.example.shkudikweatherapp.data_layer.providers.Helper.METER_PER_SEC_RUS
-import com.example.shkudikweatherapp.data_layer.providers.Helper.PERCENT
 import com.example.shkudikweatherapp.data_layer.providers.Helper.fahrenheit
 import com.example.shkudikweatherapp.data_layer.http_client.ApplicationRetrofitClient
 import com.example.shkudikweatherapp.data_layer.pojo.forecast.Forecast
@@ -34,8 +32,12 @@ import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.select
 import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.selectedLat
 import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.selectedLon
 import com.example.shkudikweatherapp.data_layer.enums.MainDescription
-import com.example.shkudikweatherapp.data_layer.providers.Helper.emptyInputErrorMessage
-import com.example.shkudikweatherapp.data_layer.providers.Helper.locationDeniedError
+import com.example.shkudikweatherapp.data_layer.providers.Helper
+import com.example.shkudikweatherapp.data_layer.providers.Helper.Messages.emptyInputMessage
+import com.example.shkudikweatherapp.data_layer.providers.Helper.Messages.locationIsDeniedMessage
+import com.example.shkudikweatherapp.data_layer.providers.Helper.Messages.locationIsUnavailable
+import com.example.shkudikweatherapp.data_layer.providers.Helper.Objects.location
+import com.example.shkudikweatherapp.data_layer.providers.Helper.Units.windUnit
 import com.example.shkudikweatherapp.data_layer.providers.UserPreferences.isLocationApplied
 import com.example.shkudikweatherapp.presentation_layer.main_activity.states.MainStates
 import kotlinx.android.synthetic.main.activity_main.*
@@ -45,7 +47,7 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlin.math.roundToInt
 
-class MainViewModel(app: Application) : AndroidViewModel(app) {
+class MainViewModel(val app: Application) : AndroidViewModel(app) {
 
     private val retrofitClient = ApplicationRetrofitClient(this)
 
@@ -72,7 +74,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     fun update() =
         CoroutineScope(Main).launch {
             while (true) {
-                if (!isMoreInfoOpened)
+                if (state.value != MainStates.MORE_INFO && state.value != MainStates.CHANGING_CITY)
                     load(this)
                 delay(10000)
             }
@@ -118,12 +120,16 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     private suspend fun succeed(weather: Weather, timeUTC: TimeUTC, forecast: Forecast) {
 
-         if (searchMode == UserPreferences.SearchMode.CITY)
+         if (searchMode == UserPreferences.SearchMode.CITY) {
+
              WeatherProvider.addHelpCity(selectedCity)
+
+         }
+
 
          // Received weather
          val receivedTemp = weather.main.temp.toInt() - ABS_ZERO
-         val receivedHumidity = weather.main.humidity.toString() + PERCENT
+         val receivedHumidity = weather.main.humidity.toString() + app.getString(R.string.percent)
          val receivedWind = weather.wind.speed.toInt()
          val receivedMainDesc = weather.weather!![0].main
          val receivedDesc = weather.weather[0].description
@@ -177,42 +183,70 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
              mainDesc.postValue(getMainDescription(isNight.value!!, receivedMainDesc))
          }
 
+        withContext(Main) {
+            // Setting forecast
 
-        // Setting forecast
+            fTemp.value(
+                arrayOf(
+                    setTemp(receivedFTemp1),
+                    setTemp(receivedFTemp2),
+                    setTemp(receivedFTemp3)
+                )
+            )
 
-        fTemp.value(arrayOf(setTemp(receivedFTemp1), setTemp(receivedFTemp2), setTemp(receivedFTemp3)))
+            fFeels.value(
+                arrayOf(
+                    setTemp(receivedFFeels1),
+                    setTemp(receivedFFeels2),
+                    setTemp(receivedFFeels3)
+                )
+            )
 
-        fFeels.value(arrayOf(setTemp(receivedFFeels1), setTemp(receivedFFeels2), setTemp(receivedFFeels3)))
+            fWind.value(
+                arrayOf(
+                    setWindSpeed(receivedFWind1),
+                    setWindSpeed(receivedFWind2),
+                    setWindSpeed(receivedFWind3)
+                )
+            )
 
-        fWind.value(arrayOf(setWindSpeed(receivedFWind1), setWindSpeed(receivedFWind2), setWindSpeed(receivedFWind3)))
+            fWindDir.value(
+                arrayOf(
+                    setWindDirection(receivedFWindDir1)!!,
+                    setWindDirection(receivedFWindDir2)!!,
+                    setWindDirection(receivedFWindDir3)!!
+                )
+            )
 
-        fWindDir.value(arrayOf(setWindDirection(receivedFWindDir1),
-                               setWindDirection(receivedFWindDir2),
-                               setWindDirection(receivedFWindDir3)))
+            fHumidity.value(
+                arrayOf(
+                    weather.main.humidity.toString() + app.getString(R.string.percent),
+                    forecast.list[1].main.humidity.toString() + app.getString(R.string.percent),
+                    forecast.list[2].main.humidity.toString() + app.getString(R.string.percent)
+                )
+            )
 
-        fHumidity.value(arrayOf(weather.main.humidity.toString() + PERCENT,
-                                forecast.list[1].main.humidity.toString() + PERCENT,
-                                forecast.list[2].main.humidity.toString() + PERCENT))
+            fPressure.value(
+                arrayOf(
+                    setPressure(receivedFPressure1),
+                    setPressure(receivedFPressure2),
+                    setPressure(receivedFPressure3)
+                )
+            )
 
-        fPressure.value(arrayOf(setPressure(receivedFPressure1),
-                                setPressure(receivedFPressure2),
-                                setPressure(receivedFPressure3)))
+            // Setting current weather
 
-        // Setting current weather
+            temp.value(
+                (if (degreeUnit == UserPreferences.TemperatureUnit.DEG_C)
+                    (receivedTemp) else (receivedTemp).fahrenheit()).toString() + degreeUnit.str
+            )
 
-        temp.value(
-            (if (degreeUnit == UserPreferences.TemperatureUnit.DEG_C)
-                        (receivedTemp) else (receivedTemp).fahrenheit()).toString() + degreeUnit.str
-        )
+            humidity.value(receivedHumidity)
 
-        humidity.value(receivedHumidity)
+            wind.value(receivedWind.toString() + windUnit)
 
-        wind.value(
-            receivedWind.toString() +
-                    if (language != UserPreferences.Language.RUS) METER_PER_SEC else METER_PER_SEC_RUS
-        )
-
-        state.value(MainStates.UPDATED)
+            state.value(MainStates.UPDATED)
+        }
 
     }
 
@@ -234,43 +268,49 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
             } else {
 
-                Toast.makeText(applicationContext, emptyInputErrorMessage, Toast.LENGTH_LONG).show()
+                boardImpl.showError(emptyInputMessage)
 
             }
         }
     }
 
     @SuppressLint("MissingPermission")
-    internal fun applyLocation(activity: MainActivity) {
+    internal fun applyLocation(activity: MainActivity) { with(activity) {
 
-        if (isLocationApplied) {
+            if (isLocationApplied) {
 
-            state.value(MainStates.LOADING)
+                try {
 
-            try {
+                    stateImpl.setState(MainStates.CITY_APPLIED)
+                    stateImpl.setState(MainStates.LOADING)
 
-                val locationManager = activity.getSystemService(AppCompatActivity.LOCATION_SERVICE) as LocationManager?
+                    val locationManager = getSystemService(AppCompatActivity.LOCATION_SERVICE) as LocationManager
 
-                locationManager!!.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1, 1f) { location ->
+                    locationManager.requestLocationUpdates(
+                        LocationManager.GPS_PROVIDER,
+                        500,
+                        200f
+                    ) { location ->
 
-                    activity.stateImpl.setState(MainStates.CITY_APPLIED)
-                    activity.stateImpl.setState(MainStates.LOADING)
+                        selectedLon = ((location.longitude * 1000).roundToInt() / 1000f)
+                        selectedLat = ((location.latitude * 1000).roundToInt() / 1000f)
 
-                    selectedLon = ((location.longitude * 1000).roundToInt() / 1000f)
-                    selectedLat = ((location.latitude * 1000).roundToInt() / 1000f)
+                        searchMode = UserPreferences.SearchMode.GEO
+                        CoroutineScope(Main).launch { load(this) }
 
-                    searchMode = UserPreferences.SearchMode.GEO
-                    activity.boardImpl.setUserLocationTitle()
-                    CoroutineScope(Main).launch { load(this) }
+                    }
+
+                } catch (e: Throwable) {
+
+                    locationAvailabilityImpl.showError(locationIsUnavailable)
 
                 }
 
-            } catch (e: Throwable) {}
+            } else {
 
-        } else {
+                locationAvailabilityImpl.showError(locationIsDeniedMessage)
 
-            activity.locationAvailabilityImpl.showError(locationDeniedError)
-
+            }
         }
     }
 }

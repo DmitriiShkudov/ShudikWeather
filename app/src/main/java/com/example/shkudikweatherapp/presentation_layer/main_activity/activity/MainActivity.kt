@@ -3,9 +3,12 @@ package com.example.shkudikweatherapp.presentation_layer.main_activity.activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.shkudikweatherapp.R
+import com.example.shkudikweatherapp.data_layer.providers.Helper
+import com.example.shkudikweatherapp.data_layer.providers.Helper.value
 import com.example.shkudikweatherapp.data_layer.providers.UserPreferences
 import com.example.shkudikweatherapp.data_layer.providers.UserPreferences.isLocationApplied
 import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider
@@ -51,10 +54,13 @@ class MainActivity : AppCompatActivity() {
     internal val iconMoreInfoImpl = IconMoreInfoImpl(this)
     //
 
+
+
     override fun onResume() {
 
         super.onResume()
 
+        stateImpl.setState(MainStates.UPDATED)
         CoroutineScope(Main).launch { viewModel.load(this) }
 
     }
@@ -65,21 +71,21 @@ class MainActivity : AppCompatActivity() {
 
         btn_change_city.setOnClickListener {
 
-            stateImpl.setState(MainStates.CHANGING_CITY)
-
-            if (isMoreInfoOpened)
+            if (viewModel.state.value == MainStates.MORE_INFO)
                 moreInfoImpl.detach()
+
+            viewModel.state.value(MainStates.CHANGING_CITY)
 
         }
 
         btn_geo.setOnClickListener {
 
-            stateImpl.setState(MainStates.CHANGING_CITY_CANCELLED)
-
-            if (isMoreInfoOpened)
+            if (viewModel.state.value == MainStates.MORE_INFO)
                 moreInfoImpl.detach()
 
             viewModel.applyLocation(this)
+
+            viewModel.state.value(MainStates.CHANGING_CITY_CANCELLED)
 
         }
 
@@ -91,7 +97,7 @@ class MainActivity : AppCompatActivity() {
 
         btn_settings.setOnClickListener {
 
-            if (isMoreInfoOpened)
+            if (viewModel.state.value == MainStates.MORE_INFO)
                 moreInfoImpl.detach()
 
             openSettings()
@@ -102,8 +108,7 @@ class MainActivity : AppCompatActivity() {
 
             if (isSelectedCityExists) {
 
-                stateImpl.setState(MainStates.MORE_INFO)
-                isMoreInfoOpened = true
+                viewModel.state.value(MainStates.MORE_INFO)
 
             }
 
@@ -117,6 +122,7 @@ class MainActivity : AppCompatActivity() {
 
         WeatherProvider.context = applicationContext
         UserPreferences.context = applicationContext
+        Helper.context = applicationContext
         viewModel = ViewModelProvider(this@MainActivity).get(MainViewModel::class.java)
         if (UserPreferences.fullscreen) setTheme(R.style.fullscreen)
 
@@ -142,7 +148,7 @@ class MainActivity : AppCompatActivity() {
 
         // Reactions
 
-        viewModel.state.observe(this, { stateImpl.setState(it) })
+        viewModel.state.observe(this) { stateImpl.setState(it) }
 
         viewModel.mainDesc.observe(this) {
             mainDesc = it
@@ -178,7 +184,6 @@ class MainActivity : AppCompatActivity() {
             isNight = it
             timeModeImpl.setTimeMode(it)
         }
-
 
     }
 

@@ -2,8 +2,10 @@ package com.example.shkudikweatherapp.presentation_layer.main_activity.views
 
 import androidx.core.content.ContextCompat
 import com.example.shkudikweatherapp.R
+import com.example.shkudikweatherapp.data_layer.enums.MainDescription
 import com.example.shkudikweatherapp.presentation_layer.main_activity.activity.MainActivity
 import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.isSelectedCityExists
+import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.mainDesc
 import com.example.shkudikweatherapp.presentation_layer.common_protocols.TimeMode
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -22,6 +24,8 @@ class TimeModeImpl(val activity: MainActivity) : TimeMode {
 
             btn_settings.setImageDrawable(ContextCompat.getDrawable(activity, R.drawable.settings))
 
+            input_city.background = ContextCompat.getDrawable(activity, R.drawable.back_city_input)
+
             ContextCompat.getColor(activity, R.color.black).also {
 
                 tvDescriptionIcon.setTextColor(it)
@@ -34,8 +38,6 @@ class TimeModeImpl(val activity: MainActivity) : TimeMode {
                 text_temp.setTextColor(it)
 
             }
-
-            input_city.background = ContextCompat.getDrawable(activity, R.drawable.back_city_input)
 
         }
     }
@@ -53,6 +55,16 @@ class TimeModeImpl(val activity: MainActivity) : TimeMode {
 
             btn_apply_city.setImageDrawable(ContextCompat.getDrawable(activity, R.drawable.apply_city_night))
 
+            tvDescriptionIcon.setTextColor(ContextCompat.getColor(activity, R.color.bright_white))
+
+            tempIcon.background = ContextCompat.getDrawable(activity, R.drawable.back_icons_night)
+
+            windIcon.background = ContextCompat.getDrawable(activity, R.drawable.back_icons_night)
+
+            humidityIcon.background = ContextCompat.getDrawable(activity, R.drawable.back_icons_night)
+
+            input_city.background = ContextCompat.getDrawable(activity, R.drawable.back_city_input_night)
+
             ContextCompat.getColor(activity, R.color.white).also {
 
                 input_city.setTextColor(it)
@@ -65,20 +77,13 @@ class TimeModeImpl(val activity: MainActivity) : TimeMode {
 
             }
 
-            tvDescriptionIcon.setTextColor(ContextCompat.getColor(activity, R.color.bright_white))
-
-            tempIcon.background = ContextCompat.getDrawable(activity, R.drawable.back_icons_night)
-
-            windIcon.background = ContextCompat.getDrawable(activity, R.drawable.back_icons_night)
-
-            humidityIcon.background = ContextCompat.getDrawable(activity, R.drawable.back_icons_night)
-
-            input_city.background = ContextCompat.getDrawable(activity, R.drawable.back_city_input_night)
-
         }
 
     }
 
-    override fun setTimeMode(isNight: Boolean) = if (isNight) setNightMode() else setDayMode()
+    override fun setTimeMode(isNight: Boolean) =
+
+        if (isNight || mainDesc == MainDescription.THUNDERSTORM) setNightMode() else setDayMode()
+
 
 }

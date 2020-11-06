@@ -14,9 +14,9 @@ abstract class RetrofitClient {
     protected object Data  {
 
         val okHttpClient = OkHttpClient.Builder()
-            .connectTimeout(2, TimeUnit.SECONDS)
-            .readTimeout(1500, TimeUnit.MILLISECONDS)
-            .writeTimeout(1, TimeUnit.SECONDS)
+            .connectTimeout(3, TimeUnit.SECONDS)
+            .readTimeout(2500, TimeUnit.MILLISECONDS)
+            .writeTimeout(2, TimeUnit.SECONDS)
             .build()
 
         val retrofitWeather =

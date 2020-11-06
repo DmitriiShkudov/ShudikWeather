@@ -6,6 +6,7 @@ import com.example.shkudikweatherapp.presentation_layer.main_activity.activity.M
 import com.example.shkudikweatherapp.data_layer.providers.UserPreferences.SearchMode.*
 import com.example.shkudikweatherapp.data_layer.providers.UserPreferences.searchMode
 import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider
+import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.isNight
 import kotlinx.android.synthetic.main.activity_main.*
 
 interface ChangeableSearchMode {
@@ -26,12 +27,12 @@ class ChangeableSearchModeImpl(private val activity: MainActivity) : ChangeableS
 
                     btn_change_city.setImageDrawable(ResourcesCompat.getDrawable(
                         resources,
-                        if (WeatherProvider.isNight) R.drawable.replace_enabled_night else R.drawable.replace_enabled,
+                        if (isNight) R.drawable.replace_enabled_night else R.drawable.replace_enabled,
                         null))
 
                     btn_geo.setImageDrawable(ResourcesCompat.getDrawable(
                         resources,
-                        if (WeatherProvider.isNight) R.drawable.location_night else R.drawable.location,
+                        if (isNight) R.drawable.location_night else R.drawable.location,
                         null))
 
                 }
@@ -42,12 +43,12 @@ class ChangeableSearchModeImpl(private val activity: MainActivity) : ChangeableS
 
                     btn_change_city.setImageDrawable(ResourcesCompat.getDrawable(
                         resources,
-                        if (WeatherProvider.isNight) R.drawable.replace_night else R.drawable.replace,
+                        if (isNight) R.drawable.replace_night else R.drawable.replace,
                         null))
 
                     btn_geo.setImageDrawable(ResourcesCompat.getDrawable(
                         resources,
-                        if (WeatherProvider.isNight) R.drawable.location_enabled_night else R.drawable.location_enabled,
+                        if (isNight) R.drawable.location_enabled_night else R.drawable.location_enabled,
                         null))
 
                 }

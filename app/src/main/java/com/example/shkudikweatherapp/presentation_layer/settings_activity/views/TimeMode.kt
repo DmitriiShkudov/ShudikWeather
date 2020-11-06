@@ -1,7 +1,11 @@
 package com.example.shkudikweatherapp.presentation_layer.settings_activity.views
 
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.example.shkudikweatherapp.R
+import com.example.shkudikweatherapp.data_layer.enums.MainDescription
+import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider
+import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.mainDesc
 import com.example.shkudikweatherapp.presentation_layer.common_protocols.TimeMode
 import com.example.shkudikweatherapp.presentation_layer.settings_activity.activity.SettingsActivity
 import kotlinx.android.synthetic.main.activity_settings.*
@@ -10,13 +14,13 @@ class TimeModeImpl(private val activity: SettingsActivity) : TimeMode {
 
     override fun setDayMode() { with(activity) {
 
-            imgLang.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.language, null))
+            imgLang.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.language))
 
-            imgFullscreen.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.fullscreen, null))
+            imgFullscreen.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.fullscreen))
 
-            imgNotification.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.notifications, null))
+            imgNotification.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.notifications))
 
-            imgTempUnit.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.temp_unit, null))
+            imgTempUnit.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.temp_unit))
 
             ResourcesCompat.getColor(resources, R.color.black, null).also {
 
@@ -38,13 +42,13 @@ class TimeModeImpl(private val activity: SettingsActivity) : TimeMode {
 
     override fun setNightMode() { with(activity) {
 
-            imgLanguage.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.language_night, null))
+            imgLanguage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.language_night))
 
-            imgFullscreen.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.fullscreen_night, null))
+            imgFullscreen.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.fullscreen_night))
 
-            imgNotification.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.notif_night, null))
+            imgNotification.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.notif_night))
 
-            imgTempUnit.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.temp_unit_night, null))
+            imgTempUnit.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.temp_unit_night))
 
             ResourcesCompat.getColor(resources, R.color.white, null).also {
 
@@ -66,6 +70,7 @@ class TimeModeImpl(private val activity: SettingsActivity) : TimeMode {
         }
     }
 
-    override fun setTimeMode(isNight: Boolean) = if (isNight) setNightMode() else setDayMode()
+    override fun setTimeMode(isNight: Boolean) =
+        if (isNight || mainDesc == MainDescription.THUNDERSTORM) setNightMode() else setDayMode()
 
 }

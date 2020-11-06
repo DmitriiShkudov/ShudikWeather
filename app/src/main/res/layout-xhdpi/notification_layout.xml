@@ -15,7 +15,8 @@
     </ImageView>
 
     <LinearLayout
-        android:layout_marginTop="-7dp"
+        android:layout_marginTop="-3dp"
+        android:layout_marginBottom="@dimen/smallest_offset"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -27,9 +28,7 @@
 
             <TextView
                 style="@style/TextAppearance.Compat.Notification.Title"
-                android:autoSizeTextType="uniform"
-                android:autoSizeMinTextSize="8sp"
-                android:autoSizeMaxTextSize="16sp"
+                android:textSize="@dimen/standard_text_size_15"
                 android:textStyle="bold"
                 android:layout_gravity="center"
                 android:id="@+id/tvTitle"
@@ -45,19 +44,20 @@
 
         </LinearLayout>
 
+
         <LinearLayout
-            android:layout_marginTop="-5sp"
-            android:layout_marginStart="6dp"
+            android:layout_marginStart="@dimen/compact_offset"
+            android:layout_marginTop="-7dp"
             android:layout_gravity="start"
             android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
             <TextView
-                android:maxLines="1"
                 android:autoSizeTextType="uniform"
-                android:autoSizeMinTextSize="8sp"
-                android:autoSizeMaxTextSize="15sp"
+                android:autoSizeMinTextSize="@dimen/up_small_text_size"
+                android:autoSizeMaxTextSize="@dimen/standard_text_size_13"
+                android:maxLines="1"
                 android:textStyle="bold"
                 android:id="@+id/firstInfo"
                 android:layout_width="wrap_content"
@@ -65,10 +65,10 @@
             </TextView>
 
             <TextView
-                android:maxLines="1"
                 android:autoSizeTextType="uniform"
-                android:autoSizeMinTextSize="8sp"
-                android:autoSizeMaxTextSize="15sp"
+                android:autoSizeMinTextSize="@dimen/up_small_text_size"
+                android:autoSizeMaxTextSize="@dimen/standard_text_size_13"
+                android:maxLines="1"
                 android:textStyle="bold"
                 android:id="@+id/secondInfo"
                 android:layout_width="wrap_content"
@@ -76,13 +76,13 @@
             </TextView>
 
             <TextView
-                android:maxLines="1"
                 android:autoSizeTextType="uniform"
-                android:autoSizeMinTextSize="8sp"
-                android:autoSizeMaxTextSize="15sp"
+                android:autoSizeMinTextSize="@dimen/up_small_text_size"
+                android:autoSizeMaxTextSize="@dimen/standard_text_size_13"
+                android:maxLines="1"
                 android:textStyle="bold"
                 android:id="@+id/thirdInfo"
-                android:layout_marginBottom="6dp"
+                android:layout_marginBottom="@dimen/up_small_offset"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
             </TextView>

@@ -8,8 +8,8 @@ import androidx.core.content.res.ResourcesCompat
 import com.example.shkudikweatherapp.R
 import com.example.shkudikweatherapp.data_layer.providers.Helper
 import com.example.shkudikweatherapp.data_layer.providers.Helper.EMPTY
+import com.example.shkudikweatherapp.data_layer.providers.Helper.Objects.location
 import com.example.shkudikweatherapp.data_layer.providers.Helper.hideKeyboard
-import com.example.shkudikweatherapp.data_layer.providers.Helper.locationTitle
 import com.example.shkudikweatherapp.data_layer.providers.Helper.setSafeOnClickListener
 import com.example.shkudikweatherapp.data_layer.providers.Helper.showKeyboard
 import com.example.shkudikweatherapp.data_layer.providers.UserPreferences
@@ -77,7 +77,7 @@ class MainStateImpl(private val activity: MainActivity) : State {
                         hideKeyboard(applicationContext)
 
                         setText(if (searchMode == UserPreferences.SearchMode.CITY) selectedCity
-                            else locationTitle)
+                            else location)
                     }
 
                 }
@@ -104,12 +104,19 @@ class MainStateImpl(private val activity: MainActivity) : State {
                 UPDATED -> {
 
                     btn_change_city.isClickable = true
+                    btn_apply_city.isClickable = false
                     btn_geo.isClickable = true
                     bad_connection.visibility = View.GONE
                     cpv_loading.visibility = View.GONE
                     recyclerHelpImpl.update()
                     changeableSearchModeImpl.setEnabledSearchMode()
                     localeImpl.setLocale()
+
+                    if (searchMode == UserPreferences.SearchMode.CITY) {
+                        boardImpl.setCity()
+                    } else {
+                        boardImpl.setUserLocationTitle()
+                    }
 
                 }
 
@@ -143,7 +150,7 @@ class MainStateImpl(private val activity: MainActivity) : State {
                         null
                     )
 
-                    Helper.MINUS.also {
+                    getString(R.string.minus).also {
 
                         tvWind.text = it
                         tvHumidity.text = it
