@@ -10,7 +10,6 @@ class Receiver: BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
 
-        Log.d("BBBB", "KIZDA")
         ContextCompat.startForegroundService(context, Intent(context, NotificationService::class.java))
 
     }

@@ -453,6 +453,9 @@
                         android:layout_height="match_parent">
 
                         <androidx.recyclerview.widget.RecyclerView
+                            android:scaleX="0.66"
+                            android:scaleY="0.66"
+                            android:alpha="0.5"
                             android:visibility="gone"
                             android:id="@+id/rvHelp"
                             android:layout_width="match_parent"

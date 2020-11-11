@@ -14,7 +14,6 @@ import com.example.shkudikweatherapp.data_layer.http_client.ApplicationRetrofitC
 import com.example.shkudikweatherapp.data_layer.pojo.forecast.Forecast
 import com.example.shkudikweatherapp.data_layer.pojo.time_utc.TimeUTC
 import com.example.shkudikweatherapp.data_layer.pojo.weather.Weather
-import com.example.shkudikweatherapp.presentation_layer.main_activity.activity.MainActivity.Companion.isMoreInfoOpened
 import com.example.shkudikweatherapp.data_layer.providers.Helper.getMainDescription
 import com.example.shkudikweatherapp.data_layer.providers.Helper.isNightTime
 import com.example.shkudikweatherapp.data_layer.providers.Helper.reformat
