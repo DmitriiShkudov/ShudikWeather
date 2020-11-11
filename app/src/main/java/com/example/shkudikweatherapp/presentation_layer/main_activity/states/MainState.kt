@@ -42,7 +42,9 @@ class MainStateImpl(private val activity: MainActivity) : State {
                 CHANGING_CITY -> {
 
                     tvDescriptionIcon.visibility = View.INVISIBLE
-                    rvHelp.visibility = View.VISIBLE
+
+                    recyclerHelpImpl.show()
+
                     btn_apply_city.isClickable = true
 
                     with(input_city) {

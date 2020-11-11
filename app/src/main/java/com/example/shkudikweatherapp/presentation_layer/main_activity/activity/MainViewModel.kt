@@ -14,7 +14,6 @@ import com.example.shkudikweatherapp.data_layer.http_client.ApplicationRetrofitC
 import com.example.shkudikweatherapp.data_layer.pojo.forecast.Forecast
 import com.example.shkudikweatherapp.data_layer.pojo.time_utc.TimeUTC
 import com.example.shkudikweatherapp.data_layer.pojo.weather.Weather
-import com.example.shkudikweatherapp.presentation_layer.main_activity.activity.MainActivity.Companion.isMoreInfoOpened
 import com.example.shkudikweatherapp.data_layer.providers.Helper.getMainDescription
 import com.example.shkudikweatherapp.data_layer.providers.Helper.isNightTime
 import com.example.shkudikweatherapp.data_layer.providers.Helper.reformat
@@ -183,6 +182,8 @@ class MainViewModel(val app: Application) : AndroidViewModel(app) {
              mainDesc.postValue(getMainDescription(isNight.value!!, receivedMainDesc))
          }
 
+        state.value(MainStates.UPDATED)
+
         withContext(Main) {
             // Setting forecast
 
@@ -245,7 +246,6 @@ class MainViewModel(val app: Application) : AndroidViewModel(app) {
 
             wind.value(receivedWind.toString() + windUnit)
 
-            state.value(MainStates.UPDATED)
         }
 
     }

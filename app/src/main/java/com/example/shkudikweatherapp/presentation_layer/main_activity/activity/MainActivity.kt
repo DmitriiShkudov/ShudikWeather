@@ -31,10 +31,8 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
 
-        var isMoreInfoOpened = false
         const val FRAGMENT_TAG = "fragment"
         const val REQUEST_PERMISSION_CODE = 44
-
 
     }
 
