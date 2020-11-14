@@ -125,7 +125,6 @@ class MainViewModel(val app: Application) : AndroidViewModel(app) {
 
          }
 
-
          // Received weather
          val receivedTemp = weather.main.temp.toInt() - ABS_ZERO
          val receivedHumidity = weather.main.humidity.toString() + app.getString(R.string.percent)
@@ -286,17 +285,24 @@ class MainViewModel(val app: Application) : AndroidViewModel(app) {
 
                     val locationManager = getSystemService(AppCompatActivity.LOCATION_SERVICE) as LocationManager
 
-                    locationManager.requestLocationUpdates(
-                        LocationManager.GPS_PROVIDER,
-                        500,
-                        200f
-                    ) { location ->
+                    if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 
-                        selectedLon = ((location.longitude * 1000).roundToInt() / 1000f)
-                        selectedLat = ((location.latitude * 1000).roundToInt() / 1000f)
+                        locationManager.requestLocationUpdates(
+                            LocationManager.GPS_PROVIDER,
+                            500,
+                            200f
+                        ) { location ->
 
-                        searchMode = UserPreferences.SearchMode.GEO
-                        CoroutineScope(Main).launch { load(this) }
+                            selectedLon = ((location.longitude * 1000).roundToInt() / 1000f)
+                            selectedLat = ((location.latitude * 1000).roundToInt() / 1000f)
+
+                            searchMode = UserPreferences.SearchMode.GEO
+                            CoroutineScope(Main).launch { load(this) }
+
+                        }
+                    } else {
+
+                        locationAvailabilityImpl.showError(locationIsUnavailable)
 
                     }
 
