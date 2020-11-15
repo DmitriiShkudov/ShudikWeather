@@ -289,8 +289,8 @@ class MainViewModel(val app: Application) : AndroidViewModel(app) {
 
                         locationManager.requestLocationUpdates(
                             LocationManager.GPS_PROVIDER,
-                            500,
-                            200f
+                            0,
+                            0f
                         ) { location ->
 
                             selectedLon = ((location.longitude * 1000).roundToInt() / 1000f)
