@@ -2,8 +2,10 @@ package com.example.shkudikweatherapp.presentation_layer.main_activity.activity
 
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.shkudikweatherapp.R
@@ -64,6 +66,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onStart() {
         super.onStart()
 

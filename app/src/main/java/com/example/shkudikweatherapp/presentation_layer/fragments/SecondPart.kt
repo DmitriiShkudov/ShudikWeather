@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.shkudikweatherapp.R
 import com.example.shkudikweatherapp.data_layer.providers.UserPreferences
+import com.example.shkudikweatherapp.data_layer.providers.Helper
 import kotlinx.android.synthetic.main.second_fragment_layout.*
 
 class SecondPart : Fragment() {

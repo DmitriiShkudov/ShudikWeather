@@ -26,6 +26,10 @@ object Helper {
     const val KEY_BOARD_CODE_5 = 5
     const val KEY_BOARD_CODE_6 = 6
 
+
+    // Loading delay
+    const val LOADING_DELAY: Long = 10000
+
     // Notifications
 
     const val NOTIFICATION_CHANNEL = "W"

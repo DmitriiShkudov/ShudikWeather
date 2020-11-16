@@ -3,7 +3,9 @@ package com.example.shkudikweatherapp.presentation_layer.main_activity.activity
 import android.annotation.SuppressLint
 import android.app.Application
 import android.location.LocationManager
+import android.os.Build
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
@@ -32,6 +34,7 @@ import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.select
 import com.example.shkudikweatherapp.data_layer.providers.WeatherProvider.selectedLon
 import com.example.shkudikweatherapp.data_layer.enums.MainDescription
 import com.example.shkudikweatherapp.data_layer.providers.Helper
+import com.example.shkudikweatherapp.data_layer.providers.Helper.LOADING_DELAY
 import com.example.shkudikweatherapp.data_layer.providers.Helper.Messages.emptyInputMessage
 import com.example.shkudikweatherapp.data_layer.providers.Helper.Messages.locationIsDeniedMessage
 import com.example.shkudikweatherapp.data_layer.providers.Helper.Messages.locationIsUnavailable
@@ -75,7 +78,7 @@ class MainViewModel(val app: Application) : AndroidViewModel(app) {
             while (true) {
                 if (state.value != MainStates.MORE_INFO && state.value != MainStates.CHANGING_CITY)
                     load(this)
-                delay(10000)
+                delay(LOADING_DELAY)
             }
     }
 
@@ -125,127 +128,7 @@ class MainViewModel(val app: Application) : AndroidViewModel(app) {
 
          }
 
-         // Received weather
-         val receivedTemp = weather.main.temp.toInt() - ABS_ZERO
-         val receivedHumidity = weather.main.humidity.toString() + app.getString(R.string.percent)
-         val receivedWind = weather.wind.speed.toInt()
-         val receivedMainDesc = weather.weather!![0].main
-         val receivedDesc = weather.weather[0].description
-
-         // Received time
-         val receivedTime = timeUTC.currentDateTime.substring(11..15)
-
-         val hoursDelta = weather.timezone / 3600
-         val delta = receivedTime.substring(0..1).toInt() + hoursDelta
-
-         // Received forecast
-         val receivedFTemp1 = weather.main.temp.toInt()
-         val receivedFTemp2 = forecast.list[1].main.temp.toInt()
-         val receivedFTemp3 = forecast.list[2].main.temp.toInt()
-
-         val receivedFFeels1 = weather.main.feels_like.toInt()
-         val receivedFFeels2 = forecast.list[1].main.feels_like.toInt()
-         val receivedFFeels3 = forecast.list[2].main.feels_like.toInt()
-
-         val receivedFWind1 = weather.wind.speed.toInt()
-         val receivedFWind2 = forecast.list[1].windModel.speed.toInt()
-         val receivedFWind3 = forecast.list[2].windModel.speed.toInt()
-
-         val receivedFWindDir1 = weather.wind.deg
-         val receivedFWindDir2 = forecast.list[1].windModel.deg
-         val receivedFWindDir3 = forecast.list[2].windModel.deg
-
-         val receivedFPressure1 = weather.main.pressure
-         val receivedFPressure2 = forecast.list[1].main.pressure
-         val receivedFPressure3 = forecast.list[2].main.pressure
-
-         // applying received info
-
-         //
-         withContext(Default) {
-             time.postValue(
-                 (when {
-                     (delta >= 24) -> (delta - 24)
-                     (delta < 0) -> (delta + 24)
-                     else -> delta
-                 }).toString() + receivedTime.substring(2..4)
-             )
-         }
-         //
-         withContext(Default) {
-             desc.postValue("$receivedDesc, ${time.value!!}")
-             isNight.postValue(isNightTime(time.value!!))
-         }
-         //
-         withContext(Default) {
-             mainDesc.postValue(getMainDescription(isNight.value!!, receivedMainDesc))
-         }
-
-        state.value(MainStates.UPDATED)
-
-        withContext(Main) {
-            // Setting forecast
-
-            fTemp.value(
-                arrayOf(
-                    setTemp(receivedFTemp1),
-                    setTemp(receivedFTemp2),
-                    setTemp(receivedFTemp3)
-                )
-            )
-
-            fFeels.value(
-                arrayOf(
-                    setTemp(receivedFFeels1),
-                    setTemp(receivedFFeels2),
-                    setTemp(receivedFFeels3)
-                )
-            )
-
-            fWind.value(
-                arrayOf(
-                    setWindSpeed(receivedFWind1),
-                    setWindSpeed(receivedFWind2),
-                    setWindSpeed(receivedFWind3)
-                )
-            )
-
-            fWindDir.value(
-                arrayOf(
-                    setWindDirection(receivedFWindDir1)!!,
-                    setWindDirection(receivedFWindDir2)!!,
-                    setWindDirection(receivedFWindDir3)!!
-                )
-            )
-
-            fHumidity.value(
-                arrayOf(
-                    weather.main.humidity.toString() + app.getString(R.string.percent),
-                    forecast.list[1].main.humidity.toString() + app.getString(R.string.percent),
-                    forecast.list[2].main.humidity.toString() + app.getString(R.string.percent)
-                )
-            )
-
-            fPressure.value(
-                arrayOf(
-                    setPressure(receivedFPressure1),
-                    setPressure(receivedFPressure2),
-                    setPressure(receivedFPressure3)
-                )
-            )
-
-            // Setting current weather
-
-            temp.value(
-                (if (degreeUnit == UserPreferences.TemperatureUnit.DEG_C)
-                    (receivedTemp) else (receivedTemp).fahrenheit()).toString() + degreeUnit.str
-            )
-
-            humidity.value(receivedHumidity)
-
-            wind.value(receivedWind.toString() + windUnit)
-
-        }
+         WeatherPresenter.loadedPresentation(weather, timeUTC, forecast, this)
 
     }
 
@@ -273,6 +156,7 @@ class MainViewModel(val app: Application) : AndroidViewModel(app) {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.P)
     @SuppressLint("MissingPermission")
     internal fun applyLocation(activity: MainActivity) { with(activity) {
 
@@ -289,8 +173,9 @@ class MainViewModel(val app: Application) : AndroidViewModel(app) {
 
                         locationManager.requestLocationUpdates(
                             LocationManager.GPS_PROVIDER,
-                            0,
-                            0f
+                            60000,
+                            0f,
+                            mainExecutor
                         ) { location ->
 
                             selectedLon = ((location.longitude * 1000).roundToInt() / 1000f)
